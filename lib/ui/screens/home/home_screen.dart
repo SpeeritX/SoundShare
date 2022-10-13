@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sound_share/ui/screens/player/player_screen.dart';
 import 'package:sound_share/ui/screens/settings/settings_screen.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
@@ -13,15 +14,30 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final TextEditingController _ipController = TextEditingController();
-
-  var _ip = "";
+  var _ip = "192.168.";
+  late final TextEditingController _ipController =
+      TextEditingController(text: _ip);
   TcpConnection tcpConnection = TcpConnection();
 
   _connect() async {
     if (await tcpConnection.connect(_ip)) {
-      print("Connected!!");
+      Fluttertoast.showToast(
+        msg: "Connected.",
+      );
+      _openPlayer();
+    } else {
+      Fluttertoast.showToast(
+        msg: "Error when connecting.",
+      );
     }
+  }
+
+  _createNetwork() {
+    tcpConnection.createNetwork();
+    Fluttertoast.showToast(
+      msg: "Created a new network.",
+    );
+    _openPlayer();
   }
 
   @override
@@ -66,8 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             PrimaryFullButton(
               onPressed: () {
-                tcpConnection.createNetwork();
-                _openPlayer();
+                _createNetwork();
               },
               child: const Text("Create"),
             ),
@@ -78,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _openPlayer() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => PlayerScreen()));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => PlayerScreen(connection: tcpConnection)));
   }
 }
