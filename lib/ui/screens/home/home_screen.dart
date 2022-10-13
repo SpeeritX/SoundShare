@@ -3,6 +3,8 @@ import 'package:sound_share/ui/screens/player/player_screen.dart';
 import 'package:sound_share/ui/screens/settings/settings_screen.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
+import '../../../network/link/tcp_connection.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -11,6 +13,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _ipController = TextEditingController();
+
+  var _ip = "";
+  TcpConnection tcpConnection = TcpConnection();
+
+  _connect() async {
+    if (await tcpConnection.connect(_ip)) {
+      print("Connected!!");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,8 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => const SettingsScreen()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const SettingsScreen()));
             },
             icon: const Icon(Icons.settings),
           )
@@ -33,14 +46,27 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            PrimaryFullButton(
-              onPressed: () {
-                _openPlayer();
+            TextField(
+              controller: _ipController,
+              onChanged: (text) {
+                setState(() {
+                  _ip = text;
+                });
               },
-              child: const Text("Join"),
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'IP',
+              ),
             ),
             PrimaryFullButton(
               onPressed: () {
+                _connect();
+              },
+              child: Text("Connect to $_ip"),
+            ),
+            PrimaryFullButton(
+              onPressed: () {
+                tcpConnection.createNetwork();
                 _openPlayer();
               },
               child: const Text("Create"),
