@@ -19,6 +19,7 @@ extension IterableExtensions<E> on Iterable<E> {
     }
   }
 }
+
 /// Plays the music from the received packages
 class MusicPlayer {
   final player = AudioPlayer();
@@ -29,11 +30,12 @@ class MusicPlayer {
     if (result != null) {
       File file = File(result.files.single.path!);
       final bytes = await file.readAsBytes();
-      var packages = bytes.toList().chunked((bytes.length/6).floor());
-      for(var package in packages) {
-        player.setAudioSource(BytesAudioSource(package));
-        await Future.delayed(Duration(milliseconds: 100));
-      }
+      player.setAudioSource(BytesAudioSource(bytes));
+      // var packages = bytes.toList().chunked((bytes.length/6).floor());
+      // for(var package in packages) {
+      //   // todo
+      //   await Future.delayed(Duration(milliseconds: 100));
+      // }
     } else {
       // User canceled the picker
     }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sound_share/ui/screens/player/music_test_screen.dart';
 import 'package:sound_share/ui/screens/player/player_screen.dart';
 import 'package:sound_share/ui/screens/settings/settings_screen.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
@@ -19,8 +20,8 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => const SettingsScreen()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const SettingsScreen()));
             },
             icon: const Icon(Icons.settings),
           )
@@ -34,16 +35,18 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             PrimaryFullButton(
-              onPressed: () {
-                _openPlayer();
-              },
+              onPressed: () {},
               child: const Text("Join"),
+            ),
+            PrimaryFullButton(
+              onPressed: () {},
+              child: const Text("Create"),
             ),
             PrimaryFullButton(
               onPressed: () {
                 _openPlayer();
               },
-              child: const Text("Create"),
+              child: const Text("Test music"),
             ),
           ],
         ),
@@ -53,6 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _openPlayer() {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => PlayerScreen()));
+        .push(MaterialPageRoute(builder: (context) => const MusicTestScreen()));
   }
 }
