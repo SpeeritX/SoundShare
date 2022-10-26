@@ -1,4 +1,10 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:sound_share/common/utils/iterable_extensions.dart';
+import 'package:sound_share/domain/music/music_package.dart';
 import 'package:sound_share/domain/music/player/music_player.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
@@ -10,20 +16,55 @@ class MusicTestScreen extends StatefulWidget {
 }
 
 class _MusicTestScreenState extends State<MusicTestScreen> {
-  final player = MusicPlayer();
+  final _player = MusicPlayer();
+  List<int> _bytes = [];
+  var _fileName = "";
 
   @override
   void initState() {
-    player.loadFile();
+    _loadFile();
     super.initState();
   }
 
-  Future<void> init() async {}
-
   @override
   void dispose() {
-    player.stop();
+    _player.stop();
     super.dispose();
+  }
+
+  void _loadFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      _bytes = await file.readAsBytes();
+      setState(() {
+        _fileName = file.path.split(Platform.pathSeparator).last;
+      });
+    } else {
+      // User canceled the picker
+      setState(() {
+        _fileName = "";
+      });
+    }
+  }
+
+  void _play() async {
+    _player.setSong(_bytes.length);
+    _player.play();
+
+    var packages = _bytes.toList().chunked((10000).floor());
+    for (var package in packages) {
+      _player.addPackage(MusicPackage(
+        startTime: DateTime(0),
+        duration: Duration.zero,
+        data: Uint8List.fromList(package),
+      ));
+      await Future.delayed(Duration(milliseconds: 50));
+    }
+  }
+
+  void _stop() {
+    _player.stop();
   }
 
   @override
@@ -39,17 +80,27 @@ class _MusicTestScreenState extends State<MusicTestScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Text(
+              _fileName,
+              style: Theme.of(context).textTheme.headline5,
+            ),
             PrimaryFullButton(
               onPressed: () {
-                player.play();
+                _play();
               },
               child: const Text("Play"),
             ),
             PrimaryFullButton(
               onPressed: () {
-                player.pause();
+                _stop();
               },
               child: const Text("Pause"),
+            ),
+            PrimaryFullButton(
+              onPressed: () {
+                _loadFile();
+              },
+              child: const Text("Pick song"),
             ),
           ],
         ),
