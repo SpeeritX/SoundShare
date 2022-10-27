@@ -47,7 +47,9 @@ class _MusicTestScreenState extends State<MusicTestScreen> {
 
   void _pickSong(ind) async {
     _bytes = await _files[ind].readAsBytes();
-    _currentFileName = basename(_files[ind].path);
+    setState(() {
+      _currentFileName = basename(_files[ind].path);
+    });
   }
 
   void _play() async {
