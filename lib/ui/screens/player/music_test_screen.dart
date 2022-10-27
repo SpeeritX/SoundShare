@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:path/path.dart';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,8 @@ class MusicTestScreen extends StatefulWidget {
 class _MusicTestScreenState extends State<MusicTestScreen> {
   final _player = MusicPlayer();
   List<int> _bytes = [];
-  var _fileName = "";
+  final List<File> _files = [];
+  var _currentFileName = "";
 
   @override
   void initState() {
@@ -33,19 +35,19 @@ class _MusicTestScreenState extends State<MusicTestScreen> {
   }
 
   void _loadFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: true, type: FileType.custom, allowedExtensions: ['mp3']);
     if (result != null) {
-      File file = File(result.files.single.path!);
-      _bytes = await file.readAsBytes();
+      List<File> files = result.paths.map((path) => File(path!)).toList();
       setState(() {
-        _fileName = file.path.split(Platform.pathSeparator).last;
-      });
-    } else {
-      // User canceled the picker
-      setState(() {
-        _fileName = "";
+        _files.addAll(files);
       });
     }
+  }
+
+  void _pickSong(ind) async {
+    _bytes = await _files[ind].readAsBytes();
+    _currentFileName = basename(_files[ind].path);
   }
 
   void _play() async {
@@ -81,7 +83,7 @@ class _MusicTestScreenState extends State<MusicTestScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              _fileName,
+              _currentFileName,
               style: Theme.of(context).textTheme.headline5,
             ),
             PrimaryFullButton(
@@ -100,8 +102,15 @@ class _MusicTestScreenState extends State<MusicTestScreen> {
               onPressed: () {
                 _loadFile();
               },
-              child: const Text("Pick song"),
+              child: const Text("Pick songs"),
             ),
+            for (var i = 0; i < _files.length; i++)
+              PrimaryFullButton(
+                onPressed: () {
+                  _pickSong(i);
+                },
+                child: Text(basename(_files[i].path)),
+              ),
           ],
         ),
       ),
