@@ -4,7 +4,7 @@ import 'dart:typed_data';
 abstract class DirectConnection {
   Stream<Iterable<String>> get connectedDevices;
 
-  createNetwork();
+  listenForConnections();
 
   Future<bool> connect(String ip);
 

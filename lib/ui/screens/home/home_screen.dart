@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sound_share/ui/screens/player/music_test_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sound_share/ui/screens/player/music_test_screen.dart';
 import 'package:sound_share/ui/screens/player/player_screen.dart';
 import 'package:sound_share/ui/screens/settings/settings_screen.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _createNetwork() {
-    tcpConnection.createNetwork();
+    tcpConnection.listenForConnections();
     Fluttertoast.showToast(
       msg: "Created a new network.",
     );

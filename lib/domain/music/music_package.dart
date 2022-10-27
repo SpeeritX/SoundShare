@@ -10,4 +10,15 @@ class MusicPackage {
     required this.duration,
     required this.data,
   });
+
+  MusicPackage.fromJson(Map<String, dynamic> json)
+      : startTime = json['startTime'],
+        duration = json['duration'],
+        data = json['data'];
+
+  Map<String, dynamic> toJson() => {
+        'startTime': startTime,
+        'duration': duration,
+        'data': data,
+      };
 }
