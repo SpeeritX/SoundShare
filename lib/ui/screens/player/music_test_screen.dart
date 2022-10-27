@@ -5,6 +5,7 @@ import 'package:path/path.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:sound_share/common/utils/iterable_extensions.dart';
+import 'package:sound_share/domain/music/music_directory/music_directory.dart';
 import 'package:sound_share/domain/music/music_package.dart';
 import 'package:sound_share/domain/music/player/music_player.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
@@ -18,6 +19,7 @@ class MusicTestScreen extends StatefulWidget {
 
 class _MusicTestScreenState extends State<MusicTestScreen> {
   final _player = MusicPlayer();
+  final _directory = MusicDirectory();
   List<int> _bytes = [];
   final List<File> _files = [];
   var _currentFileName = "";
@@ -29,18 +31,20 @@ class _MusicTestScreenState extends State<MusicTestScreen> {
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     _player.stop();
+    _directory.relinquish();
     super.dispose();
   }
 
   void _loadFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-        allowMultiple: true, type: FileType.custom, allowedExtensions: ['mp3']);
+    _directory.relinquish();
+    String? result = await FilePicker.platform.getDirectoryPath();
     if (result != null) {
-      List<File> files = result.paths.map((path) => File(path!)).toList();
+      var f = await _directory.load(result);
       setState(() {
-        _files.addAll(files);
+        _files.clear();
+        _files.addAll(f);
       });
     }
   }
@@ -63,7 +67,7 @@ class _MusicTestScreenState extends State<MusicTestScreen> {
         duration: Duration.zero,
         data: Uint8List.fromList(package),
       ));
-      await Future.delayed(Duration(milliseconds: 50));
+      //await Future.delayed(Duration(milliseconds: 50));
     }
   }
 
