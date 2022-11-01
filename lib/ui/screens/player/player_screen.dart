@@ -6,7 +6,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:sound_share/common/utils/iterable_extensions.dart';
 import 'package:sound_share/domain/music/music_package.dart';
+import 'package:sound_share/domain/music/player/music_buffer.dart';
 import 'package:sound_share/domain/music/player/music_player.dart';
+import 'package:sound_share/domain/music/player/music_queue.dart';
 import 'package:sound_share/network/link/direct_connection.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
@@ -23,7 +25,7 @@ class PlayerScreen extends StatefulWidget {
 }
 
 class _PlayerScreenState extends State<PlayerScreen> {
-  final MusicPlayer _player = MusicPlayer();
+  final MusicPlayer _player = MusicPlayer(MusicBuffer(), MusicQueue());
   late final DirectConnection _connection;
   List<int> _bytes = [];
   var _fileName = "";
