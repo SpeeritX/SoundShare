@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:rxdart/rxdart.dart';
+import 'package:sound_share/common/logger.dart';
 
 import 'direct_connection.dart';
 
@@ -24,7 +25,10 @@ class SocketMessage {
 
   SocketMessage.fromJson(Map<String, dynamic> json)
       : messageType = MessageType.values.byName(json['messageType']),
-        message = json['message'];
+        message = json['message'] == null
+            ? null
+            : Uint8List.fromList(
+                (json['message'] as List).map((e) => e as int).toList());
 
   Map<String, dynamic> toJson() => {
         'messageType': messageType.name,
@@ -44,6 +48,7 @@ class TcpConnection implements DirectConnection {
   final socketsOutController = BehaviorSubject<List<Socket>>();
   bool _isListening = false;
 
+  String buffer = "";
   Stream<List<Socket>> get socketsOut => socketsOutController.stream;
 
   @override
@@ -76,10 +81,8 @@ class TcpConnection implements DirectConnection {
       final socket = await Socket.connect(ip, 9999);
       socketsOutController
           .add((socketsOutController.valueOrNull ?? [])..add(socket));
-      final jsonObject =
-          SocketMessage(messageType: MessageType.requestToConnect).toJson();
-      print("json decoded: ${json.decode(json.encode(jsonObject))}");
-      socket.write(json.encode(jsonObject));
+      final message = SocketMessage(messageType: MessageType.requestToConnect);
+      socket.write(message.toString() + "\n");
       print("Socket Out ready");
     } on Exception catch (e) {
       print(e);
@@ -93,26 +96,46 @@ class TcpConnection implements DirectConnection {
         'server incoming connection from ${client.remoteAddress.address}:${client.remotePort}');
     client.listen((data) {
       final receivedString = String.fromCharCodes(data);
-      final receivedMessage =
-          SocketMessage.fromJson(json.decode(receivedString));
-      switch (receivedMessage.messageType) {
-        case MessageType.requestToConnect:
-          print("requestToConnect");
-          connect(client.remoteAddress.address);
-          break;
-        case MessageType.listOfDevices:
-          print("listOfDevices");
-          // TODO: Handle this case.
-          break;
-        case MessageType.musicPackage:
-          print("musicPackage");
-          _readController.add(receivedMessage.message!);
-          break;
-      }
+      buffer = buffer + receivedString;
+      logger.w(receivedString);
+      _handleBuffer(client);
     }, onDone: () {
       print("server done");
     });
     client.close();
+  }
+
+  void _handleBuffer(Socket client) {
+    while (true) {
+      final splitted = buffer.split("\n");
+      if (splitted.length > 1) {
+        buffer = buffer.substring(splitted.first.length);
+        if (buffer.startsWith("\n")) {
+          buffer = buffer.substring(1);
+        }
+        _handleMessage(splitted.first, client);
+      } else {
+        return;
+      }
+    }
+  }
+
+  void _handleMessage(String message, Socket client) {
+    final receivedMessage = SocketMessage.fromJson(json.decode(message));
+    switch (receivedMessage.messageType) {
+      case MessageType.requestToConnect:
+        print("requestToConnect");
+        connect(client.remoteAddress.address);
+        break;
+      case MessageType.listOfDevices:
+        print("listOfDevices");
+        // TODO: Handle this case.
+        break;
+      case MessageType.musicPackage:
+        print("musicPackage");
+        _readController.add(receivedMessage.message!);
+        break;
+    }
   }
 
   @override
@@ -123,7 +146,9 @@ class TcpConnection implements DirectConnection {
     final message =
         SocketMessage(messageType: MessageType.musicPackage, message: msg);
     for (Socket socket in socketsOutController.valueOrNull ?? []) {
-      socket.write(message);
+      socket.write(message.toString() + "\n");
+      print("socket ip: ${socket.address.host}");
+      await socket.flush();
     }
     return true;
   }

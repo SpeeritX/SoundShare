@@ -5,7 +5,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:sound_share/common/logger.dart';
 
 class BytesAudioSource extends StreamAudioSource {
-  final int _dataLength;
+  final int? _dataLength;
   final List<int> _bytes = List.empty(growable: true);
 
   StreamController<List<int>>? _stream;
@@ -27,7 +27,7 @@ class BytesAudioSource extends StreamAudioSource {
     logger.d("BytesAudioSource request: [${DateTime.now()}] $start $end");
 
     start ??= 0;
-    end ??= _dataLength;
+    end ??= _dataLength ?? _bytes.length;
 
     _currentStart = start;
     _currentEnd = end;

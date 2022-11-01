@@ -5,11 +5,13 @@ import 'package:sound_share/domain/music/player/stream_source.dart';
 /// Plays the music from the received packages
 class MusicPlayer {
   final _player = AudioPlayer();
-  var _source = BytesAudioSource(0);
+  var _source = BytesAudioSource(null);
 
-  MusicPlayer();
+  MusicPlayer() {
+    _player.setAudioSource(_source);
+  }
 
-  void setSong(int length) {
+  void setSong(int? length) {
     _source = BytesAudioSource(length);
     _player.setAudioSource(_source);
   }
