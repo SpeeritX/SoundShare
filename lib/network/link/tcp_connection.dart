@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sound_share/common/logger.dart';
 
@@ -16,23 +17,29 @@ enum MessageType {
 
 class SocketMessage {
   final MessageType messageType;
-  final Uint8List? message;
+  final Uint8List? musicPackage;
+  final List<String>? listOfDevices;
 
   SocketMessage({
     required this.messageType,
-    this.message,
+    this.musicPackage,
+    this.listOfDevices,
   });
 
   SocketMessage.fromJson(Map<String, dynamic> json)
       : messageType = MessageType.values.byName(json['messageType']),
-        message = json['message'] == null
+        musicPackage = json['musicPackage'] == null
             ? null
             : Uint8List.fromList(
-                (json['message'] as List).map((e) => e as int).toList());
+                (json['musicPackage'] as List).map((e) => e as int).toList()),
+        listOfDevices = json['listOfDevices'] == null
+            ? null
+            : (json['listOfDevices'] as List).map((e) => e as String).toList();
 
   Map<String, dynamic> toJson() => {
         'messageType': messageType.name,
-        'message': message,
+        'message': musicPackage,
+        'listOfDevices': listOfDevices,
       };
 
   @override
@@ -49,18 +56,21 @@ class TcpConnection implements DirectConnection {
   bool _isListening = false;
 
   String buffer = "";
-  Stream<List<Socket>> get socketsOut => socketsOutController.stream;
+  List<Socket> get socketsOut => socketsOutController.valueOrNull ?? [];
+  set socketsOut(List<Socket> newValue) {
+    socketsOutController.add(newValue);
+  }
 
   @override
-  Stream<Iterable<String>> get connectedDevices =>
-      socketsOut.map((event) => event.map((e) => e.address.host));
+  Stream<Iterable<String>> get connectedDevices => socketsOutController.stream
+      .map((event) => event.map((e) => e.address.host));
 
   @override
   listenForConnections() {
     if (!_isListening) {
       ServerSocket.bind(InternetAddress.anyIPv4, 9999)
           .then((ServerSocket server) {
-        server.listen(handleClient);
+        server.listen(_handleClient);
       });
       _isListening = true;
     }
@@ -68,22 +78,20 @@ class TcpConnection implements DirectConnection {
 
   @override
   Future<bool> connect(String ip) async {
+    print("Connecting to ${ip}");
     listenForConnections();
 
-    for (Socket socket in socketsOutController.valueOrNull ?? []) {
-      if (socket.address.host == ip) {
-        print("Already connected");
-        return true;
-      }
+    final existingSocket = _getSocketByIp(ip);
+    if (existingSocket != null) {
+      print("Already connected");
+      return false;
     }
 
     try {
       final socket = await Socket.connect(ip, 9999);
-      socketsOutController
-          .add((socketsOutController.valueOrNull ?? [])..add(socket));
+      socketsOut = socketsOut..add(socket);
       final message = SocketMessage(messageType: MessageType.requestToConnect);
       socket.write(message.toString() + "\n");
-      print("Socket Out ready");
     } on Exception catch (e) {
       print(e);
       return false;
@@ -91,10 +99,8 @@ class TcpConnection implements DirectConnection {
     return true;
   }
 
-  void handleClient(Socket client) {
-    print(
-        'server incoming connection from ${client.remoteAddress.address}:${client.remotePort}');
-    client.listen((data) {
+  void _handleClient(Socket client) {
+    client.listen((data) async {
       final receivedString = String.fromCharCodes(data);
       buffer = buffer + receivedString;
       logger.w(receivedString);
@@ -108,6 +114,8 @@ class TcpConnection implements DirectConnection {
   void _handleBuffer(Socket client) {
     while (true) {
       final splitted = buffer.split("\n");
+      print("splitted!");
+      print(splitted);
       if (splitted.length > 1) {
         buffer = buffer.substring(splitted.first.length);
         if (buffer.startsWith("\n")) {
@@ -121,19 +129,25 @@ class TcpConnection implements DirectConnection {
   }
 
   void _handleMessage(String message, Socket client) {
+    final clientIp = client.remoteAddress.address;
     final receivedMessage = SocketMessage.fromJson(json.decode(message));
+    print(receivedMessage);
     switch (receivedMessage.messageType) {
       case MessageType.requestToConnect:
         print("requestToConnect");
-        connect(client.remoteAddress.address);
+        connect(clientIp);
+        _sendListOfConnectedDevices(clientIp);
         break;
       case MessageType.listOfDevices:
         print("listOfDevices");
-        // TODO: Handle this case.
+        final devices = receivedMessage.listOfDevices!;
+        for (final ip in devices) {
+          connect(ip);
+        }
         break;
       case MessageType.musicPackage:
         print("musicPackage");
-        _readController.add(receivedMessage.message!);
+        _readController.add(receivedMessage.musicPackage!);
         break;
     }
   }
@@ -144,12 +158,31 @@ class TcpConnection implements DirectConnection {
   @override
   Future<bool> write(Uint8List msg) async {
     final message =
-        SocketMessage(messageType: MessageType.musicPackage, message: msg);
+        SocketMessage(messageType: MessageType.musicPackage, musicPackage: msg);
+    // Send the message to all sockets
     for (Socket socket in socketsOutController.valueOrNull ?? []) {
       socket.write(message.toString() + "\n");
       print("socket ip: ${socket.address.host}");
       await socket.flush();
     }
     return true;
+  }
+
+  _sendListOfConnectedDevices(String ip) {
+    final socket = _getSocketByIp(ip);
+    if (socket == null) return;
+
+    final message = SocketMessage(
+        messageType: MessageType.listOfDevices,
+        listOfDevices: _getListOfDevices());
+    socket.write(message.toString() + "\n");
+  }
+
+  List<String> _getListOfDevices() {
+    return socketsOut.map((e) => e.address.host).toList();
+  }
+
+  Socket? _getSocketByIp(String ip) {
+    return socketsOut.firstWhereOrNull((socket) => socket.address.host == ip);
   }
 }
