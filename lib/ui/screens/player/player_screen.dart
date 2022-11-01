@@ -42,6 +42,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
         data: event,
       ));
       if (!_isPlaying) {
+        _player.setSong(null);
         _player.play();
         _isPlaying = true;
       }
