@@ -45,6 +45,24 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_dartobservatory._tcp</string>
+	</array>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>Access music files</string>
+	<key>NSDesktopFolderUsageDescription</key>
+	<string>Access music files</string>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>Access music files</string>
+	<key>NSNetworkVolumesUsageDescription</key>
+	<string>Access music files</string>
+	<key>NSFileProviderDomainUsageDescription</key>
+	<string>Access music files</string>
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>
