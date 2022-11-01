@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:sound_share/common/utils/iterable_extensions.dart';
 import 'package:sound_share/domain/music/music_directory/music_directory.dart';
 import 'package:sound_share/domain/music/music_package.dart';
+import 'package:sound_share/domain/music/player/music_buffer.dart';
 import 'package:sound_share/domain/music/player/music_player.dart';
+import 'package:sound_share/domain/music/player/music_queue.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
 class MusicTestScreen extends StatefulWidget {
@@ -18,7 +20,8 @@ class MusicTestScreen extends StatefulWidget {
 }
 
 class _MusicTestScreenState extends State<MusicTestScreen> {
-  final _player = MusicPlayer();
+  final _musicBuffer = MusicBuffer();
+  late final _player = MusicPlayer(_musicBuffer, MusicQueue());
   final _directory = MusicDirectory();
   List<int> _bytes = [];
   final List<File> _files = [];
