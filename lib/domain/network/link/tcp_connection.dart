@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sound_share/common/logger.dart';
-import 'package:sound_share/network/p2p/p2p_messages.dart';
+import 'package:sound_share/domain/network/p2p/p2p_messages.dart';
 
 import 'direct_connection.dart';
 

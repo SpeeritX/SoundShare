@@ -4,9 +4,9 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:sound_share/common/logger.dart';
-import 'package:sound_share/network/link/direct_connection.dart';
-import 'package:sound_share/network/link/tcp_connection.dart';
-import 'package:sound_share/network/p2p/p2p_messages.dart';
+import 'package:sound_share/domain/network/link/direct_connection.dart';
+import 'package:sound_share/domain/network/link/tcp_connection.dart';
+import 'package:sound_share/domain/network/p2p/p2p_messages.dart';
 
 class Peer {
   final String address;
