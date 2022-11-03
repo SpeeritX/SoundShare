@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var _ip = "192.168.";
   late final TextEditingController _ipController =
       TextEditingController(text: _ip);
-  TcpConnection tcpConnection = TcpConnection();
+  TcpConnection tcpConnection = TcpConnection(port: 9999);
 
   _connect() async {
     if (await tcpConnection.connect(_ip)) {

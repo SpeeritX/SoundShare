@@ -6,8 +6,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:sound_share/common/utils/iterable_extensions.dart';
 import 'package:sound_share/domain/music/music_package.dart';
+import 'package:sound_share/domain/music/player/music_buffer.dart';
 import 'package:sound_share/domain/music/player/music_player.dart';
+import 'package:sound_share/domain/music/player/music_queue.dart';
 import 'package:sound_share/network/link/direct_connection.dart';
+import 'package:sound_share/network/p2p/p2p_network.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
 class PlayerScreen extends StatefulWidget {
@@ -23,8 +26,9 @@ class PlayerScreen extends StatefulWidget {
 }
 
 class _PlayerScreenState extends State<PlayerScreen> {
-  final MusicPlayer _player = MusicPlayer();
+  final MusicPlayer _player = MusicPlayer(MusicBuffer(), MusicQueue());
   late final DirectConnection _connection;
+  late final P2pNetwork _p2pNetwork;
   List<int> _bytes = [];
   var _fileName = "";
   var _isPlaying = false;
@@ -34,14 +38,16 @@ class _PlayerScreenState extends State<PlayerScreen> {
   @override
   void initState() {
     _connection = widget.connection;
+    _p2pNetwork = P2pNetwork(connection: _connection);
 
-    _subscription = _connection.readStream.listen((event) {
+    _subscription = _p2pNetwork.songBytesStream.listen((event) {
       _player.addPackage(MusicPackage(
         startTime: DateTime(0),
         duration: Duration.zero,
         data: event,
       ));
       if (!_isPlaying) {
+        _player.setSong(null);
         _player.play();
         _isPlaying = true;
       }
@@ -73,7 +79,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     // await _connection.write(Uint8List.fromList(_bytes));
     var packages = _bytes.toList().chunked((10000).floor());
     for (var package in packages) {
-      await _connection.write(Uint8List.fromList(package));
+      await _p2pNetwork.sendBytes(Uint8List.fromList(package));
     }
   }
 
@@ -86,7 +92,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Text("Devices:"),
+            const Text("Devices:"),
             StreamBuilder(
               stream: _connection.connectedDevices,
               builder: (BuildContext context,
@@ -104,7 +110,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
               onPressed: () {
                 _pickFile();
               },
-              child: Text("Pick file"),
+              child: const Text("Pick file"),
             ),
           ],
         ),
