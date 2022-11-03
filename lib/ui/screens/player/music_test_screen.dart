@@ -5,9 +5,10 @@ import 'package:path/path.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:sound_share/common/utils/iterable_extensions.dart';
-import 'package:sound_share/domain/music/music_directory/music_directory.dart';
+import 'package:sound_share/domain/music/directory/directory.dart';
 import 'package:sound_share/domain/music/music_package.dart';
 import 'package:sound_share/domain/music/player/music_player.dart';
+import 'package:sound_share/domain/music/song/song.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
 class MusicTestScreen extends StatefulWidget {
@@ -19,9 +20,9 @@ class MusicTestScreen extends StatefulWidget {
 
 class _MusicTestScreenState extends State<MusicTestScreen> {
   final _player = MusicPlayer();
-  final _directory = MusicDirectory();
+  MusicDirectory? _directory;
   List<int> _bytes = [];
-  final List<File> _files = [];
+  final List<MusicSong> _songs = [];
   var _currentFileName = "";
 
   @override
@@ -31,35 +32,38 @@ class _MusicTestScreenState extends State<MusicTestScreen> {
   }
 
   @override
-  void dispose() async {
+  void dispose() {
     _player.stop();
-    _directory.relinquish();
+    _directory?.relinquish();
     super.dispose();
   }
 
   void _loadFile() async {
-    _directory.relinquish();
+    await _directory?.relinquish();
     String? result = await FilePicker.platform.getDirectoryPath();
     if (result != null) {
-      var f = await _directory.load(result);
+      _directory = MusicDirectory(result);
+      await _directory?.getAccess();
+      await _directory?.load();
       setState(() {
-        _files.clear();
-        _files.addAll(f);
+        _songs.clear();
+        _songs.addAll(_directory?.songs ?? List.empty());
       });
     }
   }
 
   void _pickSong(ind) async {
-    _bytes = await _files[ind].readAsBytes();
+    _bytes = await _songs[ind].file.readAsBytes();
     setState(() {
-      _currentFileName = basename(_files[ind].path);
+      _currentFileName = basename(_songs[ind].file.path);
     });
   }
 
   void _play() async {
     _player.setSong(_bytes.length);
     _player.play();
-
+    _player.stop();
+    _player.play();
     var packages = _bytes.toList().chunked((10000).floor());
     for (var package in packages) {
       _player.addPackage(MusicPackage(
@@ -88,35 +92,40 @@ class _MusicTestScreenState extends State<MusicTestScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              _currentFileName,
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            PrimaryFullButton(
-              onPressed: () {
-                _play();
-              },
-              child: const Text("Play"),
-            ),
-            PrimaryFullButton(
-              onPressed: () {
-                _stop();
-              },
-              child: const Text("Pause"),
-            ),
-            PrimaryFullButton(
-              onPressed: () {
-                _loadFile();
-              },
-              child: const Text("Pick songs"),
-            ),
-            for (var i = 0; i < _files.length; i++)
+            ...[
+              Text(
+                _currentFileName,
+                style: Theme.of(context).textTheme.headline5,
+              ),
+              PrimaryFullButton(
+                onPressed: () {
+                  _play();
+                },
+                child: const Text("Play"),
+              ),
+              PrimaryFullButton(
+                onPressed: () {
+                  _stop();
+                },
+                child: const Text("Pause"),
+              ),
+              PrimaryFullButton(
+                onPressed: () {
+                  _loadFile();
+                },
+                child: const Text("Pick songs"),
+              ),
+            ],
+            for (var i = 0; i < _songs.length; i++) ...[
               PrimaryFullButton(
                 onPressed: () {
                   _pickSong(i);
                 },
-                child: Text(basename(_files[i].path)),
+                child: Text(basename(
+                    (_songs[i].attributes?['Title'] ?? _songs[i].file.path))),
               ),
+              Text(_songs[i].duration().toString()),
+            ]
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:just_audio/just_audio.dart';
-import 'package:sound_share/domain/music/music_package.dart';
+import 'package:sound_share/domain/music/package/music_package.dart';
 import 'package:sound_share/domain/music/player/stream_source.dart';
+import 'package:media_info/media_info.dart';
 
 /// Plays the music from the received packages
 class MusicPlayer {
