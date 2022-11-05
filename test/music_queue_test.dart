@@ -35,7 +35,7 @@ void main() {
     SongResource song = SongResource("1");
     musicQueue.addSong(song);
 
-    musicQueue.removeSong(song);
+    musicQueue.removeSong(0);
 
     expect(musicQueue.songList, []);
   });

@@ -34,10 +34,10 @@ class MusicQueue {
     songList.add(song);
   }
 
-  void removeSong(SongResource song) {
-    if (_currentSongIndex >= songList.indexOf(song)) {
+  void removeSong(int index) {
+    if (_currentSongIndex >= index) {
       _currentSongIndex = _currentSongIndex - 1;
     }
-    songList.remove(song);
+    songList.removeAt(index);
   }
 }
