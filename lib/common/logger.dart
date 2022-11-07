@@ -13,4 +13,15 @@ final logger = Logger(
         Level.debug: true,
         Level.info: true,
       }),
+  output: _ConsoleOutput(),
 );
+
+class _ConsoleOutput extends LogOutput {
+  @override
+  void output(OutputEvent event) {
+    for (var line in event.lines) {
+      // ignore: avoid_print
+      print("LOGGER - $line");
+    }
+  }
+}

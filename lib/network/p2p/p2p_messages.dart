@@ -41,11 +41,6 @@ class P2pMessage with _$P2pMessage {
 
   factory P2pMessage.fromJson(Map<String, dynamic> json) =>
       _$P2pMessageFromJson(json);
-
-  @override
-  String toString() {
-    return json.encode(toJson());
-  }
 }
 
 extension MusicPackageExt on MusicPackageMsg {

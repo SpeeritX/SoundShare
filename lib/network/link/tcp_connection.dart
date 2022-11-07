@@ -1,82 +1,34 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:collection/collection.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:sound_share/common/logger.dart';
-import 'package:sound_share/network/p2p/p2p_messages.dart';
+import 'package:sound_share/common/utils/disposable.dart';
 
 import 'direct_connection.dart';
 
-class TcpConnection implements DirectConnection {
+class TcpConnection with Disposable implements DirectConnection {
   static const messageLength = 64;
 
-  final int port;
   final StreamController<String> _readController = StreamController.broadcast();
-  final socketsOutController = BehaviorSubject<List<Socket>>();
-  bool _isListening = false;
+  final Socket _readSocket;
+  final Socket _writeSocket;
 
   String buffer = "";
 
-  List<Socket> get socketsOut => socketsOutController.valueOrNull ?? [];
-
-  set socketsOut(List<Socket> newValue) {
-    socketsOutController.add(newValue);
-  }
-
-  TcpConnection({required this.port});
-
-  @override
-  Stream<Iterable<String>> get connectedDevices => socketsOutController.stream
-      .map((event) => event.map((e) => e.address.host));
-
-  @override
-  Future<void> listenForConnections() async {
-    if (!_isListening) {
-      final server = await ServerSocket.bind(InternetAddress.anyIPv4, port);
-      server.listen(_handleClient);
-      _isListening = true;
-    }
-  }
-
-  @override
-  Future<bool> connect(String ip) async {
-    logger.d("Connecting to $ip");
-    listenForConnections();
-
-    final existingSocket = _getSocketByIp(ip);
-    if (existingSocket != null) {
-      logger.d("Already connected");
-      return false;
-    }
-
-    try {
-      final socket = await Socket.connect(ip, port);
-      socketsOut = socketsOut..add(socket);
-      const message = P2pMessage.requestStateUpdate();
-      socket.write("$message\n");
-    } on Exception catch (e) {
-      logger.d(e);
-      return false;
-    }
-    return true;
-  }
-
-  void _handleClient(Socket client) {
-    connect(client.remoteAddress.address);
-
-    client.listen((data) async {
+  TcpConnection({required Socket readSocket, required Socket writeSocket})
+      : _readSocket = readSocket,
+        _writeSocket = writeSocket {
+    _readSocket.listen((data) async {
       final receivedString = String.fromCharCodes(data);
       buffer = buffer + receivedString;
-      logger.w(receivedString);
-      _handleBuffer(client);
+      // logger.w(receivedString);
+      _handleBuffer();
     }, onDone: () {
       logger.d("server done");
-    });
-    client.close();
+    }).canceledBy(this);
   }
 
-  void _handleBuffer(Socket client) {
+  void _handleBuffer() {
     while (true) {
       final splitted = buffer.split("\n");
       logger.d("splitted!");
@@ -86,15 +38,14 @@ class TcpConnection implements DirectConnection {
         if (buffer.startsWith("\n")) {
           buffer = buffer.substring(1);
         }
-        _handleMessage(splitted.first, client);
+        _handleMessage(splitted.first);
       } else {
         return;
       }
     }
   }
 
-  void _handleMessage(String message, Socket client) {
-    final clientIp = client.remoteAddress.address;
+  void _handleMessage(String message) {
     _readController.add(message);
   }
 
@@ -103,22 +54,12 @@ class TcpConnection implements DirectConnection {
 
   @override
   Future<bool> write(String msg) async {
-    for (Socket socket in socketsOutController.valueOrNull ?? []) {
-      socket.write("$msg\n");
-      logger.d("socket ip: ${socket.address.host}");
-      await socket.flush();
-    }
+    _writeSocket.write("$msg\n");
+    logger.d("socket ip: ${_writeSocket.address.host}");
+    await _writeSocket.flush();
     return true;
   }
 
-  Socket? _getSocketByIp(String ip) {
-    return socketsOut.firstWhereOrNull((socket) => socket.address.host == ip);
-  }
-
   @override
-  void connectDevices(List<String> peersIds) {
-    for (final ip in peersIds) {
-      connect(ip);
-    }
-  }
+  String get id => _readSocket.remoteAddress.address;
 }

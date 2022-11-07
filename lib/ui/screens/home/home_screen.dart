@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sound_share/network/p2p/p2p_network.dart';
 import 'package:sound_share/ui/screens/player/music_test_screen.dart';
 import 'package:sound_share/ui/screens/player/player_screen.dart';
 import 'package:sound_share/ui/screens/settings/settings_screen.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
-
-import '../../../network/link/tcp_connection.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -18,27 +16,15 @@ class _HomeScreenState extends State<HomeScreen> {
   var _ip = "192.168.";
   late final TextEditingController _ipController =
       TextEditingController(text: _ip);
-  TcpConnection tcpConnection = TcpConnection(port: 9999);
 
   _connect() async {
-    if (await tcpConnection.connect(_ip)) {
-      Fluttertoast.showToast(
-        msg: "Connected.",
-      );
-      _openPlayer();
-    } else {
-      Fluttertoast.showToast(
-        msg: "Error when connecting.",
-      );
-    }
+    final p2pNetwork = P2pNetwork();
+    p2pNetwork.connect(_ip);
+    _openPlayer(p2pNetwork);
   }
 
   _createNetwork() {
-    tcpConnection.listenForConnections();
-    Fluttertoast.showToast(
-      msg: "Created a new network.",
-    );
-    _openPlayer();
+    _openPlayer(P2pNetwork());
   }
 
   @override
@@ -99,9 +85,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _openPlayer() {
+  void _openPlayer(P2pNetwork p2pNetwork) {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => PlayerScreen(connection: tcpConnection)));
+        builder: (context) => PlayerScreen(p2pNetwork: p2pNetwork)));
   }
 
   void _openTestMusic() {
