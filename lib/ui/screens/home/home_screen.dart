@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sound_share/network/p2p/p2p_network.dart';
+import 'package:sound_share/ui/screens/home/record_screen.dart';
 import 'package:sound_share/ui/screens/player/music_test_screen.dart';
 import 'package:sound_share/ui/screens/player/player_screen.dart';
 import 'package:sound_share/ui/screens/settings/settings_screen.dart';
@@ -79,6 +80,12 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               child: const Text("Test music"),
             ),
+            PrimaryFullButton(
+              onPressed: () {
+                _openRecording();
+              },
+              child: const Text("Record"),
+            ),
           ],
         ),
       ),
@@ -93,5 +100,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void _openTestMusic() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const MusicTestScreen()));
+  }
+
+  void _openRecording() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => RecordScreen()));
   }
 }
