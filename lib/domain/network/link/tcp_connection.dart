@@ -4,7 +4,7 @@ import 'dart:typed_data';
 
 import 'package:sound_share/common/logger.dart';
 import 'package:sound_share/common/utils/disposable.dart';
-import 'package:sound_share/network/link/message_buffer.dart';
+import 'package:sound_share/domain/network/link/message_buffer.dart';
 
 import 'direct_connection.dart';
 
