@@ -194,7 +194,9 @@ class __$$RequestResourceMsgCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$RequestResourceMsg implements RequestResourceMsg {
+class _$RequestResourceMsg
+    with DiagnosticableTreeMixin
+    implements RequestResourceMsg {
   const _$RequestResourceMsg({required this.id, final String? $type})
       : $type = $type ?? 'requestResource';
 
@@ -206,6 +208,19 @@ class _$RequestResourceMsg implements RequestResourceMsg {
 
   @JsonKey(name: 'type')
   final String $type;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'P2pMessage.requestResource(id: $id)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'P2pMessage.requestResource'))
+      ..add(DiagnosticsProperty('id', id));
+  }
 
   @override
   bool operator ==(dynamic other) {
@@ -397,7 +412,7 @@ class __$$ResourceMsgCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ResourceMsg implements ResourceMsg {
+class _$ResourceMsg with DiagnosticableTreeMixin implements ResourceMsg {
   const _$ResourceMsg({required this.id, final String? $type})
       : $type = $type ?? 'resource';
 
@@ -409,6 +424,19 @@ class _$ResourceMsg implements ResourceMsg {
 
   @JsonKey(name: 'type')
   final String $type;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'P2pMessage.resource(id: $id)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'P2pMessage.resource'))
+      ..add(DiagnosticsProperty('id', id));
+  }
 
   @override
   bool operator ==(dynamic other) {
@@ -583,7 +611,9 @@ class __$$RequestStateUpdateMsgCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$RequestStateUpdateMsg implements RequestStateUpdateMsg {
+class _$RequestStateUpdateMsg
+    with DiagnosticableTreeMixin
+    implements RequestStateUpdateMsg {
   const _$RequestStateUpdateMsg({final String? $type})
       : $type = $type ?? 'requestStateUpdate';
 
@@ -592,6 +622,18 @@ class _$RequestStateUpdateMsg implements RequestStateUpdateMsg {
 
   @JsonKey(name: 'type')
   final String $type;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'P2pMessage.requestStateUpdate()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+        .add(DiagnosticsProperty('type', 'P2pMessage.requestStateUpdate'));
+  }
 
   @override
   bool operator ==(dynamic other) {
@@ -768,7 +810,7 @@ class __$$StateUpdateMsgCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$StateUpdateMsg implements StateUpdateMsg {
+class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
   const _$StateUpdateMsg(
       {required final List<String> devices, final String? $type})
       : _devices = devices,
@@ -786,6 +828,19 @@ class _$StateUpdateMsg implements StateUpdateMsg {
 
   @JsonKey(name: 'type')
   final String $type;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'P2pMessage.stateUpdateMsg(devices: $devices)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'P2pMessage.stateUpdateMsg'))
+      ..add(DiagnosticsProperty('devices', devices));
+  }
 
   @override
   bool operator ==(dynamic other) {
@@ -945,20 +1000,20 @@ abstract class StateUpdateMsg implements P2pMessage {
 }
 
 /// @nodoc
-abstract class _$$MusicPackageCopyWith<$Res> {
-  factory _$$MusicPackageCopyWith(
-          _$MusicPackage value, $Res Function(_$MusicPackage) then) =
-      __$$MusicPackageCopyWithImpl<$Res>;
+abstract class _$$MusicPackageMsgCopyWith<$Res> {
+  factory _$$MusicPackageMsgCopyWith(
+          _$MusicPackageMsg value, $Res Function(_$MusicPackageMsg) then) =
+      __$$MusicPackageMsgCopyWithImpl<$Res>;
   @useResult
   $Res call({String songId, String serializedBytes});
 }
 
 /// @nodoc
-class __$$MusicPackageCopyWithImpl<$Res>
-    extends _$P2pMessageCopyWithImpl<$Res, _$MusicPackage>
-    implements _$$MusicPackageCopyWith<$Res> {
-  __$$MusicPackageCopyWithImpl(
-      _$MusicPackage _value, $Res Function(_$MusicPackage) _then)
+class __$$MusicPackageMsgCopyWithImpl<$Res>
+    extends _$P2pMessageCopyWithImpl<$Res, _$MusicPackageMsg>
+    implements _$$MusicPackageMsgCopyWith<$Res> {
+  __$$MusicPackageMsgCopyWithImpl(
+      _$MusicPackageMsg _value, $Res Function(_$MusicPackageMsg) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -967,7 +1022,7 @@ class __$$MusicPackageCopyWithImpl<$Res>
     Object? songId = null,
     Object? serializedBytes = null,
   }) {
-    return _then(_$MusicPackage(
+    return _then(_$MusicPackageMsg(
       songId: null == songId
           ? _value.songId
           : songId // ignore: cast_nullable_to_non_nullable
@@ -982,15 +1037,17 @@ class __$$MusicPackageCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$MusicPackage implements MusicPackageMsg {
-  const _$MusicPackage(
+class _$MusicPackageMsg
+    with DiagnosticableTreeMixin
+    implements MusicPackageMsg {
+  const _$MusicPackageMsg(
       {required this.songId,
       required this.serializedBytes,
       final String? $type})
       : $type = $type ?? 'musicPackage';
 
-  factory _$MusicPackage.fromJson(Map<String, dynamic> json) =>
-      _$$MusicPackageFromJson(json);
+  factory _$MusicPackageMsg.fromJson(Map<String, dynamic> json) =>
+      _$$MusicPackageMsgFromJson(json);
 
   @override
   final String songId;
@@ -1001,10 +1058,24 @@ class _$MusicPackage implements MusicPackageMsg {
   final String $type;
 
   @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'P2pMessage.musicPackage(songId: $songId, serializedBytes: $serializedBytes)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'P2pMessage.musicPackage'))
+      ..add(DiagnosticsProperty('songId', songId))
+      ..add(DiagnosticsProperty('serializedBytes', serializedBytes));
+  }
+
+  @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$MusicPackage &&
+            other is _$MusicPackageMsg &&
             (identical(other.songId, songId) || other.songId == songId) &&
             (identical(other.serializedBytes, serializedBytes) ||
                 other.serializedBytes == serializedBytes));
@@ -1017,8 +1088,8 @@ class _$MusicPackage implements MusicPackageMsg {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$MusicPackageCopyWith<_$MusicPackage> get copyWith =>
-      __$$MusicPackageCopyWithImpl<_$MusicPackage>(this, _$identity);
+  _$$MusicPackageMsgCopyWith<_$MusicPackageMsg> get copyWith =>
+      __$$MusicPackageMsgCopyWithImpl<_$MusicPackageMsg>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1139,7 +1210,7 @@ class _$MusicPackage implements MusicPackageMsg {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$MusicPackageToJson(
+    return _$$MusicPackageMsgToJson(
       this,
     );
   }
@@ -1148,15 +1219,15 @@ class _$MusicPackage implements MusicPackageMsg {
 abstract class MusicPackageMsg implements P2pMessage {
   const factory MusicPackageMsg(
       {required final String songId,
-      required final String serializedBytes}) = _$MusicPackage;
+      required final String serializedBytes}) = _$MusicPackageMsg;
 
   factory MusicPackageMsg.fromJson(Map<String, dynamic> json) =
-      _$MusicPackage.fromJson;
+      _$MusicPackageMsg.fromJson;
 
   String get songId;
   String get serializedBytes;
   @JsonKey(ignore: true)
-  _$$MusicPackageCopyWith<_$MusicPackage> get copyWith =>
+  _$$MusicPackageMsgCopyWith<_$MusicPackageMsg> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1176,7 +1247,7 @@ class __$$PlayMsgCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$PlayMsg implements PlayMsg {
+class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
   const _$PlayMsg({final String? $type}) : $type = $type ?? 'play';
 
   factory _$PlayMsg.fromJson(Map<String, dynamic> json) =>
@@ -1184,6 +1255,17 @@ class _$PlayMsg implements PlayMsg {
 
   @JsonKey(name: 'type')
   final String $type;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'P2pMessage.play()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('type', 'P2pMessage.play'));
+  }
 
   @override
   bool operator ==(dynamic other) {
@@ -1343,7 +1425,7 @@ class __$$PauseMsgCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$PauseMsg implements PauseMsg {
+class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
   const _$PauseMsg({final String? $type}) : $type = $type ?? 'pause';
 
   factory _$PauseMsg.fromJson(Map<String, dynamic> json) =>
@@ -1351,6 +1433,17 @@ class _$PauseMsg implements PauseMsg {
 
   @JsonKey(name: 'type')
   final String $type;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'P2pMessage.pause()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('type', 'P2pMessage.pause'));
+  }
 
   @override
   bool operator ==(dynamic other) {
@@ -1511,7 +1604,7 @@ class __$$SkipSongMsgCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$SkipSongMsg implements SkipSongMsg {
+class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
   const _$SkipSongMsg({final String? $type}) : $type = $type ?? 'skipSong';
 
   factory _$SkipSongMsg.fromJson(Map<String, dynamic> json) =>
@@ -1519,6 +1612,17 @@ class _$SkipSongMsg implements SkipSongMsg {
 
   @JsonKey(name: 'type')
   final String $type;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'P2pMessage.skipSong()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('type', 'P2pMessage.skipSong'));
+  }
 
   @override
   bool operator ==(dynamic other) {
@@ -1680,7 +1784,9 @@ class __$$PreviousSongMsgCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$PreviousSongMsg implements PreviousSongMsg {
+class _$PreviousSongMsg
+    with DiagnosticableTreeMixin
+    implements PreviousSongMsg {
   const _$PreviousSongMsg({final String? $type})
       : $type = $type ?? 'previousSong';
 
@@ -1689,6 +1795,17 @@ class _$PreviousSongMsg implements PreviousSongMsg {
 
   @JsonKey(name: 'type')
   final String $type;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'P2pMessage.previousSong()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('type', 'P2pMessage.previousSong'));
+  }
 
   @override
   bool operator ==(dynamic other) {
@@ -1850,7 +1967,9 @@ class __$$AddSongToQueueMsgCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$AddSongToQueueMsg implements AddSongToQueueMsg {
+class _$AddSongToQueueMsg
+    with DiagnosticableTreeMixin
+    implements AddSongToQueueMsg {
   const _$AddSongToQueueMsg({final String? $type})
       : $type = $type ?? 'addSongToQueue';
 
@@ -1859,6 +1978,17 @@ class _$AddSongToQueueMsg implements AddSongToQueueMsg {
 
   @JsonKey(name: 'type')
   final String $type;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'P2pMessage.addSongToQueue()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('type', 'P2pMessage.addSongToQueue'));
+  }
 
   @override
   bool operator ==(dynamic other) {
@@ -2020,7 +2150,9 @@ class __$$RemoveSongFromQueueMsgCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$RemoveSongFromQueueMsg implements RemoveSongFromQueueMsg {
+class _$RemoveSongFromQueueMsg
+    with DiagnosticableTreeMixin
+    implements RemoveSongFromQueueMsg {
   const _$RemoveSongFromQueueMsg({final String? $type})
       : $type = $type ?? 'removeSongFromQueue';
 
@@ -2029,6 +2161,18 @@ class _$RemoveSongFromQueueMsg implements RemoveSongFromQueueMsg {
 
   @JsonKey(name: 'type')
   final String $type;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'P2pMessage.removeSongFromQueue()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+        .add(DiagnosticsProperty('type', 'P2pMessage.removeSongFromQueue'));
+  }
 
   @override
   bool operator ==(dynamic other) {

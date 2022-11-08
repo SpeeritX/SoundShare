@@ -53,7 +53,7 @@ class PeersContainer with Disposable {
 
   Future<void> _send(DirectConnection peer, P2pMessage message) async {
     logger.d("SENDING to ${peer.id} - $message");
-    await peer.write(jsonEncode(message.toJson()));
+    await peer.write(message.toBytes());
   }
 
   bool contains(String peerId) {
