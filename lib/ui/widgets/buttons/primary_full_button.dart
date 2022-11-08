@@ -16,6 +16,9 @@ class PrimaryFullButton extends StatelessWidget {
     return MaterialButton(
       onPressed: onPressed,
       color: AppColors.primary,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18.0),
+      ),
       child: child,
     );
   }

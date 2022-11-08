@@ -14,8 +14,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'SoundShare',
       theme: ThemeData(
-        primarySwatch: AppColors.primary,
-      ),
+          buttonTheme: const ButtonThemeData(
+        buttonColor: AppColors.primary,
+        textTheme: ButtonTextTheme.primary,
+      )),
       home: const SplashScreen(),
     );
   }
