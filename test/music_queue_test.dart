@@ -1,16 +1,24 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sound_share/domain/music/package/details_package.dart';
 import 'package:sound_share/domain/music/player/music_queue.dart';
 
-import 'package:sound_share/domain/music/player/music_resource.dart';
-
 void main() {
+  DetailsPackage createSong(String id) {
+    return DetailsPackage(
+      songId: id,
+      duration: Duration.zero,
+      artist: "",
+      title: "",
+    );
+  }
+
   test('Song should be added to queue', () {
     MusicQueue musicQueue = MusicQueue();
 
-    SongResource song0 = SongResource("0");
-    SongResource song1 = SongResource("1");
-    SongResource song2 = SongResource("2");
-    SongResource song3 = SongResource("3");
+    final song0 = createSong("0");
+    final song1 = createSong("1");
+    final song2 = createSong("2");
+    final song3 = createSong("3");
 
     musicQueue.addSong(song0);
     musicQueue.addSong(song1);
@@ -26,13 +34,13 @@ void main() {
     musicQueue.nextSong();
     musicQueue.addSong(song1);
 
-    expect(musicQueue.songList[0].id, "1");
+    expect(musicQueue.songList[0].songId, "1");
   });
 
   test('Song should be removed from queue', () {
     MusicQueue musicQueue = MusicQueue();
 
-    SongResource song = SongResource("1");
+    final song = createSong("1");
     musicQueue.addSong(song);
 
     musicQueue.removeSong(0);
@@ -43,11 +51,11 @@ void main() {
   test('Previous song', () {
     MusicQueue musicQueue = MusicQueue();
 
-    SongResource song1 = SongResource("1");
+    final song1 = createSong("1");
     musicQueue.addSong(song1);
-    SongResource song2 = SongResource("2");
+    final song2 = createSong("2");
     musicQueue.addSong(song2);
-    SongResource song3 = SongResource("3");
+    final song3 = createSong("3");
     musicQueue.addSong(song3);
 
     musicQueue.previousSong();
@@ -63,11 +71,11 @@ void main() {
   test('Next song', () {
     MusicQueue musicQueue = MusicQueue();
 
-    SongResource song1 = SongResource("1");
+    final song1 = createSong("1");
     musicQueue.addSong(song1);
-    SongResource song2 = SongResource("2");
+    final song2 = createSong("2");
     musicQueue.addSong(song2);
-    SongResource song3 = SongResource("3");
+    final song3 = createSong("3");
     musicQueue.addSong(song3);
 
     musicQueue.nextSong();

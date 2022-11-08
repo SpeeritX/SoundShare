@@ -1,12 +1,12 @@
-import 'package:sound_share/domain/music/song/song.dart';
+import 'package:sound_share/domain/music/package/details_package.dart';
 
 class MusicQueue {
-  List<MusicSong> songList = [];
+  List<DetailsPackage> songList = [];
   int _currentSongIndex = 0;
 
   int get currentSongIndex => _currentSongIndex;
 
-  MusicSong previousSong() {
+  DetailsPackage previousSong() {
     _currentSongIndex = _currentSongIndex - 1;
     if (_currentSongIndex < 0) {
       _currentSongIndex = songList.length - 1;
@@ -14,7 +14,7 @@ class MusicQueue {
     return songList[_currentSongIndex];
   }
 
-  MusicSong nextSong() {
+  DetailsPackage nextSong() {
     _currentSongIndex = _currentSongIndex + 1;
     if (_currentSongIndex >= songList.length) {
       _currentSongIndex = 0;
@@ -22,7 +22,7 @@ class MusicQueue {
     return songList[_currentSongIndex];
   }
 
-  void addSong(MusicSong song) {
+  void addSong(DetailsPackage song) {
     if (songList.length >= 100) {
       if (_currentSongIndex != 0) {
         songList.removeAt(0);

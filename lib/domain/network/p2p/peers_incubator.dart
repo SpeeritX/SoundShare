@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:sound_share/common/utils/disposable.dart';
-import 'package:sound_share/network/link/direct_connection.dart';
-import 'package:sound_share/network/link/tcp/tcp_connection_factory.dart';
-import 'package:sound_share/network/link/tcp/tcp_server.dart';
+import 'package:sound_share/domain/network/link/tcp/tcp_server.dart';
+import 'package:sound_share/domain/network/link/direct_connection.dart';
+import 'package:sound_share/domain/network/link/tcp/tcp_connection_factory.dart';
 
 class PeersIncubator with Disposable {
   final TcpServer _tcpServer;

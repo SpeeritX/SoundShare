@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sound_share/network/p2p/p2p_network.dart';
+import 'package:sound_share/domain/network/p2p/p2p_network.dart';
 import 'package:sound_share/ui/screens/home/record_screen.dart';
 import 'package:sound_share/ui/screens/player/music_test_screen.dart';
 import 'package:sound_share/ui/screens/player/player_screen.dart';

@@ -1,6 +1,6 @@
 class DetailsPackage {
   final String songId;
-  final DateTime duration;
+  final Duration duration;
   final String artist;
   final String title;
 

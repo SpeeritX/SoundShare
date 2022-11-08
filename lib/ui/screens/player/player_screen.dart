@@ -1,19 +1,16 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:sound_share/common/utils/iterable_extensions.dart';
 import 'package:sound_share/domain/music/package/music_package.dart';
 import 'package:sound_share/domain/music/player/music_buffer.dart';
 import 'package:sound_share/domain/music/player/music_player.dart';
 import 'package:sound_share/domain/music/player/music_queue.dart';
-import 'package:sound_share/network/link/direct_connection.dart';
 import 'package:sound_share/domain/music/reader/music_reader.dart';
 import 'package:sound_share/domain/music/song/song.dart';
-import 'package:sound_share/network/p2p/p2p_network.dart';
+import 'package:sound_share/domain/network/p2p/p2p_network.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
 class PlayerScreen extends StatefulWidget {
@@ -42,16 +39,17 @@ class _PlayerScreenState extends State<PlayerScreen> {
     _p2pNetwork = widget.p2pNetwork;
 
     _subscription = _p2pNetwork.songBytesStream.listen((event) {
-      _player.addPackage(MusicPackage(
-        startTime: DateTime(0),
-        duration: Duration.zero,
-        data: event,
-      ));
       if (!_isPlaying) {
         _player.setSong(null);
         _player.play();
         _isPlaying = true;
       }
+      _player.addPackage(MusicPackage(
+        songId: "",
+        data: event,
+        startIndex: 0,
+        endIndex: 0,
+      ));
     });
     super.initState();
   }
@@ -67,7 +65,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null) {
       File file = File(result.files.single.path!);
-      _bytes = await file.readAsBytes();
       setState(() {
         _fileName = file.path.split(Platform.pathSeparator).last;
       });
@@ -77,7 +74,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
         if (package == null) {
           break;
         }
-        await _p2pNetwork.sendBytes(Uint8List.fromList(package));
+        await _p2pNetwork.sendBytes(Uint8List.fromList(package.data));
       }
     } else {
       // User canceled the picker

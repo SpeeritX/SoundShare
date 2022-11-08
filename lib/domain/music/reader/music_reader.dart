@@ -25,7 +25,7 @@ class MusicReader {
   static Future<MusicReader> create({
     required MusicSong song,
   }) async {
-    var attributes = await song.getAttributes();
+    final attributes = await song.getAttributes();
     var component = MusicReader._create(song, attributes);
     return component;
   }

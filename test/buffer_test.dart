@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:sound_share/network/link/message_buffer.dart';
+import 'package:sound_share/domain/network/link/message_buffer.dart';
 import 'package:test/test.dart';
 
 void main() {

@@ -4,10 +4,10 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:sound_share/common/logger.dart';
 import 'package:sound_share/common/utils/disposable.dart';
-import 'package:sound_share/network/link/direct_connection.dart';
-import 'package:sound_share/network/link/tcp/tcp_server.dart';
-import 'package:sound_share/network/p2p/p2p_messages.dart';
-import 'package:sound_share/network/p2p/peers_incubator.dart';
+import 'package:sound_share/domain/network/link/direct_connection.dart';
+import 'package:sound_share/domain/network/link/tcp/tcp_server.dart';
+import 'package:sound_share/domain/network/p2p/p2p_messages.dart';
+import 'package:sound_share/domain/network/p2p/peers_incubator.dart';
 
 class PeersContainer with Disposable {
   final TcpServer _tcpServer;

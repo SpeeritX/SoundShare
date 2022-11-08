@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:sound_share/common/logger.dart';
 import 'package:sound_share/common/utils/disposable.dart';
-import 'package:sound_share/network/link/tcp/tcp_server.dart';
-import 'package:sound_share/network/link/tcp_connection.dart';
+import 'package:sound_share/domain/network/link/tcp/tcp_server.dart';
+import 'package:sound_share/domain/network/link/tcp_connection.dart';
 
 class TcpConnectionFactory with Disposable {
   final TcpServer _tcpServer;
