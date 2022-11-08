@@ -1,12 +1,12 @@
-import 'package:sound_share/domain/music/player/music_resource.dart';
+import 'package:sound_share/domain/music/song/song.dart';
 
 class MusicQueue {
-  List<SongResource> songList = [];
+  List<MusicSong> songList = [];
   int _currentSongIndex = 0;
 
   int get currentSongIndex => _currentSongIndex;
 
-  SongResource previousSong() {
+  MusicSong previousSong() {
     _currentSongIndex = _currentSongIndex - 1;
     if (_currentSongIndex < 0) {
       _currentSongIndex = songList.length - 1;
@@ -14,7 +14,7 @@ class MusicQueue {
     return songList[_currentSongIndex];
   }
 
-  SongResource nextSong() {
+  MusicSong nextSong() {
     _currentSongIndex = _currentSongIndex + 1;
     if (_currentSongIndex >= songList.length) {
       _currentSongIndex = 0;
@@ -22,7 +22,7 @@ class MusicQueue {
     return songList[_currentSongIndex];
   }
 
-  void addSong(SongResource song) {
+  void addSong(MusicSong song) {
     if (songList.length >= 100) {
       if (_currentSongIndex != 0) {
         songList.removeAt(0);

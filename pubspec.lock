@@ -156,7 +156,7 @@ packages:
     source: hosted
     version: "1.6.1"
   crypto:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: crypto
       url: "https://pub.dartlang.org"
@@ -296,6 +296,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.2"
+  id3:
+    dependency: "direct main"
+    description:
+      name: id3
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   io:
     dependency: transitive
     description:
@@ -380,6 +387,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.5"
+  media_info:
+    dependency: "direct main"
+    description:
+      name: media_info
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.12.0+1"
   meta:
     dependency: transitive
     description:

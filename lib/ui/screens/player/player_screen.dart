@@ -1,14 +1,18 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:sound_share/common/utils/iterable_extensions.dart';
-import 'package:sound_share/domain/music/music_package.dart';
+import 'package:sound_share/domain/music/package/music_package.dart';
 import 'package:sound_share/domain/music/player/music_buffer.dart';
 import 'package:sound_share/domain/music/player/music_player.dart';
 import 'package:sound_share/domain/music/player/music_queue.dart';
+import 'package:sound_share/network/link/direct_connection.dart';
+import 'package:sound_share/domain/music/reader/music_reader.dart';
+import 'package:sound_share/domain/music/song/song.dart';
 import 'package:sound_share/network/p2p/p2p_network.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
@@ -67,17 +71,19 @@ class _PlayerScreenState extends State<PlayerScreen> {
       setState(() {
         _fileName = file.path.split(Platform.pathSeparator).last;
       });
+      var packages = await MusicReader.create(song: MusicSong(file: file));
+      while (true) {
+        var package = packages.next();
+        if (package == null) {
+          break;
+        }
+        await _p2pNetwork.sendBytes(Uint8List.fromList(package));
+      }
     } else {
       // User canceled the picker
       setState(() {
         _fileName = "";
       });
-    }
-
-    // await _connection.write(Uint8List.fromList(_bytes));
-    var packages = _bytes.toList().chunked((10000).floor());
-    for (var package in packages) {
-      await _p2pNetwork.sendBytes(Uint8List.fromList(package));
     }
   }
 
@@ -108,7 +114,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
               onPressed: () {
                 _pickFile();
               },
-              child: const Text("Pick file"),
+              child: Text("Pick file"),
             ),
           ],
         ),

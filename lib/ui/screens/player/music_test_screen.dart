@@ -5,10 +5,12 @@ import 'package:path/path.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:sound_share/common/utils/iterable_extensions.dart';
-import 'package:sound_share/domain/music/music_directory/music_directory.dart';
-import 'package:sound_share/domain/music/music_package.dart';
+import 'package:sound_share/domain/music/directory/directory.dart';
+import 'package:sound_share/domain/music/package/music_package.dart';
 import 'package:sound_share/domain/music/player/music_buffer.dart';
 import 'package:sound_share/domain/music/player/music_player.dart';
+import 'package:sound_share/domain/music/reader/music_reader.dart';
+import 'package:sound_share/domain/music/song/song.dart';
 import 'package:sound_share/domain/music/player/music_queue.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
@@ -22,9 +24,9 @@ class MusicTestScreen extends StatefulWidget {
 class _MusicTestScreenState extends State<MusicTestScreen> {
   final _musicBuffer = MusicBuffer();
   late final _player = MusicPlayer(_musicBuffer, MusicQueue());
-  final _directory = MusicDirectory();
-  List<int> _bytes = [];
-  final List<File> _files = [];
+  MusicDirectory? _directory;
+  MusicSong? _song;
+  final List<MusicSong> _songs = [];
   var _currentFileName = "";
 
   @override
@@ -34,43 +36,46 @@ class _MusicTestScreenState extends State<MusicTestScreen> {
   }
 
   @override
-  void dispose() async {
+  void dispose() {
     _player.stop();
-    _directory.relinquish();
+    _directory?.relinquish();
     super.dispose();
   }
 
   void _loadFile() async {
-    _directory.relinquish();
+    await _directory?.relinquish();
     String? result = await FilePicker.platform.getDirectoryPath();
     if (result != null) {
-      var f = await _directory.load(result);
+      _directory = MusicDirectory(result);
+      await _directory?.getAccess();
+      await _directory?.load();
       setState(() {
-        _files.clear();
-        _files.addAll(f);
+        _songs.clear();
+        _songs.addAll(_directory?.songs ?? List.empty());
       });
     }
   }
 
   void _pickSong(ind) async {
-    _bytes = await _files[ind].readAsBytes();
+    _song = _songs[ind];
     setState(() {
-      _currentFileName = basename(_files[ind].path);
+      _currentFileName = _song?.file.path ?? "";
     });
   }
 
   void _play() async {
-    _player.setSong(_bytes.length);
+    _player.setSong(null);
     _player.play();
-
-    var packages = _bytes.toList().chunked((10000).floor());
-    for (var package in packages) {
-      _player.addPackage(MusicPackage(
-        startTime: DateTime(0),
-        duration: Duration.zero,
-        data: Uint8List.fromList(package),
-      ));
-      //await Future.delayed(Duration(milliseconds: 50));
+    _player.stop();
+    _player.play();
+    var packages =
+        await MusicReader.create(song: MusicSong(file: File(_currentFileName)));
+    while (true) {
+      var package = packages.next();
+      if (package == null) {
+        break;
+      }
+      _player.addPackage(package);
     }
   }
 
@@ -91,35 +96,38 @@ class _MusicTestScreenState extends State<MusicTestScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              _currentFileName,
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            PrimaryFullButton(
-              onPressed: () {
-                _play();
-              },
-              child: const Text("Play"),
-            ),
-            PrimaryFullButton(
-              onPressed: () {
-                _stop();
-              },
-              child: const Text("Pause"),
-            ),
-            PrimaryFullButton(
-              onPressed: () {
-                _loadFile();
-              },
-              child: const Text("Pick songs"),
-            ),
-            for (var i = 0; i < _files.length; i++)
+            ...[
+              Text(
+                _currentFileName,
+                style: Theme.of(context).textTheme.headline5,
+              ),
+              PrimaryFullButton(
+                onPressed: () {
+                  _play();
+                },
+                child: const Text("Play"),
+              ),
+              PrimaryFullButton(
+                onPressed: () {
+                  _stop();
+                },
+                child: const Text("Pause"),
+              ),
+              PrimaryFullButton(
+                onPressed: () {
+                  _loadFile();
+                },
+                child: const Text("Pick songs"),
+              ),
+            ],
+            for (var i = 0; i < _songs.length; i++) ...[
               PrimaryFullButton(
                 onPressed: () {
                   _pickSong(i);
                 },
-                child: Text(basename(_files[i].path)),
+                child: Text(basename(_songs[i].file.path)),
               ),
+            ]
           ],
         ),
       ),
