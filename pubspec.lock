@@ -387,13 +387,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.5"
-  media_info:
-    dependency: "direct main"
-    description:
-      name: media_info
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.12.0+1"
   meta:
     dependency: transitive
     description:
@@ -408,6 +401,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  mp3_info:
+    dependency: "direct main"
+    description:
+      name: mp3_info
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   node_preamble:
     dependency: transitive
     description:

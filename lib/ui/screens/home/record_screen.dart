@@ -38,7 +38,7 @@ class _RecordScreenState extends State<RecordScreen> {
           children: [
             PrimaryFullButton(
               onPressed: () {
-                if(_isRecording) {
+                if (_isRecording) {
                   stopRecorder();
                 } else {
                   start();

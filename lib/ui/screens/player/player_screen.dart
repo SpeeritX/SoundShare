@@ -68,7 +68,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
       setState(() {
         _fileName = file.path.split(Platform.pathSeparator).last;
       });
-      var packages = await MusicReader.create(song: MusicSong(file: file));
+      var packages = MusicReader(await MusicSong.create(file: file));
       while (true) {
         var package = packages.next();
         if (package == null) {

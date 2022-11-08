@@ -12,7 +12,7 @@ class MusicPlayer {
   var _source = BytesAudioSource(null);
 
   MusicPlayer(this._musicBuffer, this._musicQueue) {
-    _player.setAudioSource(_source);
+    //_player.setAudioSource(_source);
   }
 
   void setSong(int? length) {

@@ -68,8 +68,8 @@ class _MusicTestScreenState extends State<MusicTestScreen> {
     _player.play();
     _player.stop();
     _player.play();
-    var packages =
-        await MusicReader.create(song: MusicSong(file: File(_currentFileName)));
+    var song = await MusicSong.create(file: File(_currentFileName));
+    var packages = MusicReader(song);
     while (true) {
       var package = packages.next();
       if (package == null) {
