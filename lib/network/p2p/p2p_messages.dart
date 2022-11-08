@@ -52,3 +52,9 @@ extension MusicPackageExt on MusicPackageMsg {
     return base64.encode(bytes);
   }
 }
+
+extension P2pMessageExt on P2pMessage {
+  Uint8List toBytes() {
+    return Uint8List.fromList(jsonEncode(toJson()).codeUnits);
+  }
+}

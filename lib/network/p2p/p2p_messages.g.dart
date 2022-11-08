@@ -56,14 +56,14 @@ Map<String, dynamic> _$$StateUpdateMsgToJson(_$StateUpdateMsg instance) =>
       'type': instance.$type,
     };
 
-_$MusicPackage _$$MusicPackageFromJson(Map<String, dynamic> json) =>
-    _$MusicPackage(
+_$MusicPackageMsg _$$MusicPackageMsgFromJson(Map<String, dynamic> json) =>
+    _$MusicPackageMsg(
       songId: json['songId'] as String,
       serializedBytes: json['serializedBytes'] as String,
       $type: json['type'] as String?,
     );
 
-Map<String, dynamic> _$$MusicPackageToJson(_$MusicPackage instance) =>
+Map<String, dynamic> _$$MusicPackageMsgToJson(_$MusicPackageMsg instance) =>
     <String, dynamic>{
       'songId': instance.songId,
       'serializedBytes': instance.serializedBytes,
