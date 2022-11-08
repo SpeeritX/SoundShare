@@ -6,9 +6,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:sound_share/common/utils/iterable_extensions.dart';
 import 'package:sound_share/domain/music/directory/directory.dart';
-import 'package:sound_share/domain/music/music_package.dart';
+import 'package:sound_share/domain/music/package/music_package.dart';
 import 'package:sound_share/domain/music/player/music_buffer.dart';
 import 'package:sound_share/domain/music/player/music_player.dart';
+import 'package:sound_share/domain/music/reader/music_reader.dart';
 import 'package:sound_share/domain/music/song/song.dart';
 import 'package:sound_share/domain/music/player/music_queue.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
@@ -23,8 +24,8 @@ class MusicTestScreen extends StatefulWidget {
 class _MusicTestScreenState extends State<MusicTestScreen> {
   final _musicBuffer = MusicBuffer();
   late final _player = MusicPlayer(_musicBuffer, MusicQueue());
-  final _directory = MusicDirectory();
-  List<int> _bytes = [];
+  MusicDirectory? _directory;
+  MusicSong? _song;
   final List<MusicSong> _songs = [];
   var _currentFileName = "";
 
@@ -56,25 +57,25 @@ class _MusicTestScreenState extends State<MusicTestScreen> {
   }
 
   void _pickSong(ind) async {
-    _bytes = await _songs[ind].file.readAsBytes();
+    _song = _songs[ind];
     setState(() {
-      _currentFileName = basename(_songs[ind].file.path);
+      _currentFileName = _song?.file.path ?? "";
     });
   }
 
   void _play() async {
-    _player.setSong(_bytes.length);
+    _player.setSong(null);
     _player.play();
     _player.stop();
     _player.play();
-    var packages = _bytes.toList().chunked((10000).floor());
-    for (var package in packages) {
-      _player.addPackage(MusicPackage(
-        startTime: DateTime(0),
-        duration: Duration.zero,
-        data: Uint8List.fromList(package),
-      ));
-      //await Future.delayed(Duration(milliseconds: 50));
+    var packages =
+        await MusicReader.create(song: MusicSong(file: File(_currentFileName)));
+    while (true) {
+      var package = packages.next();
+      if (package == null) {
+        break;
+      }
+      _player.addPackage(package);
     }
   }
 
@@ -124,10 +125,8 @@ class _MusicTestScreenState extends State<MusicTestScreen> {
                 onPressed: () {
                   _pickSong(i);
                 },
-                child: Text(basename(
-                    (_songs[i].attributes?['Title'] ?? _songs[i].file.path))),
+                child: Text(basename(_songs[i].file.path)),
               ),
-              Text(_songs[i].duration().toString()),
             ]
           ],
         ),

@@ -5,7 +5,7 @@ import 'package:sound_share/ui/screens/player/player_screen.dart';
 import 'package:sound_share/ui/screens/settings/settings_screen.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
-import '../../../network/link/tcp_connection.dart';
+import '../../../domain/network/link/tcp_connection.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

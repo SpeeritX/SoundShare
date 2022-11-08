@@ -1,15 +1,15 @@
-import 'package:sound_share/domain/music/player/music_resource.dart';
+import 'package:sound_share/domain/music/song/song.dart';
 
 class MusicQueue {
-  SongResource previousSong() {
+  MusicSong previousSong() {
     throw UnimplementedError();
   }
 
-  SongResource nextSong() {
+  MusicSong nextSong() {
     throw UnimplementedError();
   }
 
-  void addSong(SongResource music) {}
+  void addSong(MusicSong music) {}
 
-  void removeSong(SongResource music) {}
+  void removeSong(MusicSong music) {}
 }
