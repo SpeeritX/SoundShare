@@ -10,6 +10,7 @@ class DetailsPackage {
   final String artist;
   final String title;
   final String album;
+  final dynamic? apic;
 
   DetailsPackage({
     required this.songId,
@@ -18,6 +19,7 @@ class DetailsPackage {
     required this.artist,
     required this.title,
     required this.album,
+    this.apic = null,
   });
 
   factory DetailsPackage.fromJson(Map<String, dynamic> json) =>

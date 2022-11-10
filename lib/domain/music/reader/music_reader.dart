@@ -7,7 +7,8 @@ import 'package:sound_share/domain/music/song/song.dart';
 /// Reads the music in packages from the selected file
 class MusicReader {
   late Iterator<MusicPackage> _packages;
-  MusicReader._create(MusicSong song, DetailsPackage details) {
+
+  MusicReader(MusicSong song) {
     List<MusicPackage> arr = [];
     song.file
         .readAsBytesSync()
@@ -18,17 +19,10 @@ class MusicReader {
       arr.add(MusicPackage(
           startIndex: index * 10000,
           endIndex: (index + 1) * 10000 - 1,
-          songId: details.songId,
+          songId: song.details.songId,
           data: Uint8List.fromList(element)));
     });
     _packages = arr.iterator;
-  }
-  static Future<MusicReader> create({
-    required MusicSong song,
-  }) async {
-    final attributes = await song.getAttributes();
-    var component = MusicReader._create(song, attributes);
-    return component;
   }
 
   MusicPackage? next() {
