@@ -7,9 +7,9 @@ class DetailsPackage {
   final String songId;
   final int bytesLength;
   final Duration duration;
-  final String artist;
-  final String title;
-  final String album;
+  final String? artist;
+  final String? title;
+  final String? album;
   final dynamic? apic;
 
   DetailsPackage({

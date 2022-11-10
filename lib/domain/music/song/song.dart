@@ -9,7 +9,13 @@ import 'package:sound_share/domain/music/package/details_package.dart';
 class MusicSong {
   final File file;
   late final DetailsPackage details;
-  MusicSong._create(bytes, songId, duration, {required this.file}) {
+
+  MusicSong._create(
+    List<int> bytes,
+    String songId,
+    Duration duration, {
+    required this.file,
+  }) {
     MP3Instance mp3instance = MP3Instance(bytes);
     Map<String, dynamic>? attributes;
     String? artist, title, album;
@@ -28,12 +34,14 @@ class MusicSong {
     details = DetailsPackage(
       songId: songId,
       duration: duration,
+      bytesLength: bytes.length,
       artist: artist,
       title: title,
       album: album,
       apic: apic,
     );
   }
+
   static Future<MusicSong> create({required File file}) async {
     List<int> mp3Bytes = await file.readAsBytes();
     var songId = md5.convert(mp3Bytes).toString();

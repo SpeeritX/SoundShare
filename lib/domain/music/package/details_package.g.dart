@@ -11,9 +11,10 @@ DetailsPackage _$DetailsPackageFromJson(Map<String, dynamic> json) =>
       songId: json['songId'] as String,
       bytesLength: json['bytesLength'] as int,
       duration: Duration(microseconds: json['duration'] as int),
-      artist: json['artist'] as String,
-      title: json['title'] as String,
-      album: json['album'] as String,
+      artist: json['artist'] as String?,
+      title: json['title'] as String?,
+      album: json['album'] as String?,
+      apic: json['apic'] ?? null,
     );
 
 Map<String, dynamic> _$DetailsPackageToJson(DetailsPackage instance) =>
@@ -24,4 +25,5 @@ Map<String, dynamic> _$DetailsPackageToJson(DetailsPackage instance) =>
       'artist': instance.artist,
       'title': instance.title,
       'album': instance.album,
+      'apic': instance.apic,
     };
