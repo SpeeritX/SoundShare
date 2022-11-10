@@ -111,7 +111,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
               onPressed: () {
                 _pickFile();
               },
-              child: Text("Pick file"),
+              text: "Pick file",
             ),
           ],
         ),

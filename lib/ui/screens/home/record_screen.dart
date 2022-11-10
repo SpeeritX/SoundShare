@@ -38,13 +38,13 @@ class _RecordScreenState extends State<RecordScreen> {
           children: [
             PrimaryFullButton(
               onPressed: () {
-                if(_isRecording) {
+                if (_isRecording) {
                   stopRecorder();
                 } else {
                   start();
                 }
               },
-              child: const Text("Detect loud sound"),
+              text: "Detect loud sound",
             ),
           ],
         ),

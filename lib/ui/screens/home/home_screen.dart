@@ -5,6 +5,7 @@ import 'package:sound_share/ui/screens/home/record_screen.dart';
 import 'package:sound_share/ui/screens/player/music_test_screen.dart';
 import 'package:sound_share/ui/screens/player/player_screen.dart';
 
+import '../../style/paddings.dart';
 import '../../widgets/buttons/primary_full_button.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -46,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                padding: const EdgeInsets.only(top: 20),
+                padding: EdgeInsets.all(Paddings.dynamic.m3),
                 decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -67,29 +68,33 @@ class _HomeScreenState extends State<HomeScreen> {
                         hintText: 'IP',
                       ),
                     ),
+                    SizedBox(height: Paddings.dynamic.m3),
                     PrimaryFullButton(
                       onPressed: () {
                         _connect();
                       },
-                      child: Text("Connect to $_ip"),
+                      text: "Connect to $_ip",
                     ),
+                    SizedBox(height: Paddings.dynamic.m2),
                     PrimaryFullButton(
                       onPressed: () {
                         _createNetwork();
                       },
-                      child: const Text("Create"),
+                      text: "Create",
                     ),
+                    SizedBox(height: Paddings.dynamic.m2),
                     PrimaryFullButton(
                       onPressed: () {
                         _openTestMusic();
                       },
-                      child: const Text("Test music"),
+                      text: "Test music",
                     ),
+                    SizedBox(height: Paddings.dynamic.m2),
                     PrimaryFullButton(
                       onPressed: () {
                         _openRecording();
                       },
-                      child: const Text("Record"),
+                      text: "Record",
                     ),
                   ],
                 ),
