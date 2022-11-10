@@ -57,7 +57,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                   onPressed: () {
                     value.pickSong();
                   },
-                  child: Text("Pick file"),
+                  text: "Pick file",
                 ),
               ],
             ),

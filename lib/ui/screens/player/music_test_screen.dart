@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sound_share/domain/music/buffer/music_buffer.dart';
+import 'package:path/path.dart';
 import 'package:sound_share/domain/music/directory/directory.dart';
 import 'package:sound_share/domain/music/player/music_player.dart';
 import 'package:sound_share/domain/music/player/music_queue.dart';
@@ -102,19 +103,19 @@ class _MusicTestScreenState extends State<MusicTestScreen> {
                 onPressed: () {
                   _play();
                 },
-                child: const Text("Play"),
+                text: "Play",
               ),
               PrimaryFullButton(
                 onPressed: () {
                   _stop();
                 },
-                child: const Text("Pause"),
+                text: "Pause",
               ),
               PrimaryFullButton(
                 onPressed: () {
                   _loadFile();
                 },
-                child: const Text("Pick songs"),
+                text: "Pick songs",
               ),
             ],
             for (var i = 0; i < _songs.length; i++) ...[
@@ -122,7 +123,7 @@ class _MusicTestScreenState extends State<MusicTestScreen> {
                 onPressed: () {
                   _pickSong(i);
                 },
-                child: Text(basename(_songs[i].file.path)),
+                text: basename(_songs[i].file.path),
               ),
             ]
           ],

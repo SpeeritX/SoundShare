@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Text(
               "SoundShare",
               style: Theme.of(context).textTheme.headline2!.copyWith(
-                    color: AppColors.primary,
+                    color: AppColors.primaryColor,
                   ),
             ),
           ],
@@ -41,9 +41,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await Future.delayed(const Duration(seconds: 1));
-      if(mounted) {
-        Navigator.of(context)
-            .pushReplacement(
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => const HomeScreen()));
       }
     });

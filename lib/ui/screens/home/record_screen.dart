@@ -44,7 +44,7 @@ class _RecordScreenState extends State<RecordScreen> {
                   start();
                 }
               },
-              child: const Text("Detect loud sound"),
+              text: "Detect loud sound",
             ),
           ],
         ),

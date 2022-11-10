@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sound_share/ui/app_configuration_widget.dart';
 import 'package:sound_share/ui/screens/splash/splash_screen.dart';
-import 'package:sound_share/ui/style/app_colors.dart';
+import 'package:sound_share/ui/style/theme/app_theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,10 +14,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'SoundShare',
-      theme: ThemeData(
-        primarySwatch: AppColors.primary,
+      theme: AppTheme.lightTheme,
+      home: const AppConfigurationWidget(
+        child: SplashScreen(),
       ),
-      home: const SplashScreen(),
     );
   }
 }
