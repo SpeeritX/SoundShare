@@ -9,6 +9,8 @@ void main() {
       duration: Duration.zero,
       artist: "",
       title: "",
+      album: "",
+      apic: null,
     );
   }
 

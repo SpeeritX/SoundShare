@@ -4,18 +4,16 @@ import 'package:crypto/crypto.dart';
 import 'package:id3/id3.dart';
 import 'package:mp3_info/mp3_info.dart';
 import 'package:sound_share/common/logger.dart';
+import 'package:sound_share/domain/music/package/details_package.dart';
 
 class MusicSong {
   final File file;
-  late final Duration duration;
-  late final String? artist;
-  late final String? title;
-  late final String? album;
-  late final dynamic apic;
-  late final String songId;
-  MusicSong._create(bytes, this.songId, this.duration, {required this.file}) {
+  late final DetailsPackage details;
+  MusicSong._create(bytes, songId, duration, {required this.file}) {
     MP3Instance mp3instance = MP3Instance(bytes);
     Map<String, dynamic>? attributes;
+    String? artist, title, album;
+    dynamic apic;
     if (mp3instance.parseTagsSync()) {
       try {
         attributes = mp3instance.getMetaTags();
@@ -27,6 +25,14 @@ class MusicSong {
         logger.e("Failed to read song attributes", e, st);
       }
     }
+    details = DetailsPackage(
+      songId: songId,
+      duration: duration,
+      artist: artist,
+      title: title,
+      album: album,
+      apic: apic,
+    );
   }
   static Future<MusicSong> create({required File file}) async {
     List<int> mp3Bytes = await file.readAsBytes();

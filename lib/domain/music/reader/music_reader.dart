@@ -17,7 +17,7 @@ class MusicReader {
       arr.add(MusicPackage(
           startIndex: index * 10000,
           endIndex: (index + 1) * 10000 - 1,
-          songId: song.songId,
+          songId: song.details.songId,
           data: Uint8List.fromList(element)));
     });
     _packages = arr.iterator;
