@@ -1,17 +1,14 @@
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:path/path.dart';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:sound_share/common/utils/iterable_extensions.dart';
+import 'package:path/path.dart';
+import 'package:sound_share/domain/music/buffer/music_buffer.dart';
 import 'package:sound_share/domain/music/directory/directory.dart';
-import 'package:sound_share/domain/music/package/music_package.dart';
-import 'package:sound_share/domain/music/player/music_buffer.dart';
 import 'package:sound_share/domain/music/player/music_player.dart';
+import 'package:sound_share/domain/music/player/music_queue.dart';
 import 'package:sound_share/domain/music/reader/music_reader.dart';
 import 'package:sound_share/domain/music/song/song.dart';
-import 'package:sound_share/domain/music/player/music_queue.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
 class MusicTestScreen extends StatefulWidget {
@@ -22,7 +19,7 @@ class MusicTestScreen extends StatefulWidget {
 }
 
 class _MusicTestScreenState extends State<MusicTestScreen> {
-  final _musicBuffer = MusicBuffer();
+  final _musicBuffer = MusicBufferCollection();
   late final _player = MusicPlayer(_musicBuffer, MusicQueue());
   MusicDirectory? _directory;
   MusicSong? _song;

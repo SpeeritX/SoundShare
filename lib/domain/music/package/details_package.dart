@@ -1,26 +1,27 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'details_package.g.dart';
+
+@JsonSerializable()
 class DetailsPackage {
   final String songId;
+  final int bytesLength;
   final Duration duration;
   final String artist;
   final String title;
+  final String album;
 
   DetailsPackage({
     required this.songId,
+    required this.bytesLength,
     required this.duration,
     required this.artist,
     required this.title,
+    required this.album,
   });
 
-  DetailsPackage.fromJson(Map<String, dynamic> json)
-      : songId = json['songId'],
-        duration = json['duration'],
-        artist = json['artist'],
-        title = json['name'];
+  factory DetailsPackage.fromJson(Map<String, dynamic> json) =>
+      _$DetailsPackageFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        'songId': songId,
-        'auration': duration,
-        'artist': artist,
-        'name': title,
-      };
+  Map<String, dynamic> toJson() => _$DetailsPackageToJson(this);
 }

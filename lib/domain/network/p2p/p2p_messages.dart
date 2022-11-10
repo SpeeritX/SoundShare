@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:sound_share/domain/music/package/details_package.dart';
 
 part 'p2p_messages.freezed.dart';
 part 'p2p_messages.g.dart';
@@ -35,7 +36,8 @@ class P2pMessage with _$P2pMessage {
 
   const factory P2pMessage.previousSong() = PreviousSongMsg;
 
-  const factory P2pMessage.addSongToQueue() = AddSongToQueueMsg;
+  const factory P2pMessage.addSongToQueue(DetailsPackage songData) =
+      AddSongToQueueMsg;
 
   const factory P2pMessage.removeSongFromQueue() = RemoveSongFromQueueMsg;
 

@@ -109,11 +109,13 @@ Map<String, dynamic> _$$PreviousSongMsgToJson(_$PreviousSongMsg instance) =>
 
 _$AddSongToQueueMsg _$$AddSongToQueueMsgFromJson(Map<String, dynamic> json) =>
     _$AddSongToQueueMsg(
+      DetailsPackage.fromJson(json['songData'] as Map<String, dynamic>),
       $type: json['type'] as String?,
     );
 
 Map<String, dynamic> _$$AddSongToQueueMsgToJson(_$AddSongToQueueMsg instance) =>
     <String, dynamic>{
+      'songData': instance.songData,
       'type': instance.$type,
     };
 

@@ -59,7 +59,7 @@ mixin _$P2pMessage {
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
-    required TResult Function() addSongToQueue,
+    required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
   }) =>
       throw _privateConstructorUsedError;
@@ -74,7 +74,7 @@ mixin _$P2pMessage {
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
-    TResult? Function()? addSongToQueue,
+    TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
   }) =>
       throw _privateConstructorUsedError;
@@ -89,7 +89,7 @@ mixin _$P2pMessage {
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
-    TResult Function()? addSongToQueue,
+    TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     required TResult orElse(),
   }) =>
@@ -254,7 +254,7 @@ class _$RequestResourceMsg
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
-    required TResult Function() addSongToQueue,
+    required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
   }) {
     return requestResource(id);
@@ -272,7 +272,7 @@ class _$RequestResourceMsg
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
-    TResult? Function()? addSongToQueue,
+    TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
   }) {
     return requestResource?.call(id);
@@ -290,7 +290,7 @@ class _$RequestResourceMsg
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
-    TResult Function()? addSongToQueue,
+    TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     required TResult orElse(),
   }) {
@@ -469,7 +469,7 @@ class _$ResourceMsg with DiagnosticableTreeMixin implements ResourceMsg {
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
-    required TResult Function() addSongToQueue,
+    required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
   }) {
     return resource(id);
@@ -487,7 +487,7 @@ class _$ResourceMsg with DiagnosticableTreeMixin implements ResourceMsg {
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
-    TResult? Function()? addSongToQueue,
+    TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
   }) {
     return resource?.call(id);
@@ -505,7 +505,7 @@ class _$ResourceMsg with DiagnosticableTreeMixin implements ResourceMsg {
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
-    TResult Function()? addSongToQueue,
+    TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     required TResult orElse(),
   }) {
@@ -658,7 +658,7 @@ class _$RequestStateUpdateMsg
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
-    required TResult Function() addSongToQueue,
+    required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
   }) {
     return requestStateUpdate();
@@ -676,7 +676,7 @@ class _$RequestStateUpdateMsg
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
-    TResult? Function()? addSongToQueue,
+    TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
   }) {
     return requestStateUpdate?.call();
@@ -694,7 +694,7 @@ class _$RequestStateUpdateMsg
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
-    TResult Function()? addSongToQueue,
+    TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     required TResult orElse(),
   }) {
@@ -874,7 +874,7 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
-    required TResult Function() addSongToQueue,
+    required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
   }) {
     return stateUpdateMsg(devices);
@@ -892,7 +892,7 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
-    TResult? Function()? addSongToQueue,
+    TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
   }) {
     return stateUpdateMsg?.call(devices);
@@ -910,7 +910,7 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
-    TResult Function()? addSongToQueue,
+    TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     required TResult orElse(),
   }) {
@@ -1104,7 +1104,7 @@ class _$MusicPackageMsg
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
-    required TResult Function() addSongToQueue,
+    required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
   }) {
     return musicPackage(songId, serializedBytes);
@@ -1122,7 +1122,7 @@ class _$MusicPackageMsg
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
-    TResult? Function()? addSongToQueue,
+    TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
   }) {
     return musicPackage?.call(songId, serializedBytes);
@@ -1140,7 +1140,7 @@ class _$MusicPackageMsg
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
-    TResult Function()? addSongToQueue,
+    TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     required TResult orElse(),
   }) {
@@ -1290,7 +1290,7 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
-    required TResult Function() addSongToQueue,
+    required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
   }) {
     return play();
@@ -1308,7 +1308,7 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
-    TResult? Function()? addSongToQueue,
+    TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
   }) {
     return play?.call();
@@ -1326,7 +1326,7 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
-    TResult Function()? addSongToQueue,
+    TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     required TResult orElse(),
   }) {
@@ -1468,7 +1468,7 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
-    required TResult Function() addSongToQueue,
+    required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
   }) {
     return pause();
@@ -1486,7 +1486,7 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
-    TResult? Function()? addSongToQueue,
+    TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
   }) {
     return pause?.call();
@@ -1504,7 +1504,7 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
-    TResult Function()? addSongToQueue,
+    TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     required TResult orElse(),
   }) {
@@ -1647,7 +1647,7 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
-    required TResult Function() addSongToQueue,
+    required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
   }) {
     return skipSong();
@@ -1665,7 +1665,7 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
-    TResult? Function()? addSongToQueue,
+    TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
   }) {
     return skipSong?.call();
@@ -1683,7 +1683,7 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
-    TResult Function()? addSongToQueue,
+    TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     required TResult orElse(),
   }) {
@@ -1830,7 +1830,7 @@ class _$PreviousSongMsg
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
-    required TResult Function() addSongToQueue,
+    required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
   }) {
     return previousSong();
@@ -1848,7 +1848,7 @@ class _$PreviousSongMsg
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
-    TResult? Function()? addSongToQueue,
+    TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
   }) {
     return previousSong?.call();
@@ -1866,7 +1866,7 @@ class _$PreviousSongMsg
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
-    TResult Function()? addSongToQueue,
+    TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     required TResult orElse(),
   }) {
@@ -1954,6 +1954,8 @@ abstract class _$$AddSongToQueueMsgCopyWith<$Res> {
   factory _$$AddSongToQueueMsgCopyWith(
           _$AddSongToQueueMsg value, $Res Function(_$AddSongToQueueMsg) then) =
       __$$AddSongToQueueMsgCopyWithImpl<$Res>;
+  @useResult
+  $Res call({DetailsPackage songData});
 }
 
 /// @nodoc
@@ -1963,6 +1965,19 @@ class __$$AddSongToQueueMsgCopyWithImpl<$Res>
   __$$AddSongToQueueMsgCopyWithImpl(
       _$AddSongToQueueMsg _value, $Res Function(_$AddSongToQueueMsg) _then)
       : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? songData = null,
+  }) {
+    return _then(_$AddSongToQueueMsg(
+      null == songData
+          ? _value.songData
+          : songData // ignore: cast_nullable_to_non_nullable
+              as DetailsPackage,
+    ));
+  }
 }
 
 /// @nodoc
@@ -1970,35 +1985,49 @@ class __$$AddSongToQueueMsgCopyWithImpl<$Res>
 class _$AddSongToQueueMsg
     with DiagnosticableTreeMixin
     implements AddSongToQueueMsg {
-  const _$AddSongToQueueMsg({final String? $type})
+  const _$AddSongToQueueMsg(this.songData, {final String? $type})
       : $type = $type ?? 'addSongToQueue';
 
   factory _$AddSongToQueueMsg.fromJson(Map<String, dynamic> json) =>
       _$$AddSongToQueueMsgFromJson(json);
+
+  @override
+  final DetailsPackage songData;
 
   @JsonKey(name: 'type')
   final String $type;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'P2pMessage.addSongToQueue()';
+    return 'P2pMessage.addSongToQueue(songData: $songData)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty('type', 'P2pMessage.addSongToQueue'));
+    properties
+      ..add(DiagnosticsProperty('type', 'P2pMessage.addSongToQueue'))
+      ..add(DiagnosticsProperty('songData', songData));
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$AddSongToQueueMsg);
+        (other.runtimeType == runtimeType &&
+            other is _$AddSongToQueueMsg &&
+            (identical(other.songData, songData) ||
+                other.songData == songData));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, songData);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AddSongToQueueMsgCopyWith<_$AddSongToQueueMsg> get copyWith =>
+      __$$AddSongToQueueMsgCopyWithImpl<_$AddSongToQueueMsg>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -2013,10 +2042,10 @@ class _$AddSongToQueueMsg
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
-    required TResult Function() addSongToQueue,
+    required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
   }) {
-    return addSongToQueue();
+    return addSongToQueue(songData);
   }
 
   @override
@@ -2031,10 +2060,10 @@ class _$AddSongToQueueMsg
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
-    TResult? Function()? addSongToQueue,
+    TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
   }) {
-    return addSongToQueue?.call();
+    return addSongToQueue?.call(songData);
   }
 
   @override
@@ -2049,12 +2078,12 @@ class _$AddSongToQueueMsg
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
-    TResult Function()? addSongToQueue,
+    TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     required TResult orElse(),
   }) {
     if (addSongToQueue != null) {
-      return addSongToQueue();
+      return addSongToQueue(songData);
     }
     return orElse();
   }
@@ -2126,10 +2155,16 @@ class _$AddSongToQueueMsg
 }
 
 abstract class AddSongToQueueMsg implements P2pMessage {
-  const factory AddSongToQueueMsg() = _$AddSongToQueueMsg;
+  const factory AddSongToQueueMsg(final DetailsPackage songData) =
+      _$AddSongToQueueMsg;
 
   factory AddSongToQueueMsg.fromJson(Map<String, dynamic> json) =
       _$AddSongToQueueMsg.fromJson;
+
+  DetailsPackage get songData;
+  @JsonKey(ignore: true)
+  _$$AddSongToQueueMsgCopyWith<_$AddSongToQueueMsg> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -2197,7 +2232,7 @@ class _$RemoveSongFromQueueMsg
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
-    required TResult Function() addSongToQueue,
+    required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
   }) {
     return removeSongFromQueue();
@@ -2215,7 +2250,7 @@ class _$RemoveSongFromQueueMsg
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
-    TResult? Function()? addSongToQueue,
+    TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
   }) {
     return removeSongFromQueue?.call();
@@ -2233,7 +2268,7 @@ class _$RemoveSongFromQueueMsg
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
-    TResult Function()? addSongToQueue,
+    TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     required TResult orElse(),
   }) {

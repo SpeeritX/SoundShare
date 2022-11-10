@@ -5,11 +5,12 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:sound_share/domain/music/package/music_package.dart';
-import 'package:sound_share/domain/music/player/music_buffer.dart';
+import 'package:sound_share/domain/music/buffer/music_buffer.dart';
 import 'package:sound_share/domain/music/player/music_player.dart';
 import 'package:sound_share/domain/music/player/music_queue.dart';
 import 'package:sound_share/domain/music/reader/music_reader.dart';
 import 'package:sound_share/domain/music/song/song.dart';
+import 'package:sound_share/domain/network/p2p/p2p_messages.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
@@ -26,24 +27,19 @@ class PlayerScreen extends StatefulWidget {
 }
 
 class _PlayerScreenState extends State<PlayerScreen> {
-  final MusicPlayer _player = MusicPlayer(MusicBuffer(), MusicQueue());
+  final MusicPlayer _player =
+      MusicPlayer(MusicBufferCollection(), MusicQueue());
   late final P2pNetwork _p2pNetwork;
-  List<int> _bytes = [];
   var _fileName = "";
-  var _isPlaying = false;
 
   late StreamSubscription _subscription;
 
   @override
   void initState() {
     _p2pNetwork = widget.p2pNetwork;
+    _p2pNetwork.musicPlayerListener = _player;
 
     _subscription = _p2pNetwork.songBytesStream.listen((event) {
-      if (!_isPlaying) {
-        _player.setSong(null);
-        _player.play();
-        _isPlaying = true;
-      }
       _player.addPackage(MusicPackage(
         songId: "",
         data: event,
@@ -57,6 +53,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   @override
   void dispose() {
     _subscription.cancel();
+    _p2pNetwork.musicPlayerListener = null;
     _p2pNetwork.dispose();
     super.dispose();
   }
@@ -68,7 +65,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
       setState(() {
         _fileName = file.path.split(Platform.pathSeparator).last;
       });
-      var packages = await MusicReader.create(song: MusicSong(file: file));
+      final song = MusicSong(file: file);
+      var packages = await MusicReader.create(song: song);
+      await _p2pNetwork
+          .sendMessage(P2pMessage.addSongToQueue(await song.getAttributes()));
       while (true) {
         var package = packages.next();
         if (package == null) {
