@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:just_audio/just_audio.dart';
 import 'package:sound_share/common/logger.dart';
 import 'package:sound_share/domain/music/package/details_package.dart';
@@ -18,10 +20,10 @@ class MusicPlayer implements MusicPlayerListener {
     //_player.setAudioSource(_source);
   }
 
-  void setSong(int? length) {
+  Future<void> setSong(int? length) async {
     logger.d("#### Set new song $length");
     _source = BytesAudioSource(length);
-    _player.setAudioSource(_source);
+    await _player.setAudioSource(_source);
   }
 
   void addPackage(MusicPackage package) {
@@ -29,16 +31,16 @@ class MusicPlayer implements MusicPlayerListener {
     _source.addData(package.data.toList());
   }
 
-  void play() async {
-    _player.play();
+  Future<void> play() async {
+    await _player.play();
   }
 
   void pause() {
     _player.pause();
   }
 
-  void stop() {
-    _player.stop();
+  Future<void> stop() async {
+    await _player.stop();
   }
 
   @override
@@ -62,7 +64,8 @@ class MusicPlayer implements MusicPlayerListener {
   }
 
   @override
-  void startNewSong(DetailsPackage songData) {
+  void startNewSong(DetailsPackage songData) async {
+    stop();
     setSong(songData.bytesLength);
     play();
   }

@@ -20,16 +20,10 @@ class PlayerController extends ChangeNotifier with Disposable {
       MusicPlayer(MusicBufferCollection(), MusicQueue());
   late final P2pNetwork _p2pNetwork;
   MusicSong? currentSong;
-  var _isPlaying = false;
 
   PlayerController(this._p2pNetwork) {
     _p2pNetwork.musicPlayerListener = _player;
     _p2pNetwork.songBytesStream.listen((event) {
-      if (!_isPlaying) {
-        _player.setSong(null);
-        _player.play();
-        _isPlaying = true;
-      }
       _player.addPackage(MusicPackage(
         songId: "",
         data: event,
@@ -52,8 +46,9 @@ class PlayerController extends ChangeNotifier with Disposable {
       File file = File(result.files.single.path!);
       currentSong = await MusicSong.create(file: file);
       var packages = MusicReader(currentSong!);
-      await _p2pNetwork
-          .sendMessage(P2pMessage.addSongToQueue(currentSong!.details));
+      await _p2pNetwork.sendMessage(P2pMessage.addSongToQueue(
+        currentSong!.details,
+      ));
       while (true) {
         var package = packages.next();
         if (package == null) {

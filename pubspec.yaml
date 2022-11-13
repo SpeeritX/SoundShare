@@ -51,6 +51,7 @@ dependencies:
   noise_meter: ^3.1.0
   provider: ^6.0.4
   flutter_svg: ^1.1.6
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

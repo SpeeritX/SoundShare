@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sound_share/domain/controllers/player/player_controller.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
@@ -37,6 +40,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
           child: Consumer<PlayerController>(
             builder: (context, value, child) => Column(
               children: [
+                TimerWidget(),
                 // const Text("Devices:"),
                 // StreamBuilder(
                 //   stream: _connection.connectedDevices,
@@ -65,5 +69,36 @@ class _PlayerScreenState extends State<PlayerScreen> {
         ),
       ),
     );
+  }
+}
+
+class TimerWidget extends StatefulWidget {
+  const TimerWidget({Key? key}) : super(key: key);
+
+  @override
+  State<TimerWidget> createState() => _TimerWidgetState();
+}
+
+class _TimerWidgetState extends State<TimerWidget> {
+  final timeFormat = DateFormat('HH:mm:ss:S');
+  late final Timer timer;
+
+  @override
+  void initState() {
+    timer = Timer.periodic(Duration(milliseconds: 50), (timer) {
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(child: Text(timeFormat.format(DateTime.now())));
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 }
