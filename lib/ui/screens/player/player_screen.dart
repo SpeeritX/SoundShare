@@ -13,6 +13,8 @@ import 'package:sound_share/domain/music/song/song.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
+import '../../widgets/scaffold/app_bar.dart';
+
 class PlayerScreen extends StatefulWidget {
   final P2pNetwork p2pNetwork;
 
@@ -28,7 +30,6 @@ class PlayerScreen extends StatefulWidget {
 class _PlayerScreenState extends State<PlayerScreen> {
   final MusicPlayer _player = MusicPlayer(MusicBuffer(), MusicQueue());
   late final P2pNetwork _p2pNetwork;
-  List<int> _bytes = [];
   var _fileName = "";
   var _isPlaying = false;
 
@@ -87,9 +88,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Player"),
-      ),
+      appBar: DefaultAppBar(title: "Player"),
       body: SingleChildScrollView(
         child: Column(
           children: [

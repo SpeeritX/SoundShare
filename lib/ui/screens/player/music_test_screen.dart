@@ -11,6 +11,8 @@ import 'package:sound_share/domain/music/reader/music_reader.dart';
 import 'package:sound_share/domain/music/song/song.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
+import '../../widgets/scaffold/app_bar.dart';
+
 class MusicTestScreen extends StatefulWidget {
   const MusicTestScreen({Key? key}) : super(key: key);
 
@@ -83,9 +85,7 @@ class _MusicTestScreenState extends State<MusicTestScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Player"),
-      ),
+      appBar: DefaultAppBar(title: "Player"),
       body: SizedBox(
         width: double.infinity,
         child: Column(
