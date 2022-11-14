@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
-import 'package:sound_share/ui/screens/home/record_screen.dart';
 import 'package:sound_share/ui/screens/player/music_test_screen.dart';
 import 'package:sound_share/ui/screens/player/player_screen.dart';
 
 import '../../style/paddings.dart';
 import '../../widgets/buttons/primary_full_button.dart';
+
+import '../player/player_test_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -117,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _openRecording() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => RecordScreen()));
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const PlayerTestScreen()));
   }
 }
