@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
-import 'package:sound_share/domain/music/buffer/music_buffer.dart';
-import 'package:path/path.dart';
-import 'package:sound_share/domain/music/directory/directory.dart';
+import 'package:sound_share/domain/music/buffer/music_buffer_controller.dart';
+import 'package:sound_share/domain/music/directory/music_directory.dart';
 import 'package:sound_share/domain/music/player/music_player.dart';
 import 'package:sound_share/domain/music/player/music_queue.dart';
 import 'package:sound_share/domain/music/reader/music_reader.dart';
 import 'package:sound_share/domain/music/song/song.dart';
+import 'package:sound_share/domain/network/p2p/p2p_network.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
 class MusicTestScreen extends StatefulWidget {
@@ -20,7 +20,7 @@ class MusicTestScreen extends StatefulWidget {
 }
 
 class _MusicTestScreenState extends State<MusicTestScreen> {
-  final _musicBuffer = MusicBufferCollection();
+  final _musicBuffer = MusicBufferController(MusicQueue(), P2pNetwork());
   late final _player = MusicPlayer(_musicBuffer, MusicQueue());
   MusicDirectory? _directory;
   MusicSong? _song;
@@ -56,7 +56,6 @@ class _MusicTestScreenState extends State<MusicTestScreen> {
 
   void _pickSong(ind) async {
     _song = _songs[ind];
-    _player.setSong(_song?.file.readAsBytesSync().length);
     setState(() {
       _currentFileName = _song?.file.path ?? "";
     });

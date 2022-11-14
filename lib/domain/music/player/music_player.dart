@@ -2,28 +2,34 @@ import 'dart:async';
 
 import 'package:just_audio/just_audio.dart';
 import 'package:sound_share/common/logger.dart';
+import 'package:sound_share/common/utils/disposable.dart';
+import 'package:sound_share/domain/music/buffer/music_buffer_controller.dart';
 import 'package:sound_share/domain/music/package/details_package.dart';
 import 'package:sound_share/domain/music/package/music_package.dart';
-import 'package:sound_share/domain/music/buffer/music_buffer.dart';
-import 'package:sound_share/domain/music/player/music_queue.dart';
 import 'package:sound_share/domain/music/player/bytes_audio_source.dart';
+import 'package:sound_share/domain/music/player/music_queue.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
 
 /// Plays the music from the received packages
-class MusicPlayer implements MusicPlayerListener {
+class MusicPlayer with Disposable implements MusicPlayerListener {
   final _player = AudioPlayer();
-  final MusicBufferCollection _musicBuffer;
+  final MusicBufferController _musicBuffer;
   final MusicQueue _musicQueue;
   var _source = BytesAudioSource(null);
 
   MusicPlayer(this._musicBuffer, this._musicQueue) {
-    //_player.setAudioSource(_source);
+    _player.processingStateStream.listen((event) {
+      if (event == ProcessingState.completed) {
+        final song = _musicQueue.nextSong();
+        _playSong(song);
+      }
+    }).canceledBy(this);
   }
 
-  Future<void> setSong(int? length) async {
-    logger.d("#### Set new song $length");
-    _source = BytesAudioSource(length);
-    await _player.setAudioSource(_source);
+  Future<void> _setSong(BytesAudioSource source) async {
+    _source = source;
+    pause();
+    await _player.setAudioSource(source);
   }
 
   void addPackage(MusicPackage package) {
@@ -35,6 +41,13 @@ class MusicPlayer implements MusicPlayerListener {
     await _player.play();
   }
 
+  Future<void> _playSong(DetailsPackage song) async {
+    logger.d("#### Set new song ${song.bytesLength}");
+    final source = _musicBuffer.getSong(song);
+    _setSong(source);
+    play();
+  }
+
   void pause() {
     _player.pause();
   }
@@ -44,8 +57,8 @@ class MusicPlayer implements MusicPlayerListener {
   }
 
   @override
-  void addToQueue(int index) {
-    // TODO: implement addToQueue
+  void addToQueue(DetailsPackage song) {
+    _musicQueue.addSong(song);
   }
 
   @override
@@ -54,20 +67,19 @@ class MusicPlayer implements MusicPlayerListener {
   }
 
   @override
-  void onPlay() {
-    // TODO: implement onPlay
+  void onPlay(int index) {
+    _musicQueue.setIndex(index);
+    final song = _musicQueue.currentSong;
+    if (song == null) {
+      logger.e("onPlay song index '$index' is null");
+      return;
+    }
+    _playSong(song);
   }
 
   @override
   void removeFromQueue(int index) {
     // TODO: implement removeFromQueue
-  }
-
-  @override
-  void startNewSong(DetailsPackage songData) async {
-    stop();
-    setSong(songData.bytesLength);
-    play();
   }
 
   @override

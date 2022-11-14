@@ -12,9 +12,10 @@ class MusicDirectory {
   MusicDirectory(this.path);
 
   load() async {
-    if (!accessed)
+    if (!accessed) {
       throw Exception(
           "You have to ask for access with getAccess(). Do not forget to reliquish() when done with reading files.");
+    }
     var fileList = await Directory(path).list().toList();
     var files = fileList
         .whereType<File>()
@@ -29,17 +30,19 @@ class MusicDirectory {
 
   Future<void> getAccess() async {
     if (accessed) throw Exception("Already accessed!");
-    if (Platform.isIOS)
+    if (Platform.isIOS) {
       await SecurityScopedResource.instance
           .startAccessingSecurityScopedResource(Directory(path));
+    }
     accessed = true;
   }
 
   Future<void> relinquish() async {
     if (!accessed) throw Exception("Did not have access!");
-    if (Platform.isIOS)
+    if (Platform.isIOS) {
       await SecurityScopedResource.instance
           .stopAccessingSecurityScopedResource(Directory(path));
+    }
     accessed = false;
   }
 }

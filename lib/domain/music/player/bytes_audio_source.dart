@@ -16,6 +16,8 @@ class BytesAudioSource extends StreamAudioSource {
     logger.d("BytesAudioSource($_dataLength)");
   }
 
+  bool get isDownloaded => _bytes.length >= (_dataLength ?? 0);
+
   void addData(List<int> data) {
     logger.d("BytesAudioSource addData at ${_bytes.length}, ${data.length}");
     _bytes.addAll(data);

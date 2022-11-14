@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:sound_share/common/utils/iterable_extensions.dart';
-import 'package:sound_share/domain/music/package/details_package.dart';
 import 'package:sound_share/domain/music/package/music_package.dart';
 import 'package:sound_share/domain/music/song/song.dart';
 

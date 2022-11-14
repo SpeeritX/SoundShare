@@ -40,7 +40,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
           child: Consumer<PlayerController>(
             builder: (context, value, child) => Column(
               children: [
-                TimerWidget(),
+                const TimerWidget(),
                 // const Text("Devices:"),
                 // StreamBuilder(
                 //   stream: _connection.connectedDevices,
@@ -52,9 +52,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 //   },
                 // ),
                 Text(
-                  value.currentSong?.details.title ??
-                      (value.currentSong?.file.path) ??
-                      "No selected",
+                  value.currentSong?.title ?? "No selected",
                   style: Theme.of(context).textTheme.headline5,
                 ),
                 PrimaryFullButton(
@@ -62,6 +60,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     value.pickSong();
                   },
                   text: "Pick file",
+                ),
+                SizedBox(height: 100),
+                PrimaryFullButton(
+                  onPressed: () {
+                    value.play();
+                  },
+                  text: "Play",
                 ),
               ],
             ),
@@ -93,7 +98,7 @@ class _TimerWidgetState extends State<TimerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text(timeFormat.format(DateTime.now())));
+    return Text(timeFormat.format(DateTime.now()));
   }
 
   @override

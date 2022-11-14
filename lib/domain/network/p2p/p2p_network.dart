@@ -17,29 +17,38 @@ class Peer {
 }
 
 abstract class MusicPlayerListener {
-  void onPlay();
+  void onPlay(int index);
   void onPause();
   void updateQueue();
-  void addToQueue(int index);
+  void addToQueue(DetailsPackage songData);
   void removeFromQueue(int index);
-  void startNewSong(DetailsPackage songData);
+}
+
+abstract class MusicProviderListener {
+  void requestSong(String id);
 }
 
 abstract class MusicBufferListener {
-  void addBytes(String song, Uint8List bytes);
+  void onMusicPackage(MusicPackageMsg package);
 }
 
 class P2pNetwork with Disposable {
   final _peers = PeersContainer(TcpServer(port: TcpServer.defaultPort));
 
-  final _songBytesSink = StreamController<Uint8List>.broadcast();
-
-  Stream<Uint8List> get songBytesStream => _songBytesSink.stream;
-
   MusicPlayerListener? _musicPlayerListener;
+  MusicProviderListener? _musicProviderListener;
+  MusicBufferListener? _musicBufferListener;
 
-  set musicPlayerListener(listener) {
+  set musicPlayerListener(MusicPlayerListener? listener) {
     _musicPlayerListener = listener;
+  }
+
+  set musicProviderListener(MusicProviderListener? listener) {
+    _musicProviderListener = listener;
+  }
+
+  set musicBufferListener(MusicBufferListener? listener) {
+    _musicBufferListener = listener;
   }
 
   P2pNetwork() {
@@ -47,9 +56,9 @@ class P2pNetwork with Disposable {
     _peers.peerConnected.listen(_onPeerConnected).canceledBy(this);
   }
 
-  Future<void> sendBytes(Uint8List bytes) async {
+  Future<void> sendBytes(String id, Uint8List bytes) async {
     final msg = P2pMessage.musicPackage(
-      songId: "",
+      songId: id,
       serializedBytes: MusicPackageExt.serializeBytes(bytes),
     );
     await _peers.sendToAll(msg);
@@ -65,9 +74,13 @@ class P2pNetwork with Disposable {
     } else if (message is StateUpdateMsg) {
       connectDevices(message.devices);
     } else if (message is MusicPackageMsg) {
-      _songBytesSink.add(message.deserializeBytes());
+      _musicBufferListener?.onMusicPackage(message);
     } else if (message is AddSongToQueueMsg) {
-      _musicPlayerListener?.startNewSong(message.songData);
+      _musicPlayerListener?.addToQueue(message.songData);
+    } else if (message is RequestResourceMsg) {
+      _musicProviderListener?.requestSong(message.id);
+    } else if (message is PlayMsg) {
+      _musicPlayerListener?.onPlay(message.index);
     }
   }
 

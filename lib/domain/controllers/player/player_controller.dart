@@ -1,40 +1,42 @@
-import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:sound_share/common/utils/disposable.dart';
-import 'package:sound_share/domain/music/buffer/music_buffer.dart';
-import 'package:sound_share/domain/music/package/music_package.dart';
+import 'package:sound_share/domain/music/buffer/music_buffer_controller.dart';
+import 'package:sound_share/domain/music/package/details_package.dart';
 import 'package:sound_share/domain/music/player/music_player.dart';
 import 'package:sound_share/domain/music/player/music_queue.dart';
-import 'package:sound_share/domain/music/reader/music_reader.dart';
+import 'package:sound_share/domain/music/reader/music_provider.dart';
 import 'package:sound_share/domain/music/song/song.dart';
 import 'package:sound_share/domain/network/p2p/p2p_messages.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
 
 class PlayerController extends ChangeNotifier with Disposable {
-  final MusicPlayer _player =
-      MusicPlayer(MusicBufferCollection(), MusicQueue());
-  late final P2pNetwork _p2pNetwork;
-  MusicSong? currentSong;
+  final _musicQueue = MusicQueue();
+  late final _musicBufferController =
+      MusicBufferController(_musicQueue, _p2pNetwork);
+  late final MusicPlayer _player =
+      MusicPlayer(_musicBufferController, _musicQueue);
+  late final MusicProvider _musicProvider = MusicProvider(_p2pNetwork);
+  final P2pNetwork _p2pNetwork;
+
+  DetailsPackage? get currentSong => _musicQueue.currentSong;
 
   PlayerController(this._p2pNetwork) {
     _p2pNetwork.musicPlayerListener = _player;
-    _p2pNetwork.songBytesStream.listen((event) {
-      _player.addPackage(MusicPackage(
-        songId: "",
-        data: event,
-        startIndex: 0,
-        endIndex: 0,
-      ));
+
+    _musicQueue.updateEvents.listen((_) {
+      notifyListeners();
     }).canceledBy(this);
   }
 
   @override
   void dispose() {
+    _player.dispose();
+    _musicProvider.dispose();
+    _musicBufferController.dispose();
     _p2pNetwork.dispose();
     _p2pNetwork.musicPlayerListener = null;
     super.dispose();
@@ -44,19 +46,15 @@ class PlayerController extends ChangeNotifier with Disposable {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null && extension(result.files.single.path!) == '.mp3') {
       File file = File(result.files.single.path!);
-      currentSong = await MusicSong.create(file: file);
-      var packages = MusicReader(currentSong!);
-      await _p2pNetwork.sendMessage(P2pMessage.addSongToQueue(
-        currentSong!.details,
-      ));
-      while (true) {
-        var package = packages.next();
-        if (package == null) {
-          break;
-        }
-        await _p2pNetwork.sendBytes(Uint8List.fromList(package.data));
-      }
+      final currentSong = await MusicSong.create(file: file);
+      _musicProvider.addSong(currentSong);
+      await _p2pNetwork
+          .sendMessage(P2pMessage.addSongToQueue(currentSong.details));
     }
     notifyListeners();
+  }
+
+  void play() {
+    _p2pNetwork.sendMessage(P2pMessage.play(_musicQueue.currentSongIndex));
   }
 }

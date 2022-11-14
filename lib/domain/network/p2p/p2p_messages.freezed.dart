@@ -55,7 +55,7 @@ mixin _$P2pMessage {
     required TResult Function(List<String> devices) stateUpdateMsg,
     required TResult Function(String songId, String serializedBytes)
         musicPackage,
-    required TResult Function() play,
+    required TResult Function(int index) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
@@ -70,7 +70,7 @@ mixin _$P2pMessage {
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
     TResult? Function(String songId, String serializedBytes)? musicPackage,
-    TResult? Function()? play,
+    TResult? Function(int index)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
@@ -85,7 +85,7 @@ mixin _$P2pMessage {
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
     TResult Function(String songId, String serializedBytes)? musicPackage,
-    TResult Function()? play,
+    TResult Function(int index)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
@@ -250,7 +250,7 @@ class _$RequestResourceMsg
     required TResult Function(List<String> devices) stateUpdateMsg,
     required TResult Function(String songId, String serializedBytes)
         musicPackage,
-    required TResult Function() play,
+    required TResult Function(int index) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
@@ -268,7 +268,7 @@ class _$RequestResourceMsg
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
     TResult? Function(String songId, String serializedBytes)? musicPackage,
-    TResult? Function()? play,
+    TResult? Function(int index)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
@@ -286,7 +286,7 @@ class _$RequestResourceMsg
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
     TResult Function(String songId, String serializedBytes)? musicPackage,
-    TResult Function()? play,
+    TResult Function(int index)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
@@ -465,7 +465,7 @@ class _$ResourceMsg with DiagnosticableTreeMixin implements ResourceMsg {
     required TResult Function(List<String> devices) stateUpdateMsg,
     required TResult Function(String songId, String serializedBytes)
         musicPackage,
-    required TResult Function() play,
+    required TResult Function(int index) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
@@ -483,7 +483,7 @@ class _$ResourceMsg with DiagnosticableTreeMixin implements ResourceMsg {
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
     TResult? Function(String songId, String serializedBytes)? musicPackage,
-    TResult? Function()? play,
+    TResult? Function(int index)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
@@ -501,7 +501,7 @@ class _$ResourceMsg with DiagnosticableTreeMixin implements ResourceMsg {
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
     TResult Function(String songId, String serializedBytes)? musicPackage,
-    TResult Function()? play,
+    TResult Function(int index)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
@@ -654,7 +654,7 @@ class _$RequestStateUpdateMsg
     required TResult Function(List<String> devices) stateUpdateMsg,
     required TResult Function(String songId, String serializedBytes)
         musicPackage,
-    required TResult Function() play,
+    required TResult Function(int index) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
@@ -672,7 +672,7 @@ class _$RequestStateUpdateMsg
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
     TResult? Function(String songId, String serializedBytes)? musicPackage,
-    TResult? Function()? play,
+    TResult? Function(int index)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
@@ -690,7 +690,7 @@ class _$RequestStateUpdateMsg
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
     TResult Function(String songId, String serializedBytes)? musicPackage,
-    TResult Function()? play,
+    TResult Function(int index)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
@@ -870,7 +870,7 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     required TResult Function(List<String> devices) stateUpdateMsg,
     required TResult Function(String songId, String serializedBytes)
         musicPackage,
-    required TResult Function() play,
+    required TResult Function(int index) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
@@ -888,7 +888,7 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
     TResult? Function(String songId, String serializedBytes)? musicPackage,
-    TResult? Function()? play,
+    TResult? Function(int index)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
@@ -906,7 +906,7 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
     TResult Function(String songId, String serializedBytes)? musicPackage,
-    TResult Function()? play,
+    TResult Function(int index)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
@@ -1100,7 +1100,7 @@ class _$MusicPackageMsg
     required TResult Function(List<String> devices) stateUpdateMsg,
     required TResult Function(String songId, String serializedBytes)
         musicPackage,
-    required TResult Function() play,
+    required TResult Function(int index) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
@@ -1118,7 +1118,7 @@ class _$MusicPackageMsg
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
     TResult? Function(String songId, String serializedBytes)? musicPackage,
-    TResult? Function()? play,
+    TResult? Function(int index)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
@@ -1136,7 +1136,7 @@ class _$MusicPackageMsg
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
     TResult Function(String songId, String serializedBytes)? musicPackage,
-    TResult Function()? play,
+    TResult Function(int index)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
@@ -1235,6 +1235,8 @@ abstract class MusicPackageMsg implements P2pMessage {
 abstract class _$$PlayMsgCopyWith<$Res> {
   factory _$$PlayMsgCopyWith(_$PlayMsg value, $Res Function(_$PlayMsg) then) =
       __$$PlayMsgCopyWithImpl<$Res>;
+  @useResult
+  $Res call({int index});
 }
 
 /// @nodoc
@@ -1243,39 +1245,65 @@ class __$$PlayMsgCopyWithImpl<$Res>
     implements _$$PlayMsgCopyWith<$Res> {
   __$$PlayMsgCopyWithImpl(_$PlayMsg _value, $Res Function(_$PlayMsg) _then)
       : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? index = null,
+  }) {
+    return _then(_$PlayMsg(
+      null == index
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
-  const _$PlayMsg({final String? $type}) : $type = $type ?? 'play';
+  const _$PlayMsg(this.index, {final String? $type}) : $type = $type ?? 'play';
 
   factory _$PlayMsg.fromJson(Map<String, dynamic> json) =>
       _$$PlayMsgFromJson(json);
+
+  @override
+  final int index;
 
   @JsonKey(name: 'type')
   final String $type;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'P2pMessage.play()';
+    return 'P2pMessage.play(index: $index)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty('type', 'P2pMessage.play'));
+    properties
+      ..add(DiagnosticsProperty('type', 'P2pMessage.play'))
+      ..add(DiagnosticsProperty('index', index));
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$PlayMsg);
+        (other.runtimeType == runtimeType &&
+            other is _$PlayMsg &&
+            (identical(other.index, index) || other.index == index));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, index);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PlayMsgCopyWith<_$PlayMsg> get copyWith =>
+      __$$PlayMsgCopyWithImpl<_$PlayMsg>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1286,14 +1314,14 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     required TResult Function(List<String> devices) stateUpdateMsg,
     required TResult Function(String songId, String serializedBytes)
         musicPackage,
-    required TResult Function() play,
+    required TResult Function(int index) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
   }) {
-    return play();
+    return play(index);
   }
 
   @override
@@ -1304,14 +1332,14 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
     TResult? Function(String songId, String serializedBytes)? musicPackage,
-    TResult? Function()? play,
+    TResult? Function(int index)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
   }) {
-    return play?.call();
+    return play?.call(index);
   }
 
   @override
@@ -1322,7 +1350,7 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
     TResult Function(String songId, String serializedBytes)? musicPackage,
-    TResult Function()? play,
+    TResult Function(int index)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
@@ -1331,7 +1359,7 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     required TResult orElse(),
   }) {
     if (play != null) {
-      return play();
+      return play(index);
     }
     return orElse();
   }
@@ -1403,9 +1431,14 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
 }
 
 abstract class PlayMsg implements P2pMessage {
-  const factory PlayMsg() = _$PlayMsg;
+  const factory PlayMsg(final int index) = _$PlayMsg;
 
   factory PlayMsg.fromJson(Map<String, dynamic> json) = _$PlayMsg.fromJson;
+
+  int get index;
+  @JsonKey(ignore: true)
+  _$$PlayMsgCopyWith<_$PlayMsg> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -1464,7 +1497,7 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     required TResult Function(List<String> devices) stateUpdateMsg,
     required TResult Function(String songId, String serializedBytes)
         musicPackage,
-    required TResult Function() play,
+    required TResult Function(int index) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
@@ -1482,7 +1515,7 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
     TResult? Function(String songId, String serializedBytes)? musicPackage,
-    TResult? Function()? play,
+    TResult? Function(int index)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
@@ -1500,7 +1533,7 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
     TResult Function(String songId, String serializedBytes)? musicPackage,
-    TResult Function()? play,
+    TResult Function(int index)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
@@ -1643,7 +1676,7 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     required TResult Function(List<String> devices) stateUpdateMsg,
     required TResult Function(String songId, String serializedBytes)
         musicPackage,
-    required TResult Function() play,
+    required TResult Function(int index) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
@@ -1661,7 +1694,7 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
     TResult? Function(String songId, String serializedBytes)? musicPackage,
-    TResult? Function()? play,
+    TResult? Function(int index)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
@@ -1679,7 +1712,7 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
     TResult Function(String songId, String serializedBytes)? musicPackage,
-    TResult Function()? play,
+    TResult Function(int index)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
@@ -1826,7 +1859,7 @@ class _$PreviousSongMsg
     required TResult Function(List<String> devices) stateUpdateMsg,
     required TResult Function(String songId, String serializedBytes)
         musicPackage,
-    required TResult Function() play,
+    required TResult Function(int index) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
@@ -1844,7 +1877,7 @@ class _$PreviousSongMsg
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
     TResult? Function(String songId, String serializedBytes)? musicPackage,
-    TResult? Function()? play,
+    TResult? Function(int index)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
@@ -1862,7 +1895,7 @@ class _$PreviousSongMsg
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
     TResult Function(String songId, String serializedBytes)? musicPackage,
-    TResult Function()? play,
+    TResult Function(int index)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
@@ -2038,7 +2071,7 @@ class _$AddSongToQueueMsg
     required TResult Function(List<String> devices) stateUpdateMsg,
     required TResult Function(String songId, String serializedBytes)
         musicPackage,
-    required TResult Function() play,
+    required TResult Function(int index) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
@@ -2056,7 +2089,7 @@ class _$AddSongToQueueMsg
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
     TResult? Function(String songId, String serializedBytes)? musicPackage,
-    TResult? Function()? play,
+    TResult? Function(int index)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
@@ -2074,7 +2107,7 @@ class _$AddSongToQueueMsg
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
     TResult Function(String songId, String serializedBytes)? musicPackage,
-    TResult Function()? play,
+    TResult Function(int index)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,
@@ -2228,7 +2261,7 @@ class _$RemoveSongFromQueueMsg
     required TResult Function(List<String> devices) stateUpdateMsg,
     required TResult Function(String songId, String serializedBytes)
         musicPackage,
-    required TResult Function() play,
+    required TResult Function(int index) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
     required TResult Function() previousSong,
@@ -2246,7 +2279,7 @@ class _$RemoveSongFromQueueMsg
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
     TResult? Function(String songId, String serializedBytes)? musicPackage,
-    TResult? Function()? play,
+    TResult? Function(int index)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
@@ -2264,7 +2297,7 @@ class _$RemoveSongFromQueueMsg
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
     TResult Function(String songId, String serializedBytes)? musicPackage,
-    TResult Function()? play,
+    TResult Function(int index)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
     TResult Function()? previousSong,

@@ -28,7 +28,9 @@ class P2pMessage with _$P2pMessage {
     required String serializedBytes,
   }) = MusicPackageMsg;
 
-  const factory P2pMessage.play() = PlayMsg;
+  const factory P2pMessage.play(
+    int index,
+  ) = PlayMsg;
 
   const factory P2pMessage.pause() = PauseMsg;
 

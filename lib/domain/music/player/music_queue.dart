@@ -9,7 +9,26 @@ class MusicQueue {
 
   int get currentSongIndex => _currentSongIndex;
 
+  DetailsPackage? get currentSong {
+    if (_currentSongIndex >= songList.length) {
+      return null;
+    }
+    return songList[_currentSongIndex];
+  }
+
   Stream<void> get updateEvents => _updateEvents.stream;
+
+  List<DetailsPackage> getQueuedSongs() {
+    if (_currentSongIndex >= songList.length) {
+      return [];
+    }
+    return songList.sublist(_currentSongIndex);
+  }
+
+  void setIndex(int index) {
+    _currentSongIndex = index;
+    _notifyUpdate();
+  }
 
   DetailsPackage previousSong() {
     _currentSongIndex = _currentSongIndex - 1;

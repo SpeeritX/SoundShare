@@ -71,10 +71,12 @@ Map<String, dynamic> _$$MusicPackageMsgToJson(_$MusicPackageMsg instance) =>
     };
 
 _$PlayMsg _$$PlayMsgFromJson(Map<String, dynamic> json) => _$PlayMsg(
+      json['index'] as int,
       $type: json['type'] as String?,
     );
 
 Map<String, dynamic> _$$PlayMsgToJson(_$PlayMsg instance) => <String, dynamic>{
+      'index': instance.index,
       'type': instance.$type,
     };
 
