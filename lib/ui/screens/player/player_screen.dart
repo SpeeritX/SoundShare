@@ -7,6 +7,8 @@ import 'package:sound_share/domain/controllers/player/player_controller.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
+import '../../widgets/scaffold/app_bar.dart';
+
 class PlayerScreen extends StatefulWidget {
   final P2pNetwork p2pNetwork;
 
@@ -33,9 +35,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     return ChangeNotifierProvider(
       create: ((context) => PlayerController(_p2pNetwork)),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Player"),
-        ),
+        appBar: DefaultAppBar(title: "Player"),
         body: SingleChildScrollView(
           child: Consumer<PlayerController>(
             builder: (context, value, child) => Column(
