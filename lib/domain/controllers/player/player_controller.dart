@@ -17,13 +17,16 @@ import 'package:ntp/ntp.dart';
 class PlayerController extends ChangeNotifier with Disposable {
   final _musicQueue = MusicQueue();
   late final _musicBufferController =
-      MusicBufferController(_musicQueue, _p2pNetwork);
+  MusicBufferController(_musicQueue, _p2pNetwork);
   late final MusicPlayer _player =
-      MusicPlayer(_musicBufferController, _musicQueue);
+  MusicPlayer(_musicBufferController, _musicQueue);
   late final MusicProvider _musicProvider = MusicProvider(_p2pNetwork);
   final P2pNetwork _p2pNetwork;
 
   DetailsPackage? get currentSong => _musicQueue.currentSong;
+
+  List<DetailsPackage> get songList => _musicQueue.songList;
+
 
   PlayerController(this._p2pNetwork) {
     _p2pNetwork.musicPlayerListener = _player;

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sound_share/domain/controllers/player/player_controller.dart';
 import 'package:sound_share/ui/style/app_colors.dart';
+import 'package:sound_share/ui/widgets/buttons/small_button.dart';
 import '../../style/paddings.dart';
 
-import '../shrink_tap.dart';
-
 class PlayerWidget extends StatefulWidget {
+  final PlayerController playerController;
   static const FaIcon playIcon = FaIcon(
     FontAwesomeIcons.play,
     color: Colors.white,
@@ -19,6 +20,7 @@ class PlayerWidget extends StatefulWidget {
   );
 
   const PlayerWidget({
+    required this.playerController,
     Key? key,
   }) : super(key: key);
 
@@ -73,7 +75,9 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Song name name name",
+                  Text(
+                      widget.playerController.currentSong?.title ??
+                          "Unknown title",
                       overflow: TextOverflow.fade,
                       softWrap: false,
                       style: Theme.of(context)
@@ -81,7 +85,8 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                           .bodyText1!
                           .copyWith(color: AppColors.white)),
                   Text(
-                    "Girl",
+                    widget.playerController.currentSong?.artist ??
+                        "Unknown artist",
                     overflow: TextOverflow.fade,
                     softWrap: false,
                     style: Theme.of(context)
@@ -95,37 +100,29 @@ class _PlayerWidgetState extends State<PlayerWidget> {
           ),
           Expanded(
               flex: 2,
-              child: ShrinkTap(
-                onTap: () {},
-                shrinkScale: 0.9,
-                child: const FaIcon(
-                  FontAwesomeIcons.backward,
-                  color: Colors.white,
-                  size: 25.0,
-                ),
-              )),
+              child: SmallButton(
+                  onPressed: () {},
+                  child: const FaIcon(
+                    FontAwesomeIcons.backward,
+                    color: Colors.white,
+                    size: 25.0,
+                  ))),
+          Expanded(
+            flex: 2,
+            child: SmallButton(
+              onPressed: () {},
+              child: !toggle ? PlayerWidget.playIcon : PlayerWidget.pauseIcon,
+            ),
+          ),
           Expanded(
               flex: 2,
-              child: ShrinkTap(
-                onTap: () {
-                  setState(() {
-                    toggle = !toggle;
-                  });
-                },
-                shrinkScale: 0.9,
-                child: !toggle ? PlayerWidget.playIcon : PlayerWidget.pauseIcon,
-              )),
-          Expanded(
-              flex: 2,
-              child: ShrinkTap(
-                onTap: () {},
-                shrinkScale: 0.9,
-                child: const FaIcon(
-                  FontAwesomeIcons.forward,
-                  color: Colors.white,
-                  size: 25.0,
-                ),
-              )),
+              child: SmallButton(
+                  onPressed: () {},
+                  child: const FaIcon(
+                    FontAwesomeIcons.forward,
+                    color: Colors.white,
+                    size: 25.0,
+                  ))),
         ],
       ),
     );

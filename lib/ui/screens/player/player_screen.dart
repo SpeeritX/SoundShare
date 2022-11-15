@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sound_share/domain/controllers/player/player_controller.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
+import 'package:sound_share/ui/widgets/music/song_widget.dart';
 
 import '../../widgets/music/player_widget.dart';
 import '../../widgets/scaffold/app_bar.dart';
@@ -38,12 +39,11 @@ class _PlayerScreenState extends State<PlayerScreen> {
       child: Scaffold(
         appBar: DefaultAppBar(title: "Player"),
         body: Stack(
-          // alignment: Alignment.topCenter,
           children: <Widget>[
             Positioned.fill(
               child: SingleChildScrollView(
                 child: Consumer<PlayerController>(
-                  builder: (context, value, child) => Column(
+                  builder: (context, playerController, child) => Column(
                     children: [
                       const TimerWidget(),
                       // const Text("Devices:"),
@@ -57,37 +57,45 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       //   },
                       // ),
                       Text(
-                        value.currentSong?.title ?? "No selected",
+                        playerController.currentSong?.title ?? "No selected",
                         style: Theme.of(context).textTheme.headline5,
                       ),
                       PrimaryFullButton(
                         onPressed: () {
-                          value.pickSong();
+                          playerController.pickSong();
                         },
                         text: "Pick file",
                       ),
                       SizedBox(height: 100),
                       PrimaryFullButton(
                         onPressed: () {
-                          value.play();
+                          playerController.play();
                         },
                         text: "Play",
                       ),
+                      ..._createSongsWidgets(playerController),
                     ],
                   ),
                 ),
               ),
             ),
-            const Positioned.fill(
+            Positioned.fill(
               child: Align(
                 alignment: Alignment.bottomCenter,
-                child: PlayerWidget(),
+                child: Consumer<PlayerController>(
+                    builder: (context, playerController, child) =>
+                        PlayerWidget(playerController: playerController)),
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Iterable<SongWidget> _createSongsWidgets(PlayerController playerController) {
+    return playerController.songList
+        .map((song) => SongWidget(song: song, player: playerController));
   }
 }
 
