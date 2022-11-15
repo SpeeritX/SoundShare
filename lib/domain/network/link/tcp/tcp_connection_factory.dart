@@ -37,7 +37,12 @@ class TcpConnectionFactory with Disposable {
     if (_writeSocket == null) {
       logger.w('TcpConnectionFactory: Write socket is null');
     }
-    return TcpConnection(readSocket: _readSocket!, writeSocket: _writeSocket!);
+    try {
+      return TcpConnection(
+          readSocket: _readSocket!, writeSocket: _writeSocket!);
+    } catch (exception) {
+      throw Exception("Couldn't connect");
+    }
   }
 
   Future<void> _createReadSocket() async {

@@ -16,7 +16,7 @@ class PeersIncubator with Disposable {
 
   PeersIncubator(this._tcpServer);
 
-  void connect(String peerId, {Socket? incomingReadSocket}) async {
+  Future<void> connect(String peerId, {Socket? incomingReadSocket}) async {
     final factory = TcpConnectionFactory(
       _tcpServer,
       peerId,

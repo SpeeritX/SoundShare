@@ -12,6 +12,7 @@ import 'package:sound_share/domain/music/reader/music_provider.dart';
 import 'package:sound_share/domain/music/song/song.dart';
 import 'package:sound_share/domain/network/p2p/p2p_messages.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
+import 'package:ntp/ntp.dart';
 
 class PlayerController extends ChangeNotifier with Disposable {
   final _musicQueue = MusicQueue();
@@ -52,9 +53,11 @@ class PlayerController extends ChangeNotifier with Disposable {
           .sendMessage(P2pMessage.addSongToQueue(currentSong.details));
     }
     notifyListeners();
+    _p2pNetwork.sendMessage(const P2pMessage.sync());
   }
 
-  void play() {
-    _p2pNetwork.sendMessage(P2pMessage.play(_musicQueue.currentSongIndex));
+  void play() async {
+    var now = await NTP.now();
+    _p2pNetwork.sendMessage(P2pMessage.play(_musicQueue.currentSongIndex, now));
   }
 }

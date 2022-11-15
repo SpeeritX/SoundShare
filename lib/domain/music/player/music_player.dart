@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:just_audio/just_audio.dart';
+import 'package:ntp/ntp.dart';
 import 'package:sound_share/common/logger.dart';
 import 'package:sound_share/common/utils/disposable.dart';
 import 'package:sound_share/domain/music/buffer/music_buffer_controller.dart';
@@ -16,6 +17,8 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
   final MusicBufferController _musicBuffer;
   final MusicQueue _musicQueue;
   var _source = BytesAudioSource(null);
+  var _offset = const Duration();
+  Timer? _timer;
 
   MusicPlayer(this._musicBuffer, this._musicQueue) {
     _player.processingStateStream.listen((event) {
@@ -67,14 +70,19 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
   }
 
   @override
-  void onPlay(int index) {
+  void onPlay(int index, DateTime time) {
     _musicQueue.setIndex(index);
     final song = _musicQueue.currentSong;
     if (song == null) {
       logger.e("onPlay song index '$index' is null");
       return;
     }
-    _playSong(song);
+    _timer?.cancel();
+    _timer = Timer(
+        DateTime.now().difference(time) + _offset + const Duration(seconds: 10),
+        () {
+      _playSong(song);
+    });
   }
 
   @override
@@ -85,5 +93,12 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
   @override
   void updateQueue() {
     // TODO: implement updateQueue
+  }
+
+  @override
+  void onSync() {
+    NTP
+        .getNtpOffset(localTime: DateTime.now())
+        .then((value) => _offset = Duration(milliseconds: value));
   }
 }

@@ -22,7 +22,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _connect() async {
     final p2pNetwork = P2pNetwork();
-    p2pNetwork.connect(_ip);
+    try {
+      await p2pNetwork.connect(_ip);
+    } catch (e) {
+      return;
+    }
     _openPlayer(p2pNetwork);
   }
 

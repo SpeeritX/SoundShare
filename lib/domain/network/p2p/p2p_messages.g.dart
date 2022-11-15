@@ -6,6 +6,14 @@ part of 'p2p_messages.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+_$SyncMsg _$$SyncMsgFromJson(Map<String, dynamic> json) => _$SyncMsg(
+      $type: json['type'] as String?,
+    );
+
+Map<String, dynamic> _$$SyncMsgToJson(_$SyncMsg instance) => <String, dynamic>{
+      'type': instance.$type,
+    };
+
 _$RequestResourceMsg _$$RequestResourceMsgFromJson(Map<String, dynamic> json) =>
     _$RequestResourceMsg(
       id: json['id'] as String,
@@ -72,11 +80,13 @@ Map<String, dynamic> _$$MusicPackageMsgToJson(_$MusicPackageMsg instance) =>
 
 _$PlayMsg _$$PlayMsgFromJson(Map<String, dynamic> json) => _$PlayMsg(
       json['index'] as int,
+      DateTime.parse(json['time'] as String),
       $type: json['type'] as String?,
     );
 
 Map<String, dynamic> _$$PlayMsgToJson(_$PlayMsg instance) => <String, dynamic>{
       'index': instance.index,
+      'time': instance.time.toIso8601String(),
       'type': instance.$type,
     };
 
