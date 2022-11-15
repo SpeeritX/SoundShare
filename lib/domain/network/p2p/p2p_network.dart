@@ -17,11 +17,12 @@ class Peer {
 }
 
 abstract class MusicPlayerListener {
-  void onPlay(int index);
+  void onPlay(int index, DateTime time);
   void onPause();
   void updateQueue();
   void addToQueue(DetailsPackage songData);
   void removeFromQueue(int index);
+  void onSync();
 }
 
 abstract class MusicProviderListener {
@@ -80,7 +81,9 @@ class P2pNetwork with Disposable {
     } else if (message is RequestResourceMsg) {
       _musicProviderListener?.requestSong(message.id);
     } else if (message is PlayMsg) {
-      _musicPlayerListener?.onPlay(message.index);
+      _musicPlayerListener?.onPlay(message.index, message.time);
+    } else if (message is SyncMsg) {
+      _musicPlayerListener?.onSync();
     }
   }
 
@@ -94,9 +97,9 @@ class P2pNetwork with Disposable {
     }
   }
 
-  void connect(String peerId) {
+  Future<void> connect(String peerId) async {
     if (!_peers.contains(peerId)) {
-      _peers.connect(peerId);
+      await _peers.connect(peerId);
     }
   }
 

@@ -33,8 +33,8 @@ class PeersContainer with Disposable {
     _incubator.peerConnected.listen(_addPeer).canceledBy(this);
   }
 
-  void connect(String peerId) {
-    _incubator.connect(peerId);
+  Future<void> connect(String peerId) async {
+    await _incubator.connect(peerId);
   }
 
   Future<void> sendToAll(P2pMessage message) async {

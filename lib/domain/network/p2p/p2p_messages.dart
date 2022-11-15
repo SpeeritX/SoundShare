@@ -9,6 +9,8 @@ part 'p2p_messages.g.dart';
 
 @Freezed(unionKey: "type")
 class P2pMessage with _$P2pMessage {
+  const factory P2pMessage.sync() = SyncMsg;
+
   const factory P2pMessage.requestResource({
     required String id,
   }) = RequestResourceMsg;
@@ -28,9 +30,7 @@ class P2pMessage with _$P2pMessage {
     required String serializedBytes,
   }) = MusicPackageMsg;
 
-  const factory P2pMessage.play(
-    int index,
-  ) = PlayMsg;
+  const factory P2pMessage.play(int index, DateTime time) = PlayMsg;
 
   const factory P2pMessage.pause() = PauseMsg;
 
