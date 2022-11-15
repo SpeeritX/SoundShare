@@ -7,6 +7,7 @@ import 'package:sound_share/domain/controllers/player/player_controller.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
+import '../../widgets/music/player_widget.dart';
 import '../../widgets/scaffold/app_bar.dart';
 
 class PlayerScreen extends StatefulWidget {
@@ -36,41 +37,54 @@ class _PlayerScreenState extends State<PlayerScreen> {
       create: ((context) => PlayerController(_p2pNetwork)),
       child: Scaffold(
         appBar: DefaultAppBar(title: "Player"),
-        body: SingleChildScrollView(
-          child: Consumer<PlayerController>(
-            builder: (context, value, child) => Column(
-              children: [
-                const TimerWidget(),
-                // const Text("Devices:"),
-                // StreamBuilder(
-                //   stream: _connection.connectedDevices,
-                //   builder: (BuildContext context,
-                //       AsyncSnapshot<Iterable<String>> snapshot) {
-                //     final connections = snapshot.data ?? [];
-                //     return Column(
-                //         children: connections.map((e) => Text(e)).toList());
-                //   },
-                // ),
-                Text(
-                  value.currentSong?.title ?? "No selected",
-                  style: Theme.of(context).textTheme.headline5,
+        body: Stack(
+          // alignment: Alignment.topCenter,
+          children: <Widget>[
+            Positioned.fill(
+              child: SingleChildScrollView(
+                child: Consumer<PlayerController>(
+                  builder: (context, value, child) => Column(
+                    children: [
+                      const TimerWidget(),
+                      // const Text("Devices:"),
+                      // StreamBuilder(
+                      //   stream: _connection.connectedDevices,
+                      //   builder: (BuildContext context,
+                      //       AsyncSnapshot<Iterable<String>> snapshot) {
+                      //     final connections = snapshot.data ?? [];
+                      //     return Column(
+                      //         children: connections.map((e) => Text(e)).toList());
+                      //   },
+                      // ),
+                      Text(
+                        value.currentSong?.title ?? "No selected",
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                      PrimaryFullButton(
+                        onPressed: () {
+                          value.pickSong();
+                        },
+                        text: "Pick file",
+                      ),
+                      SizedBox(height: 100),
+                      PrimaryFullButton(
+                        onPressed: () {
+                          value.play();
+                        },
+                        text: "Play",
+                      ),
+                    ],
+                  ),
                 ),
-                PrimaryFullButton(
-                  onPressed: () {
-                    value.pickSong();
-                  },
-                  text: "Pick file",
-                ),
-                SizedBox(height: 100),
-                PrimaryFullButton(
-                  onPressed: () {
-                    value.play();
-                  },
-                  text: "Play",
-                ),
-              ],
+              ),
             ),
-          ),
+            const Positioned.fill(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: PlayerWidget(),
+              ),
+            ),
+          ],
         ),
       ),
     );

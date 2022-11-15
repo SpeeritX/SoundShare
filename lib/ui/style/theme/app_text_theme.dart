@@ -26,15 +26,15 @@ class AppTextTheme {
   static const _defaultTheme = TextTheme(
     bodyText1: TextStyle(
       fontWeight: FontWeight.normal,
-      fontSize: 14,
+      fontSize: 16,
     ),
     bodyText2: TextStyle(
       fontWeight: FontWeight.w600,
-      fontSize: 14,
+      fontSize: 16,
     ),
     subtitle1: TextStyle(
-      fontWeight: FontWeight.normal,
-      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      fontSize: 13,
     ),
     headline1: TextStyle(
       fontWeight: FontWeight.w300,

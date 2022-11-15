@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sound_share/ui/style/app_colors.dart';
+import '../../style/paddings.dart';
+
+import '../shrink_tap.dart';
 
 class PlayerWidget extends StatefulWidget {
   static const FaIcon playIcon = FaIcon(
@@ -64,73 +67,65 @@ class _PlayerWidgetState extends State<PlayerWidget> {
         children: [
           Expanded(
             flex: 6,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  "Song name name name",
-                  overflow: TextOverflow.fade,
-                  softWrap: false,
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-                Text(
-                  "",
-                  style: TextStyle(fontSize: 3),
-                ),
-                Text(
-                  "Girl",
-                  overflow: TextOverflow.fade,
-                  softWrap: false,
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xffffb833),
-                      height: 1.0),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: IconButton(
-              onPressed: () {
-                // toggle = !toggle;
-              },
-              icon: const FaIcon(
-                FontAwesomeIcons.backward,
-                color: Colors.white,
-                size: 25.0,
+            child: Container(
+              padding: EdgeInsets.only(right: Paddings.static.m1),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Song name name name",
+                      overflow: TextOverflow.fade,
+                      softWrap: false,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .copyWith(color: AppColors.white)),
+                  Text(
+                    "Girl",
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                    style: Theme.of(context)
+                        .textTheme
+                        .subtitle1!
+                        .copyWith(color: AppColors.secondary),
+                  ),
+                ],
               ),
             ),
           ),
           Expanded(
-            flex: 2,
-            child: IconButton(
-              onPressed: () {
-                setState(() {
-                  toggle = !toggle;
-                });
-              },
-              icon: !toggle ? PlayerWidget.playIcon : PlayerWidget.pauseIcon,
-            ),
-          ),
+              flex: 2,
+              child: ShrinkTap(
+                onTap: () {},
+                shrinkScale: 0.9,
+                child: const FaIcon(
+                  FontAwesomeIcons.backward,
+                  color: Colors.white,
+                  size: 25.0,
+                ),
+              )),
           Expanded(
-            flex: 2,
-            child: IconButton(
-              onPressed: () {
-                // toggle = !toggle;
-              },
-              icon: const FaIcon(
-                FontAwesomeIcons.forward,
-                color: Colors.white,
-                size: 25.0,
-              ),
-            ),
-          ),
+              flex: 2,
+              child: ShrinkTap(
+                onTap: () {
+                  setState(() {
+                    toggle = !toggle;
+                  });
+                },
+                shrinkScale: 0.9,
+                child: !toggle ? PlayerWidget.playIcon : PlayerWidget.pauseIcon,
+              )),
+          Expanded(
+              flex: 2,
+              child: ShrinkTap(
+                onTap: () {},
+                shrinkScale: 0.9,
+                child: const FaIcon(
+                  FontAwesomeIcons.forward,
+                  color: Colors.white,
+                  size: 25.0,
+                ),
+              )),
         ],
       ),
     );
