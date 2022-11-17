@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:ntp/ntp.dart';
 import 'package:path/path.dart';
 import 'package:sound_share/common/utils/disposable.dart';
 import 'package:sound_share/domain/music/buffer/music_buffer_controller.dart';
@@ -12,7 +13,6 @@ import 'package:sound_share/domain/music/reader/music_provider.dart';
 import 'package:sound_share/domain/music/song/song.dart';
 import 'package:sound_share/domain/network/p2p/p2p_messages.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
-import 'package:ntp/ntp.dart';
 
 class PlayerController extends ChangeNotifier with Disposable {
   final _musicQueue = MusicQueue();
@@ -52,11 +52,21 @@ class PlayerController extends ChangeNotifier with Disposable {
     if (result != null && extension(result.files.single.path!) == '.mp3') {
       File file = File(result.files.single.path!);
       final currentSong = await MusicSong.create(file: file);
-      _musicProvider.addSong(currentSong);
-      await _p2pNetwork
-          .sendMessage(P2pMessage.addSongToQueue(currentSong.details));
+      playSong(currentSong);
+    } else {
+      notifyListeners();
+      _p2pNetwork.sendMessage(const P2pMessage.sync());
     }
+  }
+
+  void playSong(MusicSong song) async {
+    _musicProvider.addSong(song);
+    await _p2pNetwork.sendMessage(P2pMessage.addSongToQueue(song.details));
     notifyListeners();
+  }
+
+  void removeSong(String song) async {
+    // TODO: Implement
   }
 
   void play() async {

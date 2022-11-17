@@ -1,6 +1,5 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:sound_share/common/logger.dart';
 import 'package:sound_share/domain/music/directory/music_directory.dart';
 import 'package:sound_share/domain/music/song/song.dart';
 import 'package:sound_share/ui/style/app_colors.dart';
@@ -11,8 +10,11 @@ import 'package:sound_share/ui/widgets/dialog/default_alert_dialog.dart';
 import 'package:sound_share/ui/widgets/dialog/dialog_action.dart';
 
 class PickDirectoryDialog extends StatefulWidget {
+  final ValueSetter<List<MusicSong>> selectSongs;
+
   const PickDirectoryDialog({
     Key? key,
+    required this.selectSongs,
   }) : super(key: key);
 
   @override
@@ -43,7 +45,8 @@ class _PickDirectoryDialogState extends State<PickDirectoryDialog> {
           text: "Ok",
           type: DialogActionType.primary,
           onSelected: () {
-            logger.w("Cancel button clicked");
+            widget.selectSongs(_songs);
+            Navigator.of(context).pop();
           },
         ),
       ],

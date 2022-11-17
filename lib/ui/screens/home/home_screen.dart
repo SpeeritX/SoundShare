@@ -9,6 +9,7 @@ import 'package:sound_share/ui/screens/player/music_test_screen.dart';
 import 'package:sound_share/ui/screens/player/player_screen.dart';
 import 'package:sound_share/ui/style/app_colors.dart';
 
+import '../../../domain/music/song/song.dart';
 import '../../style/paddings.dart';
 import '../../widgets/buttons/primary_full_button.dart';
 
@@ -24,6 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
   late final TextEditingController _ipController =
       TextEditingController(text: _ip);
   Duration _offset = const Duration();
+
+  List<MusicSong> localSongs = [];
 
   _connect() async {
     final p2pNetwork = P2pNetwork();
@@ -147,7 +150,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void _openPickDirectoryDialog() async {
     await showDialog(
       context: context,
-      builder: (context) => const PickDirectoryDialog(),
+      builder: (context) =>
+          PickDirectoryDialog(selectSongs: (songs) => {localSongs = songs}),
     );
   }
 
@@ -156,6 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (context) => PlayerScreen(
               p2pNetwork: p2pNetwork,
               playOffset: playOffset,
+              localSongs: localSongs,
             )));
   }
 
