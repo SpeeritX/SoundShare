@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:sound_share/common/utils/disposable.dart';
 import 'package:sound_share/domain/music/reader/music_reader.dart';
 import 'package:sound_share/domain/music/song/song.dart';
@@ -18,25 +19,21 @@ class MusicProvider with Disposable implements MusicProviderListener {
   }
 
   @override
-  Future<void> requestSong(String id) async {
-    final song = _songs.firstWhere((e) => e.details.songId == id);
-
-    var packages = MusicReader(song);
-    while (true) {
-      var package = packages.next();
-      if (package == null) {
-        break;
-      }
-      await _p2pNetwork.sendBytes(
-        song.details.songId,
-        Uint8List.fromList(package.data),
-      );
-    }
+  Future<bool> isSongAvailable(String id) async {
+    final song = _songs.firstWhereOrNull((e) => e.details.songId == id);
+    return song != null;
   }
 
   @override
   void dispose() {
     _p2pNetwork.musicProviderListener = null;
     super.dispose();
+  }
+
+  @override
+  Future<Uint8List> getSongBytes(String songId, int startIndex) async {
+    final song = _songs.firstWhereOrNull((e) => e.details.songId == songId);
+    var reader = MusicReader(song!);
+    return await reader.getBytes(startIndex);
   }
 }

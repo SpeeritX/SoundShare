@@ -5,23 +5,32 @@ import 'package:sound_share/domain/music/song/song.dart';
 
 /// Reads the music in packages from the selected file
 class MusicReader {
+  static const chunkSize = 10000;
+  final MusicSong _song;
   late Iterator<MusicPackage> _packages;
 
-  MusicReader(MusicSong song) {
+  MusicReader(this._song) {
     List<MusicPackage> arr = [];
-    song.file
+    _song.file
         .readAsBytesSync()
-        .chunked(10000)
+        .chunked(chunkSize)
         .toList()
         .asMap()
         .forEach((index, element) {
       arr.add(MusicPackage(
-          startIndex: index * 10000,
-          endIndex: (index + 1) * 10000 - 1,
-          songId: song.details.songId,
+          startIndex: index * chunkSize,
+          endIndex: (index + 1) * chunkSize - 1,
+          songId: _song.details.songId,
           data: Uint8List.fromList(element)));
     });
     _packages = arr.iterator;
+  }
+
+  Future<Uint8List> getBytes(int startIndex) async {
+    return Uint8List.fromList((await _song.file.readAsBytes())
+        .sublist(startIndex)
+        .take(chunkSize)
+        .toList());
   }
 
   MusicPackage? next() {

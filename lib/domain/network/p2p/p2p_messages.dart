@@ -7,28 +7,43 @@ import 'package:sound_share/domain/music/package/details_package.dart';
 part 'p2p_messages.freezed.dart';
 part 'p2p_messages.g.dart';
 
+class P2pMessageEvent {
+  final P2pMessage message;
+  final String peerId;
+
+  const P2pMessageEvent(this.message, this.peerId);
+}
+
 @Freezed(unionKey: "type")
 class P2pMessage with _$P2pMessage {
   const factory P2pMessage.sync() = SyncMsg;
 
+  const factory P2pMessage.searchResource({
+    required String songId,
+  }) = SearchResourceMsg;
+
   const factory P2pMessage.requestResource({
-    required String id,
+    required String requestId,
+    required String songId,
+    required int startIndex,
   }) = RequestResourceMsg;
 
-  const factory P2pMessage.resource({
-    required String id,
-  }) = ResourceMsg;
+  const factory P2pMessage.resourceAvailability({
+    required String songId,
+  }) = ResourceAvailabilityMsg;
+
+  const factory P2pMessage.musicPackage({
+    required String requestId,
+    required String songId,
+    required int startIndex,
+    required String serializedBytes,
+  }) = MusicPackageMsg;
 
   const factory P2pMessage.requestStateUpdate() = RequestStateUpdateMsg;
 
   const factory P2pMessage.stateUpdateMsg({
     required List<String> devices,
   }) = StateUpdateMsg;
-
-  const factory P2pMessage.musicPackage({
-    required String songId,
-    required String serializedBytes,
-  }) = MusicPackageMsg;
 
   const factory P2pMessage.play(int index, DateTime time) = PlayMsg;
 
@@ -48,7 +63,7 @@ class P2pMessage with _$P2pMessage {
       _$P2pMessageFromJson(json);
 }
 
-extension MusicPackageExt on MusicPackageMsg {
+extension MusicPackageMsgExt on MusicPackageMsg {
   Uint8List deserializeBytes() {
     return base64.decode(serializedBytes);
   }

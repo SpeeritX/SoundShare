@@ -32,12 +32,16 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
   Future<void> _setSong(BytesAudioSource source) async {
     _source = source;
     pause();
-    await _player.setAudioSource(source);
+    try {
+      await _player.setAudioSource(source);
+    } on PlayerInterruptedException catch (_) {
+      logger.w("setAudioSource interrupted");
+    }
   }
 
   void addPackage(MusicPackage package) {
     logger.d("#### Add song package ${package.data.length}");
-    _source.addData(package.data.toList());
+    _source.addData(package.startIndex, package.data.toList());
   }
 
   Future<void> play() async {
@@ -77,12 +81,13 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
       logger.e("onPlay song index '$index' is null");
       return;
     }
-    _timer?.cancel();
-    _timer = Timer(
-        DateTime.now().difference(time) + _offset + const Duration(seconds: 10),
-        () {
-      _playSong(song);
-    });
+    _playSong(song);
+    // _timer?.cancel();
+    // _timer = Timer(
+    //     DateTime.now().difference(time) + _offset + const Duration(seconds: 10),
+    //     () {
+    //   _playSong(song);
+    // });
   }
 
   @override
