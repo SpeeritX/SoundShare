@@ -22,27 +22,33 @@ class SongWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(Paddings.dynamic.m1),
       child: Row(children: [
-        Container(
+        SizedBox(
             height: 80,
             width: 80,
             child: Image.asset('assets/Music1.png', fit: BoxFit.cover)),
         SizedBox(width: Paddings.dynamic.m1),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              song.title ?? "Unknown title",
-              style: Theme.of(context).textTheme.bodyText2!,
-            ),
-            SizedBox(height: Paddings.dynamic.m1 / 2),
-            Text(
-              song.artist ?? "Unknown artist",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText2!
-                  .copyWith(color: AppColors.primaryColor),
-            ),
-          ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                song.title ?? "Unknown title",
+                overflow: TextOverflow.fade,
+                softWrap: false,
+                style: Theme.of(context).textTheme.bodyText2!,
+              ),
+              SizedBox(height: Paddings.dynamic.m1 / 2),
+              Text(
+                song.artist ?? "Unknown artist",
+                overflow: TextOverflow.fade,
+                softWrap: false,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText2!
+                    .copyWith(color: AppColors.primaryColor),
+              ),
+            ],
+          ),
         ),
       ]),
     );

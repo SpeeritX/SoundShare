@@ -8,14 +8,19 @@ import 'package:sound_share/domain/network/p2p/p2p_network.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 import 'package:sound_share/ui/widgets/music/song_widget.dart';
 
+import '../../../domain/music/song/song.dart';
 import '../../widgets/music/player_widget.dart';
 import '../../widgets/scaffold/app_bar.dart';
 
+enum ViewType { queuedSongs, localSongs }
+
 class PlayerScreen extends StatefulWidget {
   final P2pNetwork p2pNetwork;
+  final List<MusicSong> localSongs;
 
   const PlayerScreen({
     required this.p2pNetwork,
+    required this.localSongs,
     Key? key,
   }) : super(key: key);
 
@@ -25,6 +30,7 @@ class PlayerScreen extends StatefulWidget {
 
 class _PlayerScreenState extends State<PlayerScreen> {
   late final P2pNetwork _p2pNetwork;
+  var viewType = ViewType.queuedSongs;
 
   @override
   void initState() {
@@ -45,17 +51,35 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 child: Consumer<PlayerController>(
                   builder: (context, playerController, child) => Column(
                     children: [
+                      Row(children: [
+                        PrimaryFullButton(
+                          text: "Queued Songs",
+                          onPressed: () {
+                            setState(() {
+                              viewType = ViewType.queuedSongs;
+                            });
+                          },
+                          style: viewType == ViewType.queuedSongs
+                              ? Theme.of(context).textTheme.bodyText2!
+                              : Theme.of(context).textTheme.bodyText1!,
+                          width: 150,
+                          backgroundColor: Colors.transparent,
+                        ),
+                        PrimaryFullButton(
+                          text: "Local Songs",
+                          onPressed: () {
+                            setState(() {
+                              viewType = ViewType.localSongs;
+                            });
+                          },
+                          style: viewType == ViewType.localSongs
+                              ? Theme.of(context).textTheme.bodyText2!
+                              : Theme.of(context).textTheme.bodyText1!,
+                          width: 150,
+                          backgroundColor: Colors.transparent,
+                        ),
+                      ]),
                       const TimerWidget(),
-                      // const Text("Devices:"),
-                      // StreamBuilder(
-                      //   stream: _connection.connectedDevices,
-                      //   builder: (BuildContext context,
-                      //       AsyncSnapshot<Iterable<String>> snapshot) {
-                      //     final connections = snapshot.data ?? [];
-                      //     return Column(
-                      //         children: connections.map((e) => Text(e)).toList());
-                      //   },
-                      // ),
                       Text(
                         playerController.currentSong?.title ?? "No selected",
                         style: Theme.of(context).textTheme.headline5,
@@ -94,8 +118,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   Iterable<SongWidget> _createSongsWidgets(PlayerController playerController) {
-    return playerController.songList
-        .map((song) => SongWidget(song: song, player: playerController));
+    if (viewType == ViewType.queuedSongs) {
+      return playerController.songList
+          .map((song) => SongWidget(song: song, player: playerController));
+    } else {
+      return widget.localSongs.map((musicSong) =>
+          SongWidget(song: musicSong.details, player: playerController));
+    }
   }
 }
 
