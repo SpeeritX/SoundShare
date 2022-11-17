@@ -141,6 +141,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   Iterable<SongWidget> _createLocalSongsWidgets(
       PlayerController playerController) {
     return widget.localSongs.map((musicSong) => SongWidget(
+          inQueue: false,
           song: musicSong.details,
           player: playerController,
           action: SmallButton(
@@ -159,6 +160,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   Iterable<SongWidget> _createQueuedSongsWidgets(
       PlayerController playerController) {
     return playerController.songList.map((song) => SongWidget(
+          inQueue: true,
           song: song,
           player: playerController,
           action: SmallButton(

@@ -52,7 +52,9 @@ class _PlayerPageScreenState extends State<PlayerPageScreen> {
                   Padding(
                     padding: const EdgeInsets.only(top: 20.0, left: 30.0),
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
                       icon: const FaIcon(
                         FontAwesomeIcons.angleDown,
                         color: AppColors.black,
