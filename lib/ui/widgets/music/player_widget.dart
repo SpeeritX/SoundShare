@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sound_share/domain/controllers/player/player_controller.dart';
+import 'package:sound_share/ui/screens/player/player_page_screen.dart';
 import 'package:sound_share/ui/style/app_colors.dart';
 import 'package:sound_share/ui/widgets/buttons/small_button.dart';
+
 import '../../style/paddings.dart';
 
 class PlayerWidget extends StatefulWidget {
@@ -36,18 +38,24 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(10),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: Center(child: _buildButtons()),
-          ),
-          ClipOval(
-            child: SizedBox.fromSize(
-              size: const Size.fromRadius(39), // Image radius
-              child: Image.asset('assets/Music.png', fit: BoxFit.cover),
+      child: GestureDetector(
+        onTap: () => {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const PlayerPageScreen()))
+        },
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Center(child: _buildButtons()),
             ),
-          ),
-        ],
+            ClipOval(
+              child: SizedBox.fromSize(
+                size: const Size.fromRadius(39), // Image radius
+                child: Image.asset('assets/Music.png', fit: BoxFit.cover),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
