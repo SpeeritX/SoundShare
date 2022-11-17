@@ -20,17 +20,16 @@ class SmallButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: backgroundColor,
-      padding: EdgeInsets.all(Paddings.dynamic.m1),
-      alignment: Alignment.center,
-      child: ShrinkTap(
-        onTap: () {
-          if (!disable) onPressed();
-        },
-        shrinkScale: 0.9,
-        child: child,
-      ),
+    return ShrinkTap(
+      onTap: () {
+        if (!disable) onPressed();
+      },
+      shrinkScale: 0.9,
+      child: Container(
+          color: backgroundColor,
+          padding: EdgeInsets.all(Paddings.dynamic.m1),
+          alignment: Alignment.center,
+          child: child),
     );
   }
 }

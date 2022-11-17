@@ -8,11 +8,13 @@ import '../../style/paddings.dart';
 class SongWidget extends StatelessWidget {
   final DetailsPackage song;
   final PlayerController player;
+  final Widget action;
 
   const SongWidget({
     Key? key,
     required this.song,
     required this.player,
+    required this.action,
   }) : super(key: key);
 
   onPressed() {}
@@ -20,30 +22,41 @@ class SongWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(Paddings.dynamic.m1),
+      padding: EdgeInsets.only(
+          left: Paddings.dynamic.m2,
+          top: Paddings.dynamic.m1,
+          right: Paddings.dynamic.m2,
+          bottom: Paddings.dynamic.m1),
       child: Row(children: [
-        Container(
-            height: 80,
-            width: 80,
+        SizedBox(
+            height: 70,
+            width: 70,
             child: Image.asset('assets/Music1.png', fit: BoxFit.cover)),
         SizedBox(width: Paddings.dynamic.m1),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              song.title ?? "Unknown title",
-              style: Theme.of(context).textTheme.bodyText2!,
-            ),
-            SizedBox(height: Paddings.dynamic.m1 / 2),
-            Text(
-              song.artist ?? "Unknown artist",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText2!
-                  .copyWith(color: AppColors.primaryColor),
-            ),
-          ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                song.title ?? "Unknown title",
+                overflow: TextOverflow.fade,
+                softWrap: false,
+                style: Theme.of(context).textTheme.bodyText2!,
+              ),
+              SizedBox(height: Paddings.dynamic.m1 / 2),
+              Text(
+                song.artist ?? "Unknown artist",
+                overflow: TextOverflow.fade,
+                softWrap: false,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText2!
+                    .copyWith(color: AppColors.primaryColor),
+              ),
+            ],
+          ),
         ),
+        action,
       ]),
     );
   }

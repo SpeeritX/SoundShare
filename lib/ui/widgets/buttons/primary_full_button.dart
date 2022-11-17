@@ -11,6 +11,8 @@ class PrimaryFullButton extends StatelessWidget {
   final double? width;
   final Widget? child;
   final TextStyle? style;
+  final bool shadow;
+  final bool animation;
 
   const PrimaryFullButton({
     Key? key,
@@ -21,6 +23,8 @@ class PrimaryFullButton extends StatelessWidget {
     this.width = double.infinity,
     this.child,
     this.style,
+    this.shadow = true,
+    this.animation = true,
   }) : super(key: key);
 
   @override
@@ -29,13 +33,14 @@ class PrimaryFullButton extends StatelessWidget {
       onTap: () {
         if (!disable) onPressed();
       },
+      shrinkScale: animation ? 0.97 : 1,
       child: Container(
         width: width,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         decoration: BoxDecoration(
           borderRadius: StyleValues.defaultRadius,
           color: backgroundColor,
-          boxShadow: StyleValues.defaultShadow(context),
+          boxShadow: shadow ? StyleValues.defaultShadow(context) : null,
         ),
         child: child ??
             Text(
