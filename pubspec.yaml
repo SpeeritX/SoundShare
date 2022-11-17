@@ -54,6 +54,7 @@ dependencies:
   intl: ^0.17.0
   ntp: ^2.0.0
   font_awesome_flutter: ^10.2.1
+  percent_indicator: ^4.2.2
 
 dev_dependencies:
   flutter_test:
