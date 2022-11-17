@@ -1,24 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:sound_share/domain/music/player/music_player.dart';
-import 'package:sound_share/domain/music/song/song.dart';
+import 'package:sound_share/domain/controllers/player/player_controller.dart';
+import 'package:sound_share/domain/music/package/details_package.dart';
 import 'package:sound_share/ui/style/app_colors.dart';
 
-// class SongWidget extends StatelessWidget {
-//   final MusicSong song;
-//   final MusicPlayer player;
+import '../../style/paddings.dart';
 
-//   const SongWidget({
-//     Key? key,
-//     required this.song,
-//     required this.player,
-//   }) : super(key: key);
+class SongWidget extends StatelessWidget {
+  final DetailsPackage song;
+  final PlayerController player;
 
-//   onPressed() {
-//     player.
-//   }
+  const SongWidget({
+    Key? key,
+    required this.song,
+    required this.player,
+  }) : super(key: key);
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return TextButton(onPressed: onPressed, child: Text(""));
-//   }
-// }
+  onPressed() {}
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(Paddings.dynamic.m1),
+      child: Row(children: [
+        Container(
+            height: 80,
+            width: 80,
+            child: Image.asset('assets/Music1.png', fit: BoxFit.cover)),
+        SizedBox(width: Paddings.dynamic.m1),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              song.title ?? "Unknown title",
+              style: Theme.of(context).textTheme.bodyText2!,
+            ),
+            SizedBox(height: Paddings.dynamic.m1 / 2),
+            Text(
+              song.artist ?? "Unknown artist",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText2!
+                  .copyWith(color: AppColors.primaryColor),
+            ),
+          ],
+        ),
+      ]),
+    );
+  }
+}

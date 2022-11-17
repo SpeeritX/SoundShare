@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:id3/id3.dart';
 import 'package:mp3_info/mp3_info.dart';
+import 'package:path/path.dart';
 import 'package:sound_share/common/logger.dart';
 import 'package:sound_share/domain/music/package/details_package.dart';
 
@@ -24,7 +25,7 @@ class MusicSong {
       try {
         attributes = mp3instance.getMetaTags();
         artist = attributes?['Artist'];
-        title = attributes?['Title'];
+        title = attributes?['Title'] ?? basename(file.path);
         album = attributes?['Album'];
         apic = attributes?['APIC'];
       } catch (e, st) {

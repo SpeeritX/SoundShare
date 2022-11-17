@@ -6,8 +6,14 @@ class ShrinkTap extends StatefulWidget {
   final VoidCallback? onTap;
   final HitTestBehavior? behavior;
 
-  const ShrinkTap(
-      {Key? key, required this.child, required this.onTap, this.behavior})
+  var shrinkScale = 0.97;
+
+  ShrinkTap(
+      {Key? key,
+      required this.child,
+      required this.onTap,
+      this.shrinkScale = 0.97,
+      this.behavior})
       : super(key: key);
 
   @override
@@ -17,7 +23,6 @@ class ShrinkTap extends StatefulWidget {
 class _ShrinkTapState extends State<ShrinkTap> with TickerProviderStateMixin {
   static const _animationCurve = Curves.linear;
   static const _animationTime = Duration(milliseconds: 130);
-  static const _tapScale = 0.97;
 
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -55,7 +60,7 @@ class _ShrinkTapState extends State<ShrinkTap> with TickerProviderStateMixin {
       onTap: () => widget.onTap?.call(),
       onTapDown: (details) {
         _delayedAnimation?.cancel();
-        _controller.animateTo(_tapScale,
+        _controller.animateTo(widget.shrinkScale,
             curve: _animationCurve, duration: _animationTime);
       },
       onTapCancel: () {
