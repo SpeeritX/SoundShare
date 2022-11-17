@@ -33,8 +33,8 @@ class AppTextTheme {
       fontSize: 16,
     ),
     subtitle1: TextStyle(
-      fontWeight: FontWeight.normal,
-      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      fontSize: 13,
     ),
     headline1: TextStyle(
       fontWeight: FontWeight.w300,
@@ -52,14 +52,9 @@ class AppTextTheme {
       fontWeight: FontWeight.normal,
       fontSize: 16,
     ),
-    headline6: TextStyle(
-      fontWeight: FontWeight.w600,
-      fontSize: 20,
-      color: AppColors.lightGray,
-    ),
     button: TextStyle(
       fontWeight: FontWeight.normal,
-      fontSize: 20,
+      fontSize: 18,
     ),
   );
 }

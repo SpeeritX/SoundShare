@@ -14,28 +14,64 @@ Map<String, dynamic> _$$SyncMsgToJson(_$SyncMsg instance) => <String, dynamic>{
       'type': instance.$type,
     };
 
+_$SearchResourceMsg _$$SearchResourceMsgFromJson(Map<String, dynamic> json) =>
+    _$SearchResourceMsg(
+      songId: json['songId'] as String,
+      $type: json['type'] as String?,
+    );
+
+Map<String, dynamic> _$$SearchResourceMsgToJson(_$SearchResourceMsg instance) =>
+    <String, dynamic>{
+      'songId': instance.songId,
+      'type': instance.$type,
+    };
+
 _$RequestResourceMsg _$$RequestResourceMsgFromJson(Map<String, dynamic> json) =>
     _$RequestResourceMsg(
-      id: json['id'] as String,
+      requestId: json['requestId'] as String,
+      songId: json['songId'] as String,
+      startIndex: json['startIndex'] as int,
       $type: json['type'] as String?,
     );
 
 Map<String, dynamic> _$$RequestResourceMsgToJson(
         _$RequestResourceMsg instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'requestId': instance.requestId,
+      'songId': instance.songId,
+      'startIndex': instance.startIndex,
       'type': instance.$type,
     };
 
-_$ResourceMsg _$$ResourceMsgFromJson(Map<String, dynamic> json) =>
-    _$ResourceMsg(
-      id: json['id'] as String,
+_$ResourceAvailabilityMsg _$$ResourceAvailabilityMsgFromJson(
+        Map<String, dynamic> json) =>
+    _$ResourceAvailabilityMsg(
+      songId: json['songId'] as String,
       $type: json['type'] as String?,
     );
 
-Map<String, dynamic> _$$ResourceMsgToJson(_$ResourceMsg instance) =>
+Map<String, dynamic> _$$ResourceAvailabilityMsgToJson(
+        _$ResourceAvailabilityMsg instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'songId': instance.songId,
+      'type': instance.$type,
+    };
+
+_$MusicPackageMsg _$$MusicPackageMsgFromJson(Map<String, dynamic> json) =>
+    _$MusicPackageMsg(
+      requestId: json['requestId'] as String,
+      songId: json['songId'] as String,
+      startIndex: json['startIndex'] as int,
+      serializedBytes: json['serializedBytes'] as String,
+      $type: json['type'] as String?,
+    );
+
+Map<String, dynamic> _$$MusicPackageMsgToJson(_$MusicPackageMsg instance) =>
+    <String, dynamic>{
+      'requestId': instance.requestId,
+      'songId': instance.songId,
+      'startIndex': instance.startIndex,
+      'serializedBytes': instance.serializedBytes,
       'type': instance.$type,
     };
 
@@ -61,20 +97,6 @@ _$StateUpdateMsg _$$StateUpdateMsgFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$StateUpdateMsgToJson(_$StateUpdateMsg instance) =>
     <String, dynamic>{
       'devices': instance.devices,
-      'type': instance.$type,
-    };
-
-_$MusicPackageMsg _$$MusicPackageMsgFromJson(Map<String, dynamic> json) =>
-    _$MusicPackageMsg(
-      songId: json['songId'] as String,
-      serializedBytes: json['serializedBytes'] as String,
-      $type: json['type'] as String?,
-    );
-
-Map<String, dynamic> _$$MusicPackageMsgToJson(_$MusicPackageMsg instance) =>
-    <String, dynamic>{
-      'songId': instance.songId,
-      'serializedBytes': instance.serializedBytes,
       'type': instance.$type,
     };
 

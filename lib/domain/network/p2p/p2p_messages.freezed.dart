@@ -18,16 +18,18 @@ P2pMessage _$P2pMessageFromJson(Map<String, dynamic> json) {
   switch (json['type']) {
     case 'sync':
       return SyncMsg.fromJson(json);
+    case 'searchResource':
+      return SearchResourceMsg.fromJson(json);
     case 'requestResource':
       return RequestResourceMsg.fromJson(json);
-    case 'resource':
-      return ResourceMsg.fromJson(json);
+    case 'resourceAvailability':
+      return ResourceAvailabilityMsg.fromJson(json);
+    case 'musicPackage':
+      return MusicPackageMsg.fromJson(json);
     case 'requestStateUpdate':
       return RequestStateUpdateMsg.fromJson(json);
     case 'stateUpdateMsg':
       return StateUpdateMsg.fromJson(json);
-    case 'musicPackage':
-      return MusicPackageMsg.fromJson(json);
     case 'play':
       return PlayMsg.fromJson(json);
     case 'pause':
@@ -52,12 +54,15 @@ mixin _$P2pMessage {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() sync,
-    required TResult Function(String id) requestResource,
-    required TResult Function(String id) resource,
+    required TResult Function(String songId) searchResource,
+    required TResult Function(String requestId, String songId, int startIndex)
+        requestResource,
+    required TResult Function(String songId) resourceAvailability,
+    required TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)
+        musicPackage,
     required TResult Function() requestStateUpdate,
     required TResult Function(List<String> devices) stateUpdateMsg,
-    required TResult Function(String songId, String serializedBytes)
-        musicPackage,
     required TResult Function(int index, DateTime time) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
@@ -69,11 +74,15 @@ mixin _$P2pMessage {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? sync,
-    TResult? Function(String id)? requestResource,
-    TResult? Function(String id)? resource,
+    TResult? Function(String songId)? searchResource,
+    TResult? Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult? Function(String songId)? resourceAvailability,
+    TResult? Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
-    TResult? Function(String songId, String serializedBytes)? musicPackage,
     TResult? Function(int index, DateTime time)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
@@ -85,11 +94,15 @@ mixin _$P2pMessage {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? sync,
-    TResult Function(String id)? requestResource,
-    TResult Function(String id)? resource,
+    TResult Function(String songId)? searchResource,
+    TResult Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult Function(String songId)? resourceAvailability,
+    TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
-    TResult Function(String songId, String serializedBytes)? musicPackage,
     TResult Function(int index, DateTime time)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
@@ -102,11 +115,13 @@ mixin _$P2pMessage {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SyncMsg value) sync,
+    required TResult Function(SearchResourceMsg value) searchResource,
     required TResult Function(RequestResourceMsg value) requestResource,
-    required TResult Function(ResourceMsg value) resource,
+    required TResult Function(ResourceAvailabilityMsg value)
+        resourceAvailability,
+    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(RequestStateUpdateMsg value) requestStateUpdate,
     required TResult Function(StateUpdateMsg value) stateUpdateMsg,
-    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(PlayMsg value) play,
     required TResult Function(PauseMsg value) pause,
     required TResult Function(SkipSongMsg value) skipSong,
@@ -118,11 +133,12 @@ mixin _$P2pMessage {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SyncMsg value)? sync,
+    TResult? Function(SearchResourceMsg value)? searchResource,
     TResult? Function(RequestResourceMsg value)? requestResource,
-    TResult? Function(ResourceMsg value)? resource,
+    TResult? Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult? Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(PlayMsg value)? play,
     TResult? Function(PauseMsg value)? pause,
     TResult? Function(SkipSongMsg value)? skipSong,
@@ -134,11 +150,12 @@ mixin _$P2pMessage {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SyncMsg value)? sync,
+    TResult Function(SearchResourceMsg value)? searchResource,
     TResult Function(RequestResourceMsg value)? requestResource,
-    TResult Function(ResourceMsg value)? resource,
+    TResult Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(PlayMsg value)? play,
     TResult Function(PauseMsg value)? pause,
     TResult Function(SkipSongMsg value)? skipSong,
@@ -219,12 +236,15 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() sync,
-    required TResult Function(String id) requestResource,
-    required TResult Function(String id) resource,
+    required TResult Function(String songId) searchResource,
+    required TResult Function(String requestId, String songId, int startIndex)
+        requestResource,
+    required TResult Function(String songId) resourceAvailability,
+    required TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)
+        musicPackage,
     required TResult Function() requestStateUpdate,
     required TResult Function(List<String> devices) stateUpdateMsg,
-    required TResult Function(String songId, String serializedBytes)
-        musicPackage,
     required TResult Function(int index, DateTime time) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
@@ -239,11 +259,15 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? sync,
-    TResult? Function(String id)? requestResource,
-    TResult? Function(String id)? resource,
+    TResult? Function(String songId)? searchResource,
+    TResult? Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult? Function(String songId)? resourceAvailability,
+    TResult? Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
-    TResult? Function(String songId, String serializedBytes)? musicPackage,
     TResult? Function(int index, DateTime time)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
@@ -258,11 +282,15 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? sync,
-    TResult Function(String id)? requestResource,
-    TResult Function(String id)? resource,
+    TResult Function(String songId)? searchResource,
+    TResult Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult Function(String songId)? resourceAvailability,
+    TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
-    TResult Function(String songId, String serializedBytes)? musicPackage,
     TResult Function(int index, DateTime time)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
@@ -281,11 +309,13 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SyncMsg value) sync,
+    required TResult Function(SearchResourceMsg value) searchResource,
     required TResult Function(RequestResourceMsg value) requestResource,
-    required TResult Function(ResourceMsg value) resource,
+    required TResult Function(ResourceAvailabilityMsg value)
+        resourceAvailability,
+    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(RequestStateUpdateMsg value) requestStateUpdate,
     required TResult Function(StateUpdateMsg value) stateUpdateMsg,
-    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(PlayMsg value) play,
     required TResult Function(PauseMsg value) pause,
     required TResult Function(SkipSongMsg value) skipSong,
@@ -300,11 +330,12 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SyncMsg value)? sync,
+    TResult? Function(SearchResourceMsg value)? searchResource,
     TResult? Function(RequestResourceMsg value)? requestResource,
-    TResult? Function(ResourceMsg value)? resource,
+    TResult? Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult? Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(PlayMsg value)? play,
     TResult? Function(PauseMsg value)? pause,
     TResult? Function(SkipSongMsg value)? skipSong,
@@ -319,11 +350,12 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SyncMsg value)? sync,
+    TResult Function(SearchResourceMsg value)? searchResource,
     TResult Function(RequestResourceMsg value)? requestResource,
-    TResult Function(ResourceMsg value)? resource,
+    TResult Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(PlayMsg value)? play,
     TResult Function(PauseMsg value)? pause,
     TResult Function(SkipSongMsg value)? skipSong,
@@ -353,12 +385,250 @@ abstract class SyncMsg implements P2pMessage {
 }
 
 /// @nodoc
+abstract class _$$SearchResourceMsgCopyWith<$Res> {
+  factory _$$SearchResourceMsgCopyWith(
+          _$SearchResourceMsg value, $Res Function(_$SearchResourceMsg) then) =
+      __$$SearchResourceMsgCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String songId});
+}
+
+/// @nodoc
+class __$$SearchResourceMsgCopyWithImpl<$Res>
+    extends _$P2pMessageCopyWithImpl<$Res, _$SearchResourceMsg>
+    implements _$$SearchResourceMsgCopyWith<$Res> {
+  __$$SearchResourceMsgCopyWithImpl(
+      _$SearchResourceMsg _value, $Res Function(_$SearchResourceMsg) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? songId = null,
+  }) {
+    return _then(_$SearchResourceMsg(
+      songId: null == songId
+          ? _value.songId
+          : songId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SearchResourceMsg
+    with DiagnosticableTreeMixin
+    implements SearchResourceMsg {
+  const _$SearchResourceMsg({required this.songId, final String? $type})
+      : $type = $type ?? 'searchResource';
+
+  factory _$SearchResourceMsg.fromJson(Map<String, dynamic> json) =>
+      _$$SearchResourceMsgFromJson(json);
+
+  @override
+  final String songId;
+
+  @JsonKey(name: 'type')
+  final String $type;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'P2pMessage.searchResource(songId: $songId)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'P2pMessage.searchResource'))
+      ..add(DiagnosticsProperty('songId', songId));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SearchResourceMsg &&
+            (identical(other.songId, songId) || other.songId == songId));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, songId);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SearchResourceMsgCopyWith<_$SearchResourceMsg> get copyWith =>
+      __$$SearchResourceMsgCopyWithImpl<_$SearchResourceMsg>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() sync,
+    required TResult Function(String songId) searchResource,
+    required TResult Function(String requestId, String songId, int startIndex)
+        requestResource,
+    required TResult Function(String songId) resourceAvailability,
+    required TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)
+        musicPackage,
+    required TResult Function() requestStateUpdate,
+    required TResult Function(List<String> devices) stateUpdateMsg,
+    required TResult Function(int index, DateTime time) play,
+    required TResult Function() pause,
+    required TResult Function() skipSong,
+    required TResult Function() previousSong,
+    required TResult Function(DetailsPackage songData) addSongToQueue,
+    required TResult Function() removeSongFromQueue,
+  }) {
+    return searchResource(songId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? sync,
+    TResult? Function(String songId)? searchResource,
+    TResult? Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult? Function(String songId)? resourceAvailability,
+    TResult? Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
+    TResult? Function()? requestStateUpdate,
+    TResult? Function(List<String> devices)? stateUpdateMsg,
+    TResult? Function(int index, DateTime time)? play,
+    TResult? Function()? pause,
+    TResult? Function()? skipSong,
+    TResult? Function()? previousSong,
+    TResult? Function(DetailsPackage songData)? addSongToQueue,
+    TResult? Function()? removeSongFromQueue,
+  }) {
+    return searchResource?.call(songId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? sync,
+    TResult Function(String songId)? searchResource,
+    TResult Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult Function(String songId)? resourceAvailability,
+    TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
+    TResult Function()? requestStateUpdate,
+    TResult Function(List<String> devices)? stateUpdateMsg,
+    TResult Function(int index, DateTime time)? play,
+    TResult Function()? pause,
+    TResult Function()? skipSong,
+    TResult Function()? previousSong,
+    TResult Function(DetailsPackage songData)? addSongToQueue,
+    TResult Function()? removeSongFromQueue,
+    required TResult orElse(),
+  }) {
+    if (searchResource != null) {
+      return searchResource(songId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(SyncMsg value) sync,
+    required TResult Function(SearchResourceMsg value) searchResource,
+    required TResult Function(RequestResourceMsg value) requestResource,
+    required TResult Function(ResourceAvailabilityMsg value)
+        resourceAvailability,
+    required TResult Function(MusicPackageMsg value) musicPackage,
+    required TResult Function(RequestStateUpdateMsg value) requestStateUpdate,
+    required TResult Function(StateUpdateMsg value) stateUpdateMsg,
+    required TResult Function(PlayMsg value) play,
+    required TResult Function(PauseMsg value) pause,
+    required TResult Function(SkipSongMsg value) skipSong,
+    required TResult Function(PreviousSongMsg value) previousSong,
+    required TResult Function(AddSongToQueueMsg value) addSongToQueue,
+    required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
+  }) {
+    return searchResource(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(SyncMsg value)? sync,
+    TResult? Function(SearchResourceMsg value)? searchResource,
+    TResult? Function(RequestResourceMsg value)? requestResource,
+    TResult? Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult? Function(MusicPackageMsg value)? musicPackage,
+    TResult? Function(RequestStateUpdateMsg value)? requestStateUpdate,
+    TResult? Function(StateUpdateMsg value)? stateUpdateMsg,
+    TResult? Function(PlayMsg value)? play,
+    TResult? Function(PauseMsg value)? pause,
+    TResult? Function(SkipSongMsg value)? skipSong,
+    TResult? Function(PreviousSongMsg value)? previousSong,
+    TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
+    TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+  }) {
+    return searchResource?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(SyncMsg value)? sync,
+    TResult Function(SearchResourceMsg value)? searchResource,
+    TResult Function(RequestResourceMsg value)? requestResource,
+    TResult Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult Function(MusicPackageMsg value)? musicPackage,
+    TResult Function(RequestStateUpdateMsg value)? requestStateUpdate,
+    TResult Function(StateUpdateMsg value)? stateUpdateMsg,
+    TResult Function(PlayMsg value)? play,
+    TResult Function(PauseMsg value)? pause,
+    TResult Function(SkipSongMsg value)? skipSong,
+    TResult Function(PreviousSongMsg value)? previousSong,
+    TResult Function(AddSongToQueueMsg value)? addSongToQueue,
+    TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    required TResult orElse(),
+  }) {
+    if (searchResource != null) {
+      return searchResource(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SearchResourceMsgToJson(
+      this,
+    );
+  }
+}
+
+abstract class SearchResourceMsg implements P2pMessage {
+  const factory SearchResourceMsg({required final String songId}) =
+      _$SearchResourceMsg;
+
+  factory SearchResourceMsg.fromJson(Map<String, dynamic> json) =
+      _$SearchResourceMsg.fromJson;
+
+  String get songId;
+  @JsonKey(ignore: true)
+  _$$SearchResourceMsgCopyWith<_$SearchResourceMsg> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 abstract class _$$RequestResourceMsgCopyWith<$Res> {
   factory _$$RequestResourceMsgCopyWith(_$RequestResourceMsg value,
           $Res Function(_$RequestResourceMsg) then) =
       __$$RequestResourceMsgCopyWithImpl<$Res>;
   @useResult
-  $Res call({String id});
+  $Res call({String requestId, String songId, int startIndex});
 }
 
 /// @nodoc
@@ -372,13 +642,23 @@ class __$$RequestResourceMsgCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? requestId = null,
+    Object? songId = null,
+    Object? startIndex = null,
   }) {
     return _then(_$RequestResourceMsg(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      requestId: null == requestId
+          ? _value.requestId
+          : requestId // ignore: cast_nullable_to_non_nullable
               as String,
+      songId: null == songId
+          ? _value.songId
+          : songId // ignore: cast_nullable_to_non_nullable
+              as String,
+      startIndex: null == startIndex
+          ? _value.startIndex
+          : startIndex // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -388,21 +668,29 @@ class __$$RequestResourceMsgCopyWithImpl<$Res>
 class _$RequestResourceMsg
     with DiagnosticableTreeMixin
     implements RequestResourceMsg {
-  const _$RequestResourceMsg({required this.id, final String? $type})
+  const _$RequestResourceMsg(
+      {required this.requestId,
+      required this.songId,
+      required this.startIndex,
+      final String? $type})
       : $type = $type ?? 'requestResource';
 
   factory _$RequestResourceMsg.fromJson(Map<String, dynamic> json) =>
       _$$RequestResourceMsgFromJson(json);
 
   @override
-  final String id;
+  final String requestId;
+  @override
+  final String songId;
+  @override
+  final int startIndex;
 
   @JsonKey(name: 'type')
   final String $type;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'P2pMessage.requestResource(id: $id)';
+    return 'P2pMessage.requestResource(requestId: $requestId, songId: $songId, startIndex: $startIndex)';
   }
 
   @override
@@ -410,7 +698,9 @@ class _$RequestResourceMsg
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'P2pMessage.requestResource'))
-      ..add(DiagnosticsProperty('id', id));
+      ..add(DiagnosticsProperty('requestId', requestId))
+      ..add(DiagnosticsProperty('songId', songId))
+      ..add(DiagnosticsProperty('startIndex', startIndex));
   }
 
   @override
@@ -418,12 +708,16 @@ class _$RequestResourceMsg
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RequestResourceMsg &&
-            (identical(other.id, id) || other.id == id));
+            (identical(other.requestId, requestId) ||
+                other.requestId == requestId) &&
+            (identical(other.songId, songId) || other.songId == songId) &&
+            (identical(other.startIndex, startIndex) ||
+                other.startIndex == startIndex));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id);
+  int get hashCode => Object.hash(runtimeType, requestId, songId, startIndex);
 
   @JsonKey(ignore: true)
   @override
@@ -436,12 +730,15 @@ class _$RequestResourceMsg
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() sync,
-    required TResult Function(String id) requestResource,
-    required TResult Function(String id) resource,
+    required TResult Function(String songId) searchResource,
+    required TResult Function(String requestId, String songId, int startIndex)
+        requestResource,
+    required TResult Function(String songId) resourceAvailability,
+    required TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)
+        musicPackage,
     required TResult Function() requestStateUpdate,
     required TResult Function(List<String> devices) stateUpdateMsg,
-    required TResult Function(String songId, String serializedBytes)
-        musicPackage,
     required TResult Function(int index, DateTime time) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
@@ -449,18 +746,22 @@ class _$RequestResourceMsg
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
   }) {
-    return requestResource(id);
+    return requestResource(requestId, songId, startIndex);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? sync,
-    TResult? Function(String id)? requestResource,
-    TResult? Function(String id)? resource,
+    TResult? Function(String songId)? searchResource,
+    TResult? Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult? Function(String songId)? resourceAvailability,
+    TResult? Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
-    TResult? Function(String songId, String serializedBytes)? musicPackage,
     TResult? Function(int index, DateTime time)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
@@ -468,18 +769,22 @@ class _$RequestResourceMsg
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
   }) {
-    return requestResource?.call(id);
+    return requestResource?.call(requestId, songId, startIndex);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? sync,
-    TResult Function(String id)? requestResource,
-    TResult Function(String id)? resource,
+    TResult Function(String songId)? searchResource,
+    TResult Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult Function(String songId)? resourceAvailability,
+    TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
-    TResult Function(String songId, String serializedBytes)? musicPackage,
     TResult Function(int index, DateTime time)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
@@ -489,7 +794,7 @@ class _$RequestResourceMsg
     required TResult orElse(),
   }) {
     if (requestResource != null) {
-      return requestResource(id);
+      return requestResource(requestId, songId, startIndex);
     }
     return orElse();
   }
@@ -498,11 +803,13 @@ class _$RequestResourceMsg
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SyncMsg value) sync,
+    required TResult Function(SearchResourceMsg value) searchResource,
     required TResult Function(RequestResourceMsg value) requestResource,
-    required TResult Function(ResourceMsg value) resource,
+    required TResult Function(ResourceAvailabilityMsg value)
+        resourceAvailability,
+    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(RequestStateUpdateMsg value) requestStateUpdate,
     required TResult Function(StateUpdateMsg value) stateUpdateMsg,
-    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(PlayMsg value) play,
     required TResult Function(PauseMsg value) pause,
     required TResult Function(SkipSongMsg value) skipSong,
@@ -517,11 +824,12 @@ class _$RequestResourceMsg
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SyncMsg value)? sync,
+    TResult? Function(SearchResourceMsg value)? searchResource,
     TResult? Function(RequestResourceMsg value)? requestResource,
-    TResult? Function(ResourceMsg value)? resource,
+    TResult? Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult? Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(PlayMsg value)? play,
     TResult? Function(PauseMsg value)? pause,
     TResult? Function(SkipSongMsg value)? skipSong,
@@ -536,11 +844,12 @@ class _$RequestResourceMsg
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SyncMsg value)? sync,
+    TResult Function(SearchResourceMsg value)? searchResource,
     TResult Function(RequestResourceMsg value)? requestResource,
-    TResult Function(ResourceMsg value)? resource,
+    TResult Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(PlayMsg value)? play,
     TResult Function(PauseMsg value)? pause,
     TResult Function(SkipSongMsg value)? skipSong,
@@ -564,44 +873,48 @@ class _$RequestResourceMsg
 }
 
 abstract class RequestResourceMsg implements P2pMessage {
-  const factory RequestResourceMsg({required final String id}) =
-      _$RequestResourceMsg;
+  const factory RequestResourceMsg(
+      {required final String requestId,
+      required final String songId,
+      required final int startIndex}) = _$RequestResourceMsg;
 
   factory RequestResourceMsg.fromJson(Map<String, dynamic> json) =
       _$RequestResourceMsg.fromJson;
 
-  String get id;
+  String get requestId;
+  String get songId;
+  int get startIndex;
   @JsonKey(ignore: true)
   _$$RequestResourceMsgCopyWith<_$RequestResourceMsg> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$ResourceMsgCopyWith<$Res> {
-  factory _$$ResourceMsgCopyWith(
-          _$ResourceMsg value, $Res Function(_$ResourceMsg) then) =
-      __$$ResourceMsgCopyWithImpl<$Res>;
+abstract class _$$ResourceAvailabilityMsgCopyWith<$Res> {
+  factory _$$ResourceAvailabilityMsgCopyWith(_$ResourceAvailabilityMsg value,
+          $Res Function(_$ResourceAvailabilityMsg) then) =
+      __$$ResourceAvailabilityMsgCopyWithImpl<$Res>;
   @useResult
-  $Res call({String id});
+  $Res call({String songId});
 }
 
 /// @nodoc
-class __$$ResourceMsgCopyWithImpl<$Res>
-    extends _$P2pMessageCopyWithImpl<$Res, _$ResourceMsg>
-    implements _$$ResourceMsgCopyWith<$Res> {
-  __$$ResourceMsgCopyWithImpl(
-      _$ResourceMsg _value, $Res Function(_$ResourceMsg) _then)
+class __$$ResourceAvailabilityMsgCopyWithImpl<$Res>
+    extends _$P2pMessageCopyWithImpl<$Res, _$ResourceAvailabilityMsg>
+    implements _$$ResourceAvailabilityMsgCopyWith<$Res> {
+  __$$ResourceAvailabilityMsgCopyWithImpl(_$ResourceAvailabilityMsg _value,
+      $Res Function(_$ResourceAvailabilityMsg) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? songId = null,
   }) {
-    return _then(_$ResourceMsg(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+    return _then(_$ResourceAvailabilityMsg(
+      songId: null == songId
+          ? _value.songId
+          : songId // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -609,60 +922,66 @@ class __$$ResourceMsgCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ResourceMsg with DiagnosticableTreeMixin implements ResourceMsg {
-  const _$ResourceMsg({required this.id, final String? $type})
-      : $type = $type ?? 'resource';
+class _$ResourceAvailabilityMsg
+    with DiagnosticableTreeMixin
+    implements ResourceAvailabilityMsg {
+  const _$ResourceAvailabilityMsg({required this.songId, final String? $type})
+      : $type = $type ?? 'resourceAvailability';
 
-  factory _$ResourceMsg.fromJson(Map<String, dynamic> json) =>
-      _$$ResourceMsgFromJson(json);
+  factory _$ResourceAvailabilityMsg.fromJson(Map<String, dynamic> json) =>
+      _$$ResourceAvailabilityMsgFromJson(json);
 
   @override
-  final String id;
+  final String songId;
 
   @JsonKey(name: 'type')
   final String $type;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'P2pMessage.resource(id: $id)';
+    return 'P2pMessage.resourceAvailability(songId: $songId)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'P2pMessage.resource'))
-      ..add(DiagnosticsProperty('id', id));
+      ..add(DiagnosticsProperty('type', 'P2pMessage.resourceAvailability'))
+      ..add(DiagnosticsProperty('songId', songId));
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ResourceMsg &&
-            (identical(other.id, id) || other.id == id));
+            other is _$ResourceAvailabilityMsg &&
+            (identical(other.songId, songId) || other.songId == songId));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id);
+  int get hashCode => Object.hash(runtimeType, songId);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ResourceMsgCopyWith<_$ResourceMsg> get copyWith =>
-      __$$ResourceMsgCopyWithImpl<_$ResourceMsg>(this, _$identity);
+  _$$ResourceAvailabilityMsgCopyWith<_$ResourceAvailabilityMsg> get copyWith =>
+      __$$ResourceAvailabilityMsgCopyWithImpl<_$ResourceAvailabilityMsg>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() sync,
-    required TResult Function(String id) requestResource,
-    required TResult Function(String id) resource,
+    required TResult Function(String songId) searchResource,
+    required TResult Function(String requestId, String songId, int startIndex)
+        requestResource,
+    required TResult Function(String songId) resourceAvailability,
+    required TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)
+        musicPackage,
     required TResult Function() requestStateUpdate,
     required TResult Function(List<String> devices) stateUpdateMsg,
-    required TResult Function(String songId, String serializedBytes)
-        musicPackage,
     required TResult Function(int index, DateTime time) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
@@ -670,18 +989,22 @@ class _$ResourceMsg with DiagnosticableTreeMixin implements ResourceMsg {
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
   }) {
-    return resource(id);
+    return resourceAvailability(songId);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? sync,
-    TResult? Function(String id)? requestResource,
-    TResult? Function(String id)? resource,
+    TResult? Function(String songId)? searchResource,
+    TResult? Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult? Function(String songId)? resourceAvailability,
+    TResult? Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
-    TResult? Function(String songId, String serializedBytes)? musicPackage,
     TResult? Function(int index, DateTime time)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
@@ -689,18 +1012,22 @@ class _$ResourceMsg with DiagnosticableTreeMixin implements ResourceMsg {
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
   }) {
-    return resource?.call(id);
+    return resourceAvailability?.call(songId);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? sync,
-    TResult Function(String id)? requestResource,
-    TResult Function(String id)? resource,
+    TResult Function(String songId)? searchResource,
+    TResult Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult Function(String songId)? resourceAvailability,
+    TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
-    TResult Function(String songId, String serializedBytes)? musicPackage,
     TResult Function(int index, DateTime time)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
@@ -709,8 +1036,8 @@ class _$ResourceMsg with DiagnosticableTreeMixin implements ResourceMsg {
     TResult Function()? removeSongFromQueue,
     required TResult orElse(),
   }) {
-    if (resource != null) {
-      return resource(id);
+    if (resourceAvailability != null) {
+      return resourceAvailability(songId);
     }
     return orElse();
   }
@@ -719,11 +1046,13 @@ class _$ResourceMsg with DiagnosticableTreeMixin implements ResourceMsg {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SyncMsg value) sync,
+    required TResult Function(SearchResourceMsg value) searchResource,
     required TResult Function(RequestResourceMsg value) requestResource,
-    required TResult Function(ResourceMsg value) resource,
+    required TResult Function(ResourceAvailabilityMsg value)
+        resourceAvailability,
+    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(RequestStateUpdateMsg value) requestStateUpdate,
     required TResult Function(StateUpdateMsg value) stateUpdateMsg,
-    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(PlayMsg value) play,
     required TResult Function(PauseMsg value) pause,
     required TResult Function(SkipSongMsg value) skipSong,
@@ -731,18 +1060,19 @@ class _$ResourceMsg with DiagnosticableTreeMixin implements ResourceMsg {
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
   }) {
-    return resource(this);
+    return resourceAvailability(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SyncMsg value)? sync,
+    TResult? Function(SearchResourceMsg value)? searchResource,
     TResult? Function(RequestResourceMsg value)? requestResource,
-    TResult? Function(ResourceMsg value)? resource,
+    TResult? Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult? Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(PlayMsg value)? play,
     TResult? Function(PauseMsg value)? pause,
     TResult? Function(SkipSongMsg value)? skipSong,
@@ -750,18 +1080,19 @@ class _$ResourceMsg with DiagnosticableTreeMixin implements ResourceMsg {
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
   }) {
-    return resource?.call(this);
+    return resourceAvailability?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SyncMsg value)? sync,
+    TResult Function(SearchResourceMsg value)? searchResource,
     TResult Function(RequestResourceMsg value)? requestResource,
-    TResult Function(ResourceMsg value)? resource,
+    TResult Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(PlayMsg value)? play,
     TResult Function(PauseMsg value)? pause,
     TResult Function(SkipSongMsg value)? skipSong,
@@ -770,29 +1101,314 @@ class _$ResourceMsg with DiagnosticableTreeMixin implements ResourceMsg {
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     required TResult orElse(),
   }) {
-    if (resource != null) {
-      return resource(this);
+    if (resourceAvailability != null) {
+      return resourceAvailability(this);
     }
     return orElse();
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ResourceMsgToJson(
+    return _$$ResourceAvailabilityMsgToJson(
       this,
     );
   }
 }
 
-abstract class ResourceMsg implements P2pMessage {
-  const factory ResourceMsg({required final String id}) = _$ResourceMsg;
+abstract class ResourceAvailabilityMsg implements P2pMessage {
+  const factory ResourceAvailabilityMsg({required final String songId}) =
+      _$ResourceAvailabilityMsg;
 
-  factory ResourceMsg.fromJson(Map<String, dynamic> json) =
-      _$ResourceMsg.fromJson;
+  factory ResourceAvailabilityMsg.fromJson(Map<String, dynamic> json) =
+      _$ResourceAvailabilityMsg.fromJson;
 
-  String get id;
+  String get songId;
   @JsonKey(ignore: true)
-  _$$ResourceMsgCopyWith<_$ResourceMsg> get copyWith =>
+  _$$ResourceAvailabilityMsgCopyWith<_$ResourceAvailabilityMsg> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$MusicPackageMsgCopyWith<$Res> {
+  factory _$$MusicPackageMsgCopyWith(
+          _$MusicPackageMsg value, $Res Function(_$MusicPackageMsg) then) =
+      __$$MusicPackageMsgCopyWithImpl<$Res>;
+  @useResult
+  $Res call(
+      {String requestId,
+      String songId,
+      int startIndex,
+      String serializedBytes});
+}
+
+/// @nodoc
+class __$$MusicPackageMsgCopyWithImpl<$Res>
+    extends _$P2pMessageCopyWithImpl<$Res, _$MusicPackageMsg>
+    implements _$$MusicPackageMsgCopyWith<$Res> {
+  __$$MusicPackageMsgCopyWithImpl(
+      _$MusicPackageMsg _value, $Res Function(_$MusicPackageMsg) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? requestId = null,
+    Object? songId = null,
+    Object? startIndex = null,
+    Object? serializedBytes = null,
+  }) {
+    return _then(_$MusicPackageMsg(
+      requestId: null == requestId
+          ? _value.requestId
+          : requestId // ignore: cast_nullable_to_non_nullable
+              as String,
+      songId: null == songId
+          ? _value.songId
+          : songId // ignore: cast_nullable_to_non_nullable
+              as String,
+      startIndex: null == startIndex
+          ? _value.startIndex
+          : startIndex // ignore: cast_nullable_to_non_nullable
+              as int,
+      serializedBytes: null == serializedBytes
+          ? _value.serializedBytes
+          : serializedBytes // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$MusicPackageMsg
+    with DiagnosticableTreeMixin
+    implements MusicPackageMsg {
+  const _$MusicPackageMsg(
+      {required this.requestId,
+      required this.songId,
+      required this.startIndex,
+      required this.serializedBytes,
+      final String? $type})
+      : $type = $type ?? 'musicPackage';
+
+  factory _$MusicPackageMsg.fromJson(Map<String, dynamic> json) =>
+      _$$MusicPackageMsgFromJson(json);
+
+  @override
+  final String requestId;
+  @override
+  final String songId;
+  @override
+  final int startIndex;
+  @override
+  final String serializedBytes;
+
+  @JsonKey(name: 'type')
+  final String $type;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'P2pMessage.musicPackage(requestId: $requestId, songId: $songId, startIndex: $startIndex, serializedBytes: $serializedBytes)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'P2pMessage.musicPackage'))
+      ..add(DiagnosticsProperty('requestId', requestId))
+      ..add(DiagnosticsProperty('songId', songId))
+      ..add(DiagnosticsProperty('startIndex', startIndex))
+      ..add(DiagnosticsProperty('serializedBytes', serializedBytes));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$MusicPackageMsg &&
+            (identical(other.requestId, requestId) ||
+                other.requestId == requestId) &&
+            (identical(other.songId, songId) || other.songId == songId) &&
+            (identical(other.startIndex, startIndex) ||
+                other.startIndex == startIndex) &&
+            (identical(other.serializedBytes, serializedBytes) ||
+                other.serializedBytes == serializedBytes));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, requestId, songId, startIndex, serializedBytes);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$MusicPackageMsgCopyWith<_$MusicPackageMsg> get copyWith =>
+      __$$MusicPackageMsgCopyWithImpl<_$MusicPackageMsg>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() sync,
+    required TResult Function(String songId) searchResource,
+    required TResult Function(String requestId, String songId, int startIndex)
+        requestResource,
+    required TResult Function(String songId) resourceAvailability,
+    required TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)
+        musicPackage,
+    required TResult Function() requestStateUpdate,
+    required TResult Function(List<String> devices) stateUpdateMsg,
+    required TResult Function(int index, DateTime time) play,
+    required TResult Function() pause,
+    required TResult Function() skipSong,
+    required TResult Function() previousSong,
+    required TResult Function(DetailsPackage songData) addSongToQueue,
+    required TResult Function() removeSongFromQueue,
+  }) {
+    return musicPackage(requestId, songId, startIndex, serializedBytes);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? sync,
+    TResult? Function(String songId)? searchResource,
+    TResult? Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult? Function(String songId)? resourceAvailability,
+    TResult? Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
+    TResult? Function()? requestStateUpdate,
+    TResult? Function(List<String> devices)? stateUpdateMsg,
+    TResult? Function(int index, DateTime time)? play,
+    TResult? Function()? pause,
+    TResult? Function()? skipSong,
+    TResult? Function()? previousSong,
+    TResult? Function(DetailsPackage songData)? addSongToQueue,
+    TResult? Function()? removeSongFromQueue,
+  }) {
+    return musicPackage?.call(requestId, songId, startIndex, serializedBytes);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? sync,
+    TResult Function(String songId)? searchResource,
+    TResult Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult Function(String songId)? resourceAvailability,
+    TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
+    TResult Function()? requestStateUpdate,
+    TResult Function(List<String> devices)? stateUpdateMsg,
+    TResult Function(int index, DateTime time)? play,
+    TResult Function()? pause,
+    TResult Function()? skipSong,
+    TResult Function()? previousSong,
+    TResult Function(DetailsPackage songData)? addSongToQueue,
+    TResult Function()? removeSongFromQueue,
+    required TResult orElse(),
+  }) {
+    if (musicPackage != null) {
+      return musicPackage(requestId, songId, startIndex, serializedBytes);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(SyncMsg value) sync,
+    required TResult Function(SearchResourceMsg value) searchResource,
+    required TResult Function(RequestResourceMsg value) requestResource,
+    required TResult Function(ResourceAvailabilityMsg value)
+        resourceAvailability,
+    required TResult Function(MusicPackageMsg value) musicPackage,
+    required TResult Function(RequestStateUpdateMsg value) requestStateUpdate,
+    required TResult Function(StateUpdateMsg value) stateUpdateMsg,
+    required TResult Function(PlayMsg value) play,
+    required TResult Function(PauseMsg value) pause,
+    required TResult Function(SkipSongMsg value) skipSong,
+    required TResult Function(PreviousSongMsg value) previousSong,
+    required TResult Function(AddSongToQueueMsg value) addSongToQueue,
+    required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
+  }) {
+    return musicPackage(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(SyncMsg value)? sync,
+    TResult? Function(SearchResourceMsg value)? searchResource,
+    TResult? Function(RequestResourceMsg value)? requestResource,
+    TResult? Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult? Function(MusicPackageMsg value)? musicPackage,
+    TResult? Function(RequestStateUpdateMsg value)? requestStateUpdate,
+    TResult? Function(StateUpdateMsg value)? stateUpdateMsg,
+    TResult? Function(PlayMsg value)? play,
+    TResult? Function(PauseMsg value)? pause,
+    TResult? Function(SkipSongMsg value)? skipSong,
+    TResult? Function(PreviousSongMsg value)? previousSong,
+    TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
+    TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+  }) {
+    return musicPackage?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(SyncMsg value)? sync,
+    TResult Function(SearchResourceMsg value)? searchResource,
+    TResult Function(RequestResourceMsg value)? requestResource,
+    TResult Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult Function(MusicPackageMsg value)? musicPackage,
+    TResult Function(RequestStateUpdateMsg value)? requestStateUpdate,
+    TResult Function(StateUpdateMsg value)? stateUpdateMsg,
+    TResult Function(PlayMsg value)? play,
+    TResult Function(PauseMsg value)? pause,
+    TResult Function(SkipSongMsg value)? skipSong,
+    TResult Function(PreviousSongMsg value)? previousSong,
+    TResult Function(AddSongToQueueMsg value)? addSongToQueue,
+    TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    required TResult orElse(),
+  }) {
+    if (musicPackage != null) {
+      return musicPackage(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$MusicPackageMsgToJson(
+      this,
+    );
+  }
+}
+
+abstract class MusicPackageMsg implements P2pMessage {
+  const factory MusicPackageMsg(
+      {required final String requestId,
+      required final String songId,
+      required final int startIndex,
+      required final String serializedBytes}) = _$MusicPackageMsg;
+
+  factory MusicPackageMsg.fromJson(Map<String, dynamic> json) =
+      _$MusicPackageMsg.fromJson;
+
+  String get requestId;
+  String get songId;
+  int get startIndex;
+  String get serializedBytes;
+  @JsonKey(ignore: true)
+  _$$MusicPackageMsgCopyWith<_$MusicPackageMsg> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -852,12 +1468,15 @@ class _$RequestStateUpdateMsg
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() sync,
-    required TResult Function(String id) requestResource,
-    required TResult Function(String id) resource,
+    required TResult Function(String songId) searchResource,
+    required TResult Function(String requestId, String songId, int startIndex)
+        requestResource,
+    required TResult Function(String songId) resourceAvailability,
+    required TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)
+        musicPackage,
     required TResult Function() requestStateUpdate,
     required TResult Function(List<String> devices) stateUpdateMsg,
-    required TResult Function(String songId, String serializedBytes)
-        musicPackage,
     required TResult Function(int index, DateTime time) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
@@ -872,11 +1491,15 @@ class _$RequestStateUpdateMsg
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? sync,
-    TResult? Function(String id)? requestResource,
-    TResult? Function(String id)? resource,
+    TResult? Function(String songId)? searchResource,
+    TResult? Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult? Function(String songId)? resourceAvailability,
+    TResult? Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
-    TResult? Function(String songId, String serializedBytes)? musicPackage,
     TResult? Function(int index, DateTime time)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
@@ -891,11 +1514,15 @@ class _$RequestStateUpdateMsg
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? sync,
-    TResult Function(String id)? requestResource,
-    TResult Function(String id)? resource,
+    TResult Function(String songId)? searchResource,
+    TResult Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult Function(String songId)? resourceAvailability,
+    TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
-    TResult Function(String songId, String serializedBytes)? musicPackage,
     TResult Function(int index, DateTime time)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
@@ -914,11 +1541,13 @@ class _$RequestStateUpdateMsg
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SyncMsg value) sync,
+    required TResult Function(SearchResourceMsg value) searchResource,
     required TResult Function(RequestResourceMsg value) requestResource,
-    required TResult Function(ResourceMsg value) resource,
+    required TResult Function(ResourceAvailabilityMsg value)
+        resourceAvailability,
+    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(RequestStateUpdateMsg value) requestStateUpdate,
     required TResult Function(StateUpdateMsg value) stateUpdateMsg,
-    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(PlayMsg value) play,
     required TResult Function(PauseMsg value) pause,
     required TResult Function(SkipSongMsg value) skipSong,
@@ -933,11 +1562,12 @@ class _$RequestStateUpdateMsg
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SyncMsg value)? sync,
+    TResult? Function(SearchResourceMsg value)? searchResource,
     TResult? Function(RequestResourceMsg value)? requestResource,
-    TResult? Function(ResourceMsg value)? resource,
+    TResult? Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult? Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(PlayMsg value)? play,
     TResult? Function(PauseMsg value)? pause,
     TResult? Function(SkipSongMsg value)? skipSong,
@@ -952,11 +1582,12 @@ class _$RequestStateUpdateMsg
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SyncMsg value)? sync,
+    TResult Function(SearchResourceMsg value)? searchResource,
     TResult Function(RequestResourceMsg value)? requestResource,
-    TResult Function(ResourceMsg value)? resource,
+    TResult Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(PlayMsg value)? play,
     TResult Function(PauseMsg value)? pause,
     TResult Function(SkipSongMsg value)? skipSong,
@@ -1074,12 +1705,15 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() sync,
-    required TResult Function(String id) requestResource,
-    required TResult Function(String id) resource,
+    required TResult Function(String songId) searchResource,
+    required TResult Function(String requestId, String songId, int startIndex)
+        requestResource,
+    required TResult Function(String songId) resourceAvailability,
+    required TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)
+        musicPackage,
     required TResult Function() requestStateUpdate,
     required TResult Function(List<String> devices) stateUpdateMsg,
-    required TResult Function(String songId, String serializedBytes)
-        musicPackage,
     required TResult Function(int index, DateTime time) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
@@ -1094,11 +1728,15 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? sync,
-    TResult? Function(String id)? requestResource,
-    TResult? Function(String id)? resource,
+    TResult? Function(String songId)? searchResource,
+    TResult? Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult? Function(String songId)? resourceAvailability,
+    TResult? Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
-    TResult? Function(String songId, String serializedBytes)? musicPackage,
     TResult? Function(int index, DateTime time)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
@@ -1113,11 +1751,15 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? sync,
-    TResult Function(String id)? requestResource,
-    TResult Function(String id)? resource,
+    TResult Function(String songId)? searchResource,
+    TResult Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult Function(String songId)? resourceAvailability,
+    TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
-    TResult Function(String songId, String serializedBytes)? musicPackage,
     TResult Function(int index, DateTime time)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
@@ -1136,11 +1778,13 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SyncMsg value) sync,
+    required TResult Function(SearchResourceMsg value) searchResource,
     required TResult Function(RequestResourceMsg value) requestResource,
-    required TResult Function(ResourceMsg value) resource,
+    required TResult Function(ResourceAvailabilityMsg value)
+        resourceAvailability,
+    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(RequestStateUpdateMsg value) requestStateUpdate,
     required TResult Function(StateUpdateMsg value) stateUpdateMsg,
-    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(PlayMsg value) play,
     required TResult Function(PauseMsg value) pause,
     required TResult Function(SkipSongMsg value) skipSong,
@@ -1155,11 +1799,12 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SyncMsg value)? sync,
+    TResult? Function(SearchResourceMsg value)? searchResource,
     TResult? Function(RequestResourceMsg value)? requestResource,
-    TResult? Function(ResourceMsg value)? resource,
+    TResult? Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult? Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(PlayMsg value)? play,
     TResult? Function(PauseMsg value)? pause,
     TResult? Function(SkipSongMsg value)? skipSong,
@@ -1174,11 +1819,12 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SyncMsg value)? sync,
+    TResult Function(SearchResourceMsg value)? searchResource,
     TResult Function(RequestResourceMsg value)? requestResource,
-    TResult Function(ResourceMsg value)? resource,
+    TResult Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(PlayMsg value)? play,
     TResult Function(PauseMsg value)? pause,
     TResult Function(SkipSongMsg value)? skipSong,
@@ -1211,244 +1857,6 @@ abstract class StateUpdateMsg implements P2pMessage {
   List<String> get devices;
   @JsonKey(ignore: true)
   _$$StateUpdateMsgCopyWith<_$StateUpdateMsg> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$MusicPackageMsgCopyWith<$Res> {
-  factory _$$MusicPackageMsgCopyWith(
-          _$MusicPackageMsg value, $Res Function(_$MusicPackageMsg) then) =
-      __$$MusicPackageMsgCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String songId, String serializedBytes});
-}
-
-/// @nodoc
-class __$$MusicPackageMsgCopyWithImpl<$Res>
-    extends _$P2pMessageCopyWithImpl<$Res, _$MusicPackageMsg>
-    implements _$$MusicPackageMsgCopyWith<$Res> {
-  __$$MusicPackageMsgCopyWithImpl(
-      _$MusicPackageMsg _value, $Res Function(_$MusicPackageMsg) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? songId = null,
-    Object? serializedBytes = null,
-  }) {
-    return _then(_$MusicPackageMsg(
-      songId: null == songId
-          ? _value.songId
-          : songId // ignore: cast_nullable_to_non_nullable
-              as String,
-      serializedBytes: null == serializedBytes
-          ? _value.serializedBytes
-          : serializedBytes // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$MusicPackageMsg
-    with DiagnosticableTreeMixin
-    implements MusicPackageMsg {
-  const _$MusicPackageMsg(
-      {required this.songId,
-      required this.serializedBytes,
-      final String? $type})
-      : $type = $type ?? 'musicPackage';
-
-  factory _$MusicPackageMsg.fromJson(Map<String, dynamic> json) =>
-      _$$MusicPackageMsgFromJson(json);
-
-  @override
-  final String songId;
-  @override
-  final String serializedBytes;
-
-  @JsonKey(name: 'type')
-  final String $type;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'P2pMessage.musicPackage(songId: $songId, serializedBytes: $serializedBytes)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'P2pMessage.musicPackage'))
-      ..add(DiagnosticsProperty('songId', songId))
-      ..add(DiagnosticsProperty('serializedBytes', serializedBytes));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$MusicPackageMsg &&
-            (identical(other.songId, songId) || other.songId == songId) &&
-            (identical(other.serializedBytes, serializedBytes) ||
-                other.serializedBytes == serializedBytes));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, songId, serializedBytes);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$MusicPackageMsgCopyWith<_$MusicPackageMsg> get copyWith =>
-      __$$MusicPackageMsgCopyWithImpl<_$MusicPackageMsg>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() sync,
-    required TResult Function(String id) requestResource,
-    required TResult Function(String id) resource,
-    required TResult Function() requestStateUpdate,
-    required TResult Function(List<String> devices) stateUpdateMsg,
-    required TResult Function(String songId, String serializedBytes)
-        musicPackage,
-    required TResult Function(int index, DateTime time) play,
-    required TResult Function() pause,
-    required TResult Function() skipSong,
-    required TResult Function() previousSong,
-    required TResult Function(DetailsPackage songData) addSongToQueue,
-    required TResult Function() removeSongFromQueue,
-  }) {
-    return musicPackage(songId, serializedBytes);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? sync,
-    TResult? Function(String id)? requestResource,
-    TResult? Function(String id)? resource,
-    TResult? Function()? requestStateUpdate,
-    TResult? Function(List<String> devices)? stateUpdateMsg,
-    TResult? Function(String songId, String serializedBytes)? musicPackage,
-    TResult? Function(int index, DateTime time)? play,
-    TResult? Function()? pause,
-    TResult? Function()? skipSong,
-    TResult? Function()? previousSong,
-    TResult? Function(DetailsPackage songData)? addSongToQueue,
-    TResult? Function()? removeSongFromQueue,
-  }) {
-    return musicPackage?.call(songId, serializedBytes);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? sync,
-    TResult Function(String id)? requestResource,
-    TResult Function(String id)? resource,
-    TResult Function()? requestStateUpdate,
-    TResult Function(List<String> devices)? stateUpdateMsg,
-    TResult Function(String songId, String serializedBytes)? musicPackage,
-    TResult Function(int index, DateTime time)? play,
-    TResult Function()? pause,
-    TResult Function()? skipSong,
-    TResult Function()? previousSong,
-    TResult Function(DetailsPackage songData)? addSongToQueue,
-    TResult Function()? removeSongFromQueue,
-    required TResult orElse(),
-  }) {
-    if (musicPackage != null) {
-      return musicPackage(songId, serializedBytes);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(SyncMsg value) sync,
-    required TResult Function(RequestResourceMsg value) requestResource,
-    required TResult Function(ResourceMsg value) resource,
-    required TResult Function(RequestStateUpdateMsg value) requestStateUpdate,
-    required TResult Function(StateUpdateMsg value) stateUpdateMsg,
-    required TResult Function(MusicPackageMsg value) musicPackage,
-    required TResult Function(PlayMsg value) play,
-    required TResult Function(PauseMsg value) pause,
-    required TResult Function(SkipSongMsg value) skipSong,
-    required TResult Function(PreviousSongMsg value) previousSong,
-    required TResult Function(AddSongToQueueMsg value) addSongToQueue,
-    required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
-  }) {
-    return musicPackage(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(SyncMsg value)? sync,
-    TResult? Function(RequestResourceMsg value)? requestResource,
-    TResult? Function(ResourceMsg value)? resource,
-    TResult? Function(RequestStateUpdateMsg value)? requestStateUpdate,
-    TResult? Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult? Function(MusicPackageMsg value)? musicPackage,
-    TResult? Function(PlayMsg value)? play,
-    TResult? Function(PauseMsg value)? pause,
-    TResult? Function(SkipSongMsg value)? skipSong,
-    TResult? Function(PreviousSongMsg value)? previousSong,
-    TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
-    TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
-  }) {
-    return musicPackage?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(SyncMsg value)? sync,
-    TResult Function(RequestResourceMsg value)? requestResource,
-    TResult Function(ResourceMsg value)? resource,
-    TResult Function(RequestStateUpdateMsg value)? requestStateUpdate,
-    TResult Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult Function(MusicPackageMsg value)? musicPackage,
-    TResult Function(PlayMsg value)? play,
-    TResult Function(PauseMsg value)? pause,
-    TResult Function(SkipSongMsg value)? skipSong,
-    TResult Function(PreviousSongMsg value)? previousSong,
-    TResult Function(AddSongToQueueMsg value)? addSongToQueue,
-    TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
-    required TResult orElse(),
-  }) {
-    if (musicPackage != null) {
-      return musicPackage(this);
-    }
-    return orElse();
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$MusicPackageMsgToJson(
-      this,
-    );
-  }
-}
-
-abstract class MusicPackageMsg implements P2pMessage {
-  const factory MusicPackageMsg(
-      {required final String songId,
-      required final String serializedBytes}) = _$MusicPackageMsg;
-
-  factory MusicPackageMsg.fromJson(Map<String, dynamic> json) =
-      _$MusicPackageMsg.fromJson;
-
-  String get songId;
-  String get serializedBytes;
-  @JsonKey(ignore: true)
-  _$$MusicPackageMsgCopyWith<_$MusicPackageMsg> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1540,12 +1948,15 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() sync,
-    required TResult Function(String id) requestResource,
-    required TResult Function(String id) resource,
+    required TResult Function(String songId) searchResource,
+    required TResult Function(String requestId, String songId, int startIndex)
+        requestResource,
+    required TResult Function(String songId) resourceAvailability,
+    required TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)
+        musicPackage,
     required TResult Function() requestStateUpdate,
     required TResult Function(List<String> devices) stateUpdateMsg,
-    required TResult Function(String songId, String serializedBytes)
-        musicPackage,
     required TResult Function(int index, DateTime time) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
@@ -1560,11 +1971,15 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? sync,
-    TResult? Function(String id)? requestResource,
-    TResult? Function(String id)? resource,
+    TResult? Function(String songId)? searchResource,
+    TResult? Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult? Function(String songId)? resourceAvailability,
+    TResult? Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
-    TResult? Function(String songId, String serializedBytes)? musicPackage,
     TResult? Function(int index, DateTime time)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
@@ -1579,11 +1994,15 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? sync,
-    TResult Function(String id)? requestResource,
-    TResult Function(String id)? resource,
+    TResult Function(String songId)? searchResource,
+    TResult Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult Function(String songId)? resourceAvailability,
+    TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
-    TResult Function(String songId, String serializedBytes)? musicPackage,
     TResult Function(int index, DateTime time)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
@@ -1602,11 +2021,13 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SyncMsg value) sync,
+    required TResult Function(SearchResourceMsg value) searchResource,
     required TResult Function(RequestResourceMsg value) requestResource,
-    required TResult Function(ResourceMsg value) resource,
+    required TResult Function(ResourceAvailabilityMsg value)
+        resourceAvailability,
+    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(RequestStateUpdateMsg value) requestStateUpdate,
     required TResult Function(StateUpdateMsg value) stateUpdateMsg,
-    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(PlayMsg value) play,
     required TResult Function(PauseMsg value) pause,
     required TResult Function(SkipSongMsg value) skipSong,
@@ -1621,11 +2042,12 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SyncMsg value)? sync,
+    TResult? Function(SearchResourceMsg value)? searchResource,
     TResult? Function(RequestResourceMsg value)? requestResource,
-    TResult? Function(ResourceMsg value)? resource,
+    TResult? Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult? Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(PlayMsg value)? play,
     TResult? Function(PauseMsg value)? pause,
     TResult? Function(SkipSongMsg value)? skipSong,
@@ -1640,11 +2062,12 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SyncMsg value)? sync,
+    TResult Function(SearchResourceMsg value)? searchResource,
     TResult Function(RequestResourceMsg value)? requestResource,
-    TResult Function(ResourceMsg value)? resource,
+    TResult Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(PlayMsg value)? play,
     TResult Function(PauseMsg value)? pause,
     TResult Function(SkipSongMsg value)? skipSong,
@@ -1730,12 +2153,15 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() sync,
-    required TResult Function(String id) requestResource,
-    required TResult Function(String id) resource,
+    required TResult Function(String songId) searchResource,
+    required TResult Function(String requestId, String songId, int startIndex)
+        requestResource,
+    required TResult Function(String songId) resourceAvailability,
+    required TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)
+        musicPackage,
     required TResult Function() requestStateUpdate,
     required TResult Function(List<String> devices) stateUpdateMsg,
-    required TResult Function(String songId, String serializedBytes)
-        musicPackage,
     required TResult Function(int index, DateTime time) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
@@ -1750,11 +2176,15 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? sync,
-    TResult? Function(String id)? requestResource,
-    TResult? Function(String id)? resource,
+    TResult? Function(String songId)? searchResource,
+    TResult? Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult? Function(String songId)? resourceAvailability,
+    TResult? Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
-    TResult? Function(String songId, String serializedBytes)? musicPackage,
     TResult? Function(int index, DateTime time)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
@@ -1769,11 +2199,15 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? sync,
-    TResult Function(String id)? requestResource,
-    TResult Function(String id)? resource,
+    TResult Function(String songId)? searchResource,
+    TResult Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult Function(String songId)? resourceAvailability,
+    TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
-    TResult Function(String songId, String serializedBytes)? musicPackage,
     TResult Function(int index, DateTime time)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
@@ -1792,11 +2226,13 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SyncMsg value) sync,
+    required TResult Function(SearchResourceMsg value) searchResource,
     required TResult Function(RequestResourceMsg value) requestResource,
-    required TResult Function(ResourceMsg value) resource,
+    required TResult Function(ResourceAvailabilityMsg value)
+        resourceAvailability,
+    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(RequestStateUpdateMsg value) requestStateUpdate,
     required TResult Function(StateUpdateMsg value) stateUpdateMsg,
-    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(PlayMsg value) play,
     required TResult Function(PauseMsg value) pause,
     required TResult Function(SkipSongMsg value) skipSong,
@@ -1811,11 +2247,12 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SyncMsg value)? sync,
+    TResult? Function(SearchResourceMsg value)? searchResource,
     TResult? Function(RequestResourceMsg value)? requestResource,
-    TResult? Function(ResourceMsg value)? resource,
+    TResult? Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult? Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(PlayMsg value)? play,
     TResult? Function(PauseMsg value)? pause,
     TResult? Function(SkipSongMsg value)? skipSong,
@@ -1830,11 +2267,12 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SyncMsg value)? sync,
+    TResult Function(SearchResourceMsg value)? searchResource,
     TResult Function(RequestResourceMsg value)? requestResource,
-    TResult Function(ResourceMsg value)? resource,
+    TResult Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(PlayMsg value)? play,
     TResult Function(PauseMsg value)? pause,
     TResult Function(SkipSongMsg value)? skipSong,
@@ -1915,12 +2353,15 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() sync,
-    required TResult Function(String id) requestResource,
-    required TResult Function(String id) resource,
+    required TResult Function(String songId) searchResource,
+    required TResult Function(String requestId, String songId, int startIndex)
+        requestResource,
+    required TResult Function(String songId) resourceAvailability,
+    required TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)
+        musicPackage,
     required TResult Function() requestStateUpdate,
     required TResult Function(List<String> devices) stateUpdateMsg,
-    required TResult Function(String songId, String serializedBytes)
-        musicPackage,
     required TResult Function(int index, DateTime time) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
@@ -1935,11 +2376,15 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? sync,
-    TResult? Function(String id)? requestResource,
-    TResult? Function(String id)? resource,
+    TResult? Function(String songId)? searchResource,
+    TResult? Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult? Function(String songId)? resourceAvailability,
+    TResult? Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
-    TResult? Function(String songId, String serializedBytes)? musicPackage,
     TResult? Function(int index, DateTime time)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
@@ -1954,11 +2399,15 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? sync,
-    TResult Function(String id)? requestResource,
-    TResult Function(String id)? resource,
+    TResult Function(String songId)? searchResource,
+    TResult Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult Function(String songId)? resourceAvailability,
+    TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
-    TResult Function(String songId, String serializedBytes)? musicPackage,
     TResult Function(int index, DateTime time)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
@@ -1977,11 +2426,13 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SyncMsg value) sync,
+    required TResult Function(SearchResourceMsg value) searchResource,
     required TResult Function(RequestResourceMsg value) requestResource,
-    required TResult Function(ResourceMsg value) resource,
+    required TResult Function(ResourceAvailabilityMsg value)
+        resourceAvailability,
+    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(RequestStateUpdateMsg value) requestStateUpdate,
     required TResult Function(StateUpdateMsg value) stateUpdateMsg,
-    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(PlayMsg value) play,
     required TResult Function(PauseMsg value) pause,
     required TResult Function(SkipSongMsg value) skipSong,
@@ -1996,11 +2447,12 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SyncMsg value)? sync,
+    TResult? Function(SearchResourceMsg value)? searchResource,
     TResult? Function(RequestResourceMsg value)? requestResource,
-    TResult? Function(ResourceMsg value)? resource,
+    TResult? Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult? Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(PlayMsg value)? play,
     TResult? Function(PauseMsg value)? pause,
     TResult? Function(SkipSongMsg value)? skipSong,
@@ -2015,11 +2467,12 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SyncMsg value)? sync,
+    TResult Function(SearchResourceMsg value)? searchResource,
     TResult Function(RequestResourceMsg value)? requestResource,
-    TResult Function(ResourceMsg value)? resource,
+    TResult Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(PlayMsg value)? play,
     TResult Function(PauseMsg value)? pause,
     TResult Function(SkipSongMsg value)? skipSong,
@@ -2104,12 +2557,15 @@ class _$PreviousSongMsg
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() sync,
-    required TResult Function(String id) requestResource,
-    required TResult Function(String id) resource,
+    required TResult Function(String songId) searchResource,
+    required TResult Function(String requestId, String songId, int startIndex)
+        requestResource,
+    required TResult Function(String songId) resourceAvailability,
+    required TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)
+        musicPackage,
     required TResult Function() requestStateUpdate,
     required TResult Function(List<String> devices) stateUpdateMsg,
-    required TResult Function(String songId, String serializedBytes)
-        musicPackage,
     required TResult Function(int index, DateTime time) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
@@ -2124,11 +2580,15 @@ class _$PreviousSongMsg
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? sync,
-    TResult? Function(String id)? requestResource,
-    TResult? Function(String id)? resource,
+    TResult? Function(String songId)? searchResource,
+    TResult? Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult? Function(String songId)? resourceAvailability,
+    TResult? Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
-    TResult? Function(String songId, String serializedBytes)? musicPackage,
     TResult? Function(int index, DateTime time)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
@@ -2143,11 +2603,15 @@ class _$PreviousSongMsg
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? sync,
-    TResult Function(String id)? requestResource,
-    TResult Function(String id)? resource,
+    TResult Function(String songId)? searchResource,
+    TResult Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult Function(String songId)? resourceAvailability,
+    TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
-    TResult Function(String songId, String serializedBytes)? musicPackage,
     TResult Function(int index, DateTime time)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
@@ -2166,11 +2630,13 @@ class _$PreviousSongMsg
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SyncMsg value) sync,
+    required TResult Function(SearchResourceMsg value) searchResource,
     required TResult Function(RequestResourceMsg value) requestResource,
-    required TResult Function(ResourceMsg value) resource,
+    required TResult Function(ResourceAvailabilityMsg value)
+        resourceAvailability,
+    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(RequestStateUpdateMsg value) requestStateUpdate,
     required TResult Function(StateUpdateMsg value) stateUpdateMsg,
-    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(PlayMsg value) play,
     required TResult Function(PauseMsg value) pause,
     required TResult Function(SkipSongMsg value) skipSong,
@@ -2185,11 +2651,12 @@ class _$PreviousSongMsg
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SyncMsg value)? sync,
+    TResult? Function(SearchResourceMsg value)? searchResource,
     TResult? Function(RequestResourceMsg value)? requestResource,
-    TResult? Function(ResourceMsg value)? resource,
+    TResult? Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult? Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(PlayMsg value)? play,
     TResult? Function(PauseMsg value)? pause,
     TResult? Function(SkipSongMsg value)? skipSong,
@@ -2204,11 +2671,12 @@ class _$PreviousSongMsg
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SyncMsg value)? sync,
+    TResult Function(SearchResourceMsg value)? searchResource,
     TResult Function(RequestResourceMsg value)? requestResource,
-    TResult Function(ResourceMsg value)? resource,
+    TResult Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(PlayMsg value)? play,
     TResult Function(PauseMsg value)? pause,
     TResult Function(SkipSongMsg value)? skipSong,
@@ -2322,12 +2790,15 @@ class _$AddSongToQueueMsg
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() sync,
-    required TResult Function(String id) requestResource,
-    required TResult Function(String id) resource,
+    required TResult Function(String songId) searchResource,
+    required TResult Function(String requestId, String songId, int startIndex)
+        requestResource,
+    required TResult Function(String songId) resourceAvailability,
+    required TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)
+        musicPackage,
     required TResult Function() requestStateUpdate,
     required TResult Function(List<String> devices) stateUpdateMsg,
-    required TResult Function(String songId, String serializedBytes)
-        musicPackage,
     required TResult Function(int index, DateTime time) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
@@ -2342,11 +2813,15 @@ class _$AddSongToQueueMsg
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? sync,
-    TResult? Function(String id)? requestResource,
-    TResult? Function(String id)? resource,
+    TResult? Function(String songId)? searchResource,
+    TResult? Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult? Function(String songId)? resourceAvailability,
+    TResult? Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
-    TResult? Function(String songId, String serializedBytes)? musicPackage,
     TResult? Function(int index, DateTime time)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
@@ -2361,11 +2836,15 @@ class _$AddSongToQueueMsg
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? sync,
-    TResult Function(String id)? requestResource,
-    TResult Function(String id)? resource,
+    TResult Function(String songId)? searchResource,
+    TResult Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult Function(String songId)? resourceAvailability,
+    TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
-    TResult Function(String songId, String serializedBytes)? musicPackage,
     TResult Function(int index, DateTime time)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
@@ -2384,11 +2863,13 @@ class _$AddSongToQueueMsg
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SyncMsg value) sync,
+    required TResult Function(SearchResourceMsg value) searchResource,
     required TResult Function(RequestResourceMsg value) requestResource,
-    required TResult Function(ResourceMsg value) resource,
+    required TResult Function(ResourceAvailabilityMsg value)
+        resourceAvailability,
+    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(RequestStateUpdateMsg value) requestStateUpdate,
     required TResult Function(StateUpdateMsg value) stateUpdateMsg,
-    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(PlayMsg value) play,
     required TResult Function(PauseMsg value) pause,
     required TResult Function(SkipSongMsg value) skipSong,
@@ -2403,11 +2884,12 @@ class _$AddSongToQueueMsg
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SyncMsg value)? sync,
+    TResult? Function(SearchResourceMsg value)? searchResource,
     TResult? Function(RequestResourceMsg value)? requestResource,
-    TResult? Function(ResourceMsg value)? resource,
+    TResult? Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult? Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(PlayMsg value)? play,
     TResult? Function(PauseMsg value)? pause,
     TResult? Function(SkipSongMsg value)? skipSong,
@@ -2422,11 +2904,12 @@ class _$AddSongToQueueMsg
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SyncMsg value)? sync,
+    TResult Function(SearchResourceMsg value)? searchResource,
     TResult Function(RequestResourceMsg value)? requestResource,
-    TResult Function(ResourceMsg value)? resource,
+    TResult Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(PlayMsg value)? play,
     TResult Function(PauseMsg value)? pause,
     TResult Function(SkipSongMsg value)? skipSong,
@@ -2518,12 +3001,15 @@ class _$RemoveSongFromQueueMsg
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() sync,
-    required TResult Function(String id) requestResource,
-    required TResult Function(String id) resource,
+    required TResult Function(String songId) searchResource,
+    required TResult Function(String requestId, String songId, int startIndex)
+        requestResource,
+    required TResult Function(String songId) resourceAvailability,
+    required TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)
+        musicPackage,
     required TResult Function() requestStateUpdate,
     required TResult Function(List<String> devices) stateUpdateMsg,
-    required TResult Function(String songId, String serializedBytes)
-        musicPackage,
     required TResult Function(int index, DateTime time) play,
     required TResult Function() pause,
     required TResult Function() skipSong,
@@ -2538,11 +3024,15 @@ class _$RemoveSongFromQueueMsg
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? sync,
-    TResult? Function(String id)? requestResource,
-    TResult? Function(String id)? resource,
+    TResult? Function(String songId)? searchResource,
+    TResult? Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult? Function(String songId)? resourceAvailability,
+    TResult? Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult? Function()? requestStateUpdate,
     TResult? Function(List<String> devices)? stateUpdateMsg,
-    TResult? Function(String songId, String serializedBytes)? musicPackage,
     TResult? Function(int index, DateTime time)? play,
     TResult? Function()? pause,
     TResult? Function()? skipSong,
@@ -2557,11 +3047,15 @@ class _$RemoveSongFromQueueMsg
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? sync,
-    TResult Function(String id)? requestResource,
-    TResult Function(String id)? resource,
+    TResult Function(String songId)? searchResource,
+    TResult Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult Function(String songId)? resourceAvailability,
+    TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
     TResult Function()? requestStateUpdate,
     TResult Function(List<String> devices)? stateUpdateMsg,
-    TResult Function(String songId, String serializedBytes)? musicPackage,
     TResult Function(int index, DateTime time)? play,
     TResult Function()? pause,
     TResult Function()? skipSong,
@@ -2580,11 +3074,13 @@ class _$RemoveSongFromQueueMsg
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SyncMsg value) sync,
+    required TResult Function(SearchResourceMsg value) searchResource,
     required TResult Function(RequestResourceMsg value) requestResource,
-    required TResult Function(ResourceMsg value) resource,
+    required TResult Function(ResourceAvailabilityMsg value)
+        resourceAvailability,
+    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(RequestStateUpdateMsg value) requestStateUpdate,
     required TResult Function(StateUpdateMsg value) stateUpdateMsg,
-    required TResult Function(MusicPackageMsg value) musicPackage,
     required TResult Function(PlayMsg value) play,
     required TResult Function(PauseMsg value) pause,
     required TResult Function(SkipSongMsg value) skipSong,
@@ -2599,11 +3095,12 @@ class _$RemoveSongFromQueueMsg
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SyncMsg value)? sync,
+    TResult? Function(SearchResourceMsg value)? searchResource,
     TResult? Function(RequestResourceMsg value)? requestResource,
-    TResult? Function(ResourceMsg value)? resource,
+    TResult? Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult? Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult? Function(MusicPackageMsg value)? musicPackage,
     TResult? Function(PlayMsg value)? play,
     TResult? Function(PauseMsg value)? pause,
     TResult? Function(SkipSongMsg value)? skipSong,
@@ -2618,11 +3115,12 @@ class _$RemoveSongFromQueueMsg
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SyncMsg value)? sync,
+    TResult Function(SearchResourceMsg value)? searchResource,
     TResult Function(RequestResourceMsg value)? requestResource,
-    TResult Function(ResourceMsg value)? resource,
+    TResult Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(RequestStateUpdateMsg value)? requestStateUpdate,
     TResult Function(StateUpdateMsg value)? stateUpdateMsg,
-    TResult Function(MusicPackageMsg value)? musicPackage,
     TResult Function(PlayMsg value)? play,
     TResult Function(PauseMsg value)? pause,
     TResult Function(SkipSongMsg value)? skipSong,

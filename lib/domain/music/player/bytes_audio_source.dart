@@ -18,9 +18,15 @@ class BytesAudioSource extends StreamAudioSource {
 
   bool get isDownloaded => _bytes.length >= (_dataLength ?? 0);
 
-  void addData(List<int> data) {
-    logger.d("BytesAudioSource addData at ${_bytes.length}, ${data.length}");
-    _bytes.addAll(data);
+  void addData(int startIndex, List<int> data) {
+    logger.d(
+        "BytesAudioSource addData $startIndex ${_bytes.length}, ${data.length}");
+    if (_bytes.length == startIndex) {
+      _bytes.addAll(data);
+    } else {
+      logger.e(
+          "Received song bytes with wrong startIndex $startIndex, ${_bytes.length}");
+    }
     _updateCurrentStream();
   }
 
@@ -61,5 +67,9 @@ class BytesAudioSource extends StreamAudioSource {
         _stream = null;
       }
     }
+  }
+
+  int getNextPackageIndex() {
+    return _bytes.length;
   }
 }

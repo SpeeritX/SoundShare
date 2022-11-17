@@ -4,9 +4,10 @@ import 'package:ntp/ntp.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sound_share/domain/music/synchronization/synchronization.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
-import 'package:sound_share/ui/screens/home/record_screen.dart';
+import 'package:sound_share/ui/screens/home/pick_directory_dialog.dart';
 import 'package:sound_share/ui/screens/player/music_test_screen.dart';
 import 'package:sound_share/ui/screens/player/player_screen.dart';
+import 'package:sound_share/ui/style/app_colors.dart';
 
 import '../../style/paddings.dart';
 import '../../widgets/buttons/primary_full_button.dart';
@@ -36,6 +37,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _createNetwork() {
     _openPlayer(P2pNetwork(), _offset);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future(_openPickDirectoryDialog);
   }
 
   @override
@@ -108,6 +115,25 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       text: "Calibrate",
                     ),
+                    SizedBox(height: Paddings.dynamic.m4),
+                    SizedBox(height: Paddings.dynamic.m4),
+                    Container(
+                        padding: EdgeInsets.all(Paddings.static.m2),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Help",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .button!
+                                    .copyWith(color: AppColors.primaryColor)),
+                            Text("About",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .button!
+                                    .copyWith(color: AppColors.primaryColor))
+                          ],
+                        )),
                   ],
                 ),
               ),
@@ -115,6 +141,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  void _openPickDirectoryDialog() async {
+    await showDialog(
+      context: context,
+      builder: (context) => const PickDirectoryDialog(),
     );
   }
 
@@ -129,10 +162,5 @@ class _HomeScreenState extends State<HomeScreen> {
   void _openTestMusic() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const MusicTestScreen()));
-  }
-
-  void _openRecording() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => RecordScreen()));
   }
 }

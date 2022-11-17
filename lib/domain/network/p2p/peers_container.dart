@@ -13,10 +13,10 @@ class PeersContainer with Disposable {
   final TcpServer _tcpServer;
   late final PeersIncubator _incubator = PeersIncubator(_tcpServer);
   final _peers = List<DirectConnection>.empty(growable: true);
-  final _receivedMessages = StreamController<P2pMessage>.broadcast();
+  final _receivedMessages = StreamController<P2pMessageEvent>.broadcast();
   final _peerConnected = StreamController<String>.broadcast();
 
-  Stream<P2pMessage> get receivedMessages => _receivedMessages.stream;
+  Stream<P2pMessageEvent> get receivedMessages => _receivedMessages.stream;
   Stream<String> get peerConnected => _peerConnected.stream;
 
   List<String> get allIds => _peers.map((e) => e.id).toList();
@@ -65,7 +65,7 @@ class PeersContainer with Disposable {
     peer.readStream.listen((data) {
       final message = P2pMessage.fromJson(jsonDecode(data));
       logger.d("RECEIVED $message");
-      _receivedMessages.add(message);
+      _receivedMessages.add(P2pMessageEvent(message, peer.id));
     }).canceledBy(this);
 
     _peerConnected.add(peer.id);

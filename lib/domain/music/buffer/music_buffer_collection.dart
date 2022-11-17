@@ -23,13 +23,13 @@ class MusicBufferCollection {
     _songs.remove(id);
   }
 
-  void onMusicPackage(String id, List<int> bytes) {
+  void onMusicPackage(String id, int startIndex, List<int> bytes) {
     final song = _songs[id];
     if (song == null) {
       logger.e("Received unexpected package for song '$id'");
       return;
     }
-    song.addData(bytes);
+    song.addData(startIndex, bytes);
     if (song.isDownloaded) {
       _onDownloadFinished.add(null);
     }
@@ -43,7 +43,11 @@ class MusicBufferCollection {
     return _songs.containsKey(id);
   }
 
-  bool isDownloadInProgress() {
-    return _songs.values.any((e) => !e.isDownloaded);
+  bool isSongDownloaded(String songId) {
+    return _songs[songId]!.isDownloaded;
+  }
+
+  int getNextPackageIndex(String songId) {
+    return _songs[songId]!.getNextPackageIndex();
   }
 }

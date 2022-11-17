@@ -25,6 +25,7 @@ class PlayerController extends ChangeNotifier with Disposable {
   late final MusicProvider _musicProvider = MusicProvider(_p2pNetwork);
 
   DetailsPackage? get currentSong => _musicQueue.currentSong;
+  List<DetailsPackage> get songList => _musicQueue.songList;
 
   PlayerController(this._p2pNetwork, this._playOffset) {
     _p2pNetwork.musicPlayerListener = _player;
@@ -60,6 +61,7 @@ class PlayerController extends ChangeNotifier with Disposable {
 
   void play() async {
     var now = await NTP.now();
+    // final now = DateTime.now();
     _p2pNetwork.sendMessage(P2pMessage.play(_musicQueue.currentSongIndex, now));
   }
 }
