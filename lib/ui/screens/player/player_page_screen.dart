@@ -1,19 +1,35 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:sound_share/domain/controllers/player/player_controller.dart';
 import 'package:sound_share/ui/style/app_colors.dart';
 import 'package:sound_share/ui/widgets/shrink_tap.dart';
 
 import '../../widgets/music/player_details_controls.dart';
 
 class PlayerPageScreen extends StatefulWidget {
-  const PlayerPageScreen({Key? key}) : super(key: key);
+  final PlayerController playerController;
+
+  const PlayerPageScreen({required this.playerController, Key? key})
+      : super(key: key);
 
   @override
   State<PlayerPageScreen> createState() => _PlayerPageScreenState();
 }
 
 class _PlayerPageScreenState extends State<PlayerPageScreen> {
+  late final Timer timer;
+
+  @override
+  void initState() {
+    timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      setState(() {});
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,30 +73,31 @@ class _PlayerPageScreenState extends State<PlayerPageScreen> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
+                children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 30, right: 30, bottom: 15),
+                    padding:
+                        const EdgeInsets.only(left: 30, right: 30, bottom: 15),
                     child: Text(
-                      "Somebody To Love",
+                      widget.playerController.currentSong?.title ?? "",
                       overflow: TextOverflow.fade,
                       softWrap: false,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
                           color: AppColors.black),
                     ),
                   ),
-                  Text(
+                  const Text(
                     "",
                     style: TextStyle(fontSize: 3),
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 30, right: 30),
                     child: Text(
-                      "OneRepublic",
+                      widget.playerController.currentSong?.artist ?? "",
                       overflow: TextOverflow.fade,
                       softWrap: false,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                           color: AppColors.primaryColor,
@@ -100,14 +117,15 @@ class _PlayerPageScreenState extends State<PlayerPageScreen> {
                         child: LinearPercentIndicator(
                           padding: const EdgeInsets.only(left: 30, right: 30),
                           lineHeight: 2,
-                          percent: 0,
+                          percent: widget.playerController
+                              .getCurrentSongPositionPercentage(),
                           progressColor: AppColors.primaryColor,
                         ),
                       ),
                     ),
                     Positioned.fill(
                       child: Align(
-                        alignment: const Alignment(-1.0, 0.0),
+                        alignment: Alignment(_getMarkerPosition(), 0.0),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 30, right: 30),
                           child: ShrinkTap(
@@ -129,10 +147,10 @@ class _PlayerPageScreenState extends State<PlayerPageScreen> {
                     left: 30, top: 8, right: 30, bottom: 30),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text('0:00'),
-                    Spacer(),
-                    Text('3:20'),
+                  children: [
+                    Text(_getCurrentSongPosition()),
+                    const Spacer(),
+                    Text(_getCurrentSongDuration()),
                   ],
                 ),
               ),
@@ -145,5 +163,34 @@ class _PlayerPageScreenState extends State<PlayerPageScreen> {
         ),
       ),
     );
+  }
+
+  double _getMarkerPosition() {
+    return widget.playerController.getCurrentSongPositionPercentage() * 2 - 1;
+  }
+
+  String _getCurrentSongPosition() {
+    var duration =
+        widget.playerController.getCurrentSongPosition() ?? const Duration();
+    return _durationToString(duration);
+  }
+
+  String _getCurrentSongDuration() {
+    var duration = widget.playerController.getCurrentSongDuration() ??
+        widget.playerController.currentSong?.duration ??
+        const Duration();
+    return _durationToString(duration);
+  }
+
+  String _durationToString(Duration duration) {
+    var seconds = duration.inSeconds % 60;
+    var minutes = duration.inMinutes;
+    return "$minutes:${seconds < 10 ? "0" : ""}${seconds % 60}";
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 }

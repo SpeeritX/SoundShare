@@ -24,7 +24,7 @@ class MusicSong {
     if (mp3instance.parseTagsSync()) {
       try {
         attributes = mp3instance.getMetaTags();
-        artist = attributes?['Artist'];
+        artist = attributes?['Artist'] ?? "Unknown artist";
         title = attributes?['Title'] ?? basename(file.path);
         album = attributes?['Album'];
         apic = attributes?['APIC'];

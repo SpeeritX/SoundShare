@@ -51,35 +51,39 @@ class _PlayerScreenState extends State<PlayerScreen> {
           children: <Widget>[
             Column(
               children: [
-                Row(children: [
-                  Expanded(
-                    child: PrimaryFullButton(
-                        text: "My Songs",
+                Container(
+                  padding: EdgeInsets.only(
+                      left: Paddings.dynamic.m2, right: Paddings.dynamic.m2),
+                  child: Row(children: [
+                    Expanded(
+                      child: PrimaryFullButton(
+                          text: "My Songs",
+                          onPressed: () {
+                            setState(() {
+                              controller.jumpToPage(0);
+                            });
+                          },
+                          style: getSwitchViewButtonStyle(_pageNumber == 0),
+                          backgroundColor: Colors.transparent,
+                          shadow: false,
+                          animation: false),
+                    ),
+                    Expanded(
+                      child: PrimaryFullButton(
+                        text: "Queued Songs",
                         onPressed: () {
                           setState(() {
-                            controller.jumpToPage(0);
+                            controller.jumpToPage(1);
                           });
                         },
-                        style: getSwitchViewButtonStyle(_pageNumber == 0),
+                        style: getSwitchViewButtonStyle(_pageNumber == 1),
                         backgroundColor: Colors.transparent,
                         shadow: false,
-                        animation: false),
-                  ),
-                  Expanded(
-                    child: PrimaryFullButton(
-                      text: "Queued Songs",
-                      onPressed: () {
-                        setState(() {
-                          controller.jumpToPage(1);
-                        });
-                      },
-                      style: getSwitchViewButtonStyle(_pageNumber == 1),
-                      backgroundColor: Colors.transparent,
-                      shadow: false,
-                      animation: false,
+                        animation: false,
+                      ),
                     ),
-                  ),
-                ]),
+                  ]),
+                ),
                 Expanded(
                   child: PageView(
                     scrollDirection: Axis.horizontal,
@@ -91,36 +95,25 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       });
                     },
                     children: [
-                      Positioned.fill(
-                        child: SingleChildScrollView(
-                          child: Consumer<PlayerController>(
-                            builder: (context, playerController, child) =>
-                                Column(
-                              children: [
-                                ..._createLocalSongsWidgets(playerController),
-                                SizedBox(height: 4 * Paddings.dynamic.m4),
-                              ],
-                            ),
+                      SingleChildScrollView(
+                        child: Consumer<PlayerController>(
+                          builder: (context, playerController, child) => Column(
+                            children: [
+                              ..._createLocalSongsWidgets(playerController),
+                              SizedBox(height: 4 * Paddings.dynamic.m4),
+                            ],
                           ),
                         ),
                       ),
-                      Positioned.fill(
-                        child: SingleChildScrollView(
-                          child: Consumer<PlayerController>(
-                            builder: (context, playerController, child) =>
-                                Column(
-                              children: [
-                                PrimaryFullButton(
-                                  onPressed: () {
-                                    playerController.play();
-                                  },
-                                  text: "Play",
-                                ),
-                                const TimerWidget(),
-                                ..._createQueuedSongsWidgets(playerController),
-                                SizedBox(height: 4 * Paddings.dynamic.m4),
-                              ],
-                            ),
+                      SingleChildScrollView(
+                        child: Consumer<PlayerController>(
+                          builder: (context, playerController, child) => Column(
+                            children: [
+                              SizedBox(height: Paddings.dynamic.m3),
+                              const TimerWidget(),
+                              ..._createQueuedSongsWidgets(playerController),
+                              SizedBox(height: 4 * Paddings.dynamic.m4),
+                            ],
                           ),
                         ),
                       ),
@@ -129,23 +122,14 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 ),
               ],
             ),
-            // Positioned.fill(
-            //   child: SingleChildScrollView(
-            //     child: Consumer<PlayerController>(
-            //       builder: (context, playerController, child) => Column(
-            //         children: [
-            //           ..._createSongsWidgets(playerController),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
             Positioned.fill(
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Consumer<PlayerController>(
                     builder: (context, playerController, child) =>
-                        PlayerWidget(playerController: playerController)),
+                        (playerController.songList.isNotEmpty)
+                            ? PlayerWidget(playerController: playerController)
+                            : const SizedBox.shrink()),
               ),
             ),
           ],
@@ -199,7 +183,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
         : Theme.of(context)
             .textTheme
             .bodyText2!
-            .copyWith(color: AppColors.black);
+            .copyWith(color: AppColors.middleGray);
   }
 }
 

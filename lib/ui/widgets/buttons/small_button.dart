@@ -24,7 +24,7 @@ class SmallButton extends StatelessWidget {
       onTap: () {
         if (!disable) onPressed();
       },
-      shrinkScale: 0.9,
+      shrinkScale: 0.85,
       child: Container(
           color: backgroundColor,
           padding: EdgeInsets.all(Paddings.dynamic.m1),
