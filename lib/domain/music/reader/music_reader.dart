@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:sound_share/common/utils/iterable_extensions.dart';
 import 'package:sound_share/domain/music/package/music_package.dart';
 import 'package:sound_share/domain/music/song/song.dart';
 
@@ -10,20 +9,20 @@ class MusicReader {
   late Iterator<MusicPackage> _packages;
 
   MusicReader(this._song) {
-    List<MusicPackage> arr = [];
-    _song.file
-        .readAsBytesSync()
-        .chunked(chunkSize)
-        .toList()
-        .asMap()
-        .forEach((index, element) {
-      arr.add(MusicPackage(
-          startIndex: index * chunkSize,
-          endIndex: (index + 1) * chunkSize - 1,
-          songId: _song.details.songId,
-          data: Uint8List.fromList(element)));
-    });
-    _packages = arr.iterator;
+    // List<MusicPackage> arr = [];
+    // _song.file
+    //     .readAsBytesSync()
+    //     .chunked(chunkSize)
+    //     .toList()
+    //     .asMap()
+    //     .forEach((index, element) {
+    //   arr.add(MusicPackage(
+    //       startIndex: index * chunkSize,
+    //       endIndex: (index + 1) * chunkSize - 1,
+    //       songId: _song.details.songId,
+    //       data: Uint8List.fromList(element)));
+    // });
+    // _packages = arr.iterator;
   }
 
   Future<Uint8List> getBytes(int startIndex) async {
