@@ -8,11 +8,13 @@ import '../../style/paddings.dart';
 class SongWidget extends StatelessWidget {
   final DetailsPackage song;
   final PlayerController player;
+  final Widget action;
 
   const SongWidget({
     Key? key,
     required this.song,
     required this.player,
+    required this.action,
   }) : super(key: key);
 
   onPressed() {}
@@ -20,11 +22,15 @@ class SongWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(Paddings.dynamic.m1),
+      padding: EdgeInsets.only(
+          left: Paddings.dynamic.m2,
+          top: Paddings.dynamic.m1,
+          right: Paddings.dynamic.m2,
+          bottom: Paddings.dynamic.m1),
       child: Row(children: [
         SizedBox(
-            height: 80,
-            width: 80,
+            height: 70,
+            width: 70,
             child: Image.asset('assets/Music1.png', fit: BoxFit.cover)),
         SizedBox(width: Paddings.dynamic.m1),
         Expanded(
@@ -50,6 +56,7 @@ class SongWidget extends StatelessWidget {
             ],
           ),
         ),
+        action,
       ]),
     );
   }

@@ -1,11 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sound_share/domain/controllers/player/player_controller.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
+import 'package:sound_share/ui/style/app_colors.dart';
+import 'package:sound_share/ui/style/paddings.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
+import 'package:sound_share/ui/widgets/buttons/small_button.dart';
 import 'package:sound_share/ui/widgets/music/song_widget.dart';
 
 import '../../../domain/music/song/song.dart';
@@ -51,44 +55,46 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 child: Consumer<PlayerController>(
                   builder: (context, playerController, child) => Column(
                     children: [
-                      Row(children: [
-                        PrimaryFullButton(
-                          text: "Queued Songs",
-                          onPressed: () {
-                            setState(() {
-                              viewType = ViewType.queuedSongs;
-                            });
-                          },
-                          style: viewType == ViewType.queuedSongs
-                              ? Theme.of(context).textTheme.bodyText2!
-                              : Theme.of(context).textTheme.bodyText1!,
-                          width: 150,
-                          backgroundColor: Colors.transparent,
-                        ),
-                        PrimaryFullButton(
-                          text: "Local Songs",
-                          onPressed: () {
-                            setState(() {
-                              viewType = ViewType.localSongs;
-                            });
-                          },
-                          style: viewType == ViewType.localSongs
-                              ? Theme.of(context).textTheme.bodyText2!
-                              : Theme.of(context).textTheme.bodyText1!,
-                          width: 150,
-                          backgroundColor: Colors.transparent,
-                        ),
-                      ]),
                       const TimerWidget(),
+                      Container(
+                        padding: EdgeInsets.only(
+                            left: Paddings.dynamic.m2,
+                            right: Paddings.dynamic.m2),
+                        child: Row(children: [
+                          Expanded(
+                            child: PrimaryFullButton(
+                              text: "Queued Songs",
+                              onPressed: () {
+                                setState(() {
+                                  viewType = ViewType.queuedSongs;
+                                });
+                              },
+                              style: getSwitchViewButtonStyle(
+                                  viewType == ViewType.queuedSongs),
+                              backgroundColor: Colors.transparent,
+                              shadow: false,
+                              animation: false,
+                            ),
+                          ),
+                          Expanded(
+                            child: PrimaryFullButton(
+                                text: "Local Songs",
+                                onPressed: () {
+                                  setState(() {
+                                    viewType = ViewType.localSongs;
+                                  });
+                                },
+                                style: getSwitchViewButtonStyle(
+                                    viewType == ViewType.localSongs),
+                                backgroundColor: Colors.transparent,
+                                shadow: false,
+                                animation: false),
+                          ),
+                        ]),
+                      ),
                       Text(
                         playerController.currentSong?.title ?? "No selected",
                         style: Theme.of(context).textTheme.headline5,
-                      ),
-                      PrimaryFullButton(
-                        onPressed: () {
-                          playerController.pickSong();
-                        },
-                        text: "Pick file",
                       ),
                       SizedBox(height: 100),
                       PrimaryFullButton(
@@ -119,12 +125,45 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   Iterable<SongWidget> _createSongsWidgets(PlayerController playerController) {
     if (viewType == ViewType.queuedSongs) {
-      return playerController.songList
-          .map((song) => SongWidget(song: song, player: playerController));
+      return playerController.songList.map((song) => SongWidget(
+            song: song,
+            player: playerController,
+            action: SmallButton(
+              onPressed: () {
+                playerController.removeSong(song.songId);
+              },
+              child: const FaIcon(
+                FontAwesomeIcons.circleMinus,
+                color: AppColors.red,
+                size: 25.0,
+              ),
+            ),
+          ));
     } else {
-      return widget.localSongs.map((musicSong) =>
-          SongWidget(song: musicSong.details, player: playerController));
+      return widget.localSongs.map((musicSong) => SongWidget(
+            song: musicSong.details,
+            player: playerController,
+            action: SmallButton(
+              onPressed: () {
+                playerController.playSong(musicSong);
+              },
+              child: const FaIcon(
+                FontAwesomeIcons.circlePlus,
+                color: AppColors.primaryColor,
+                size: 25.0,
+              ),
+            ),
+          ));
     }
+  }
+
+  TextStyle getSwitchViewButtonStyle(bool selected) {
+    return selected
+        ? Theme.of(context).textTheme.headline3!
+        : Theme.of(context)
+            .textTheme
+            .bodyText2!
+            .copyWith(color: AppColors.primaryColor);
   }
 }
 

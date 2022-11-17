@@ -50,7 +50,7 @@ class AppTextTheme {
     ),
     headline4: TextStyle(
       fontWeight: FontWeight.normal,
-      fontSize: 16,
+      fontSize: 18,
     ),
     button: TextStyle(
       fontWeight: FontWeight.normal,

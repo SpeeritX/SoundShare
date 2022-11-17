@@ -64,6 +64,10 @@ class PlayerController extends ChangeNotifier with Disposable {
     _p2pNetwork.sendMessage(const P2pMessage.sync());
   }
 
+  void removeSong(String song) async {
+    // TODO: Implement
+  }
+
   void play() async {
     var now = await NTP.now();
     _p2pNetwork.sendMessage(P2pMessage.play(_musicQueue.currentSongIndex, now));
