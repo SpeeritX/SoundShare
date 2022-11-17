@@ -9,8 +9,6 @@ import 'package:sound_share/ui/style/app_colors.dart';
 import '../../style/paddings.dart';
 import '../../widgets/buttons/primary_full_button.dart';
 
-import '../player/player_test_screen.dart';
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -146,10 +144,5 @@ class _HomeScreenState extends State<HomeScreen> {
   void _openTestMusic() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const MusicTestScreen()));
-  }
-
-  void _openRecording() {
-    Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const PlayerTestScreen()));
   }
 }
