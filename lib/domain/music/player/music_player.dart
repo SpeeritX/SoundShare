@@ -9,6 +9,7 @@ import 'package:sound_share/domain/music/package/details_package.dart';
 import 'package:sound_share/domain/music/package/music_package.dart';
 import 'package:sound_share/domain/music/player/bytes_audio_source.dart';
 import 'package:sound_share/domain/music/player/music_queue.dart';
+import 'package:sound_share/domain/music/synchronization/synchronization.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
 
 /// Plays the music from the received packages
@@ -16,11 +17,12 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
   final _player = AudioPlayer();
   final MusicBufferController _musicBuffer;
   final MusicQueue _musicQueue;
+  final Duration _playOffset;
   var _source = BytesAudioSource(null);
   var _offset = const Duration();
   Timer? _timer;
 
-  MusicPlayer(this._musicBuffer, this._musicQueue) {
+  MusicPlayer(this._musicBuffer, this._musicQueue, this._playOffset) {
     _player.processingStateStream.listen((event) {
       if (event == ProcessingState.completed) {
         final song = _musicQueue.nextSong();
@@ -97,8 +99,7 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
 
   @override
   void onSync() {
-    NTP
-        .getNtpOffset(localTime: DateTime.now())
-        .then((value) => _offset = Duration(milliseconds: value));
+    NTP.getNtpOffset(localTime: DateTime.now()).then((timeOffset) =>
+        _offset = Duration(milliseconds: timeOffset) + _playOffset);
   }
 }

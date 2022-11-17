@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ntp/ntp.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:sound_share/domain/music/synchronization/synchronization.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
 import 'package:sound_share/ui/screens/home/record_screen.dart';
 import 'package:sound_share/ui/screens/player/music_test_screen.dart';
@@ -19,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var _ip = "192.168.";
   late final TextEditingController _ipController =
       TextEditingController(text: _ip);
+  Duration _offset = const Duration();
 
   _connect() async {
     final p2pNetwork = P2pNetwork();
@@ -27,11 +31,11 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       return;
     }
-    _openPlayer(p2pNetwork);
+    _openPlayer(p2pNetwork, _offset);
   }
 
   _createNetwork() {
-    _openPlayer(P2pNetwork());
+    _openPlayer(P2pNetwork(), _offset);
   }
 
   @override
@@ -95,10 +99,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: Paddings.dynamic.m2),
                     PrimaryFullButton(
-                      onPressed: () {
-                        _openRecording();
+                      onPressed: () async {
+                        if (await Permission.microphone.request().isGranted) {
+                          Synchronization()
+                              .sync()
+                              .then((playOffset) => _offset = playOffset);
+                        }
                       },
-                      text: "Record",
+                      text: "Calibrate",
                     ),
                   ],
                 ),
@@ -110,9 +118,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _openPlayer(P2pNetwork p2pNetwork) {
+  void _openPlayer(P2pNetwork p2pNetwork, Duration playOffset) {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => PlayerScreen(p2pNetwork: p2pNetwork)));
+        builder: (context) => PlayerScreen(
+              p2pNetwork: p2pNetwork,
+              playOffset: playOffset,
+            )));
   }
 
   void _openTestMusic() {

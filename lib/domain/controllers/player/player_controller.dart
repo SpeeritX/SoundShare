@@ -16,21 +16,24 @@ import 'package:ntp/ntp.dart';
 
 class PlayerController extends ChangeNotifier with Disposable {
   final _musicQueue = MusicQueue();
+  final P2pNetwork _p2pNetwork;
+  final Duration _playOffset;
   late final _musicBufferController =
       MusicBufferController(_musicQueue, _p2pNetwork);
   late final MusicPlayer _player =
-      MusicPlayer(_musicBufferController, _musicQueue);
+      MusicPlayer(_musicBufferController, _musicQueue, _playOffset);
   late final MusicProvider _musicProvider = MusicProvider(_p2pNetwork);
-  final P2pNetwork _p2pNetwork;
 
   DetailsPackage? get currentSong => _musicQueue.currentSong;
 
-  PlayerController(this._p2pNetwork) {
+  PlayerController(this._p2pNetwork, this._playOffset) {
     _p2pNetwork.musicPlayerListener = _player;
 
     _musicQueue.updateEvents.listen((_) {
       notifyListeners();
     }).canceledBy(this);
+
+    _p2pNetwork.sendMessage(const P2pMessage.sync());
   }
 
   @override
@@ -53,7 +56,6 @@ class PlayerController extends ChangeNotifier with Disposable {
           .sendMessage(P2pMessage.addSongToQueue(currentSong.details));
     }
     notifyListeners();
-    _p2pNetwork.sendMessage(const P2pMessage.sync());
   }
 
   void play() async {

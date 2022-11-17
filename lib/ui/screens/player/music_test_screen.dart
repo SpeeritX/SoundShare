@@ -21,7 +21,8 @@ class MusicTestScreen extends StatefulWidget {
 
 class _MusicTestScreenState extends State<MusicTestScreen> {
   final _musicBuffer = MusicBufferController(MusicQueue(), P2pNetwork());
-  late final _player = MusicPlayer(_musicBuffer, MusicQueue());
+  late final _player =
+      MusicPlayer(_musicBuffer, MusicQueue(), const Duration());
   MusicDirectory? _directory;
   MusicSong? _song;
   final List<MusicSong> _songs = [];

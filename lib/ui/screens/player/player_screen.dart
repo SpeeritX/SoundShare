@@ -9,9 +9,11 @@ import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
 class PlayerScreen extends StatefulWidget {
   final P2pNetwork p2pNetwork;
+  final Duration playOffset;
 
   const PlayerScreen({
     required this.p2pNetwork,
+    required this.playOffset,
     Key? key,
   }) : super(key: key);
 
@@ -21,17 +23,19 @@ class PlayerScreen extends StatefulWidget {
 
 class _PlayerScreenState extends State<PlayerScreen> {
   late final P2pNetwork _p2pNetwork;
+  late final Duration _playOffset;
 
   @override
   void initState() {
     _p2pNetwork = widget.p2pNetwork;
+    _playOffset = widget.playOffset;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: ((context) => PlayerController(_p2pNetwork)),
+      create: ((context) => PlayerController(_p2pNetwork, _playOffset)),
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Player"),
