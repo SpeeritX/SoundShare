@@ -31,7 +31,7 @@ class SongWidget extends StatelessWidget {
         SizedBox(
             height: 70,
             width: 70,
-            child: Image.asset('assets/Music1.png', fit: BoxFit.cover)),
+            child: Image.asset('assets/Music.png', fit: BoxFit.cover)),
         SizedBox(width: Paddings.dynamic.m1),
         Expanded(
           child: Column(
