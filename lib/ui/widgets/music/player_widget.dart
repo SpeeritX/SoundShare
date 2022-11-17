@@ -39,7 +39,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
           ClipOval(
             child: SizedBox.fromSize(
               size: const Size.fromRadius(39), // Image radius
-              child: Image.asset('assets/Music1.png', fit: BoxFit.cover),
+              child: Image.asset('assets/Music.png', fit: BoxFit.cover),
             ),
           ),
         ],

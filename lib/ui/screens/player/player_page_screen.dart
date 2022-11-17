@@ -49,7 +49,7 @@ class _PlayerPageScreenState extends State<PlayerPageScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 40, bottom: 30),
                 child: Image.asset(
-                  "assets/Music1.png",
+                  "assets/Music.png",
                   width: 340,
                   height: 340,
                 ),
