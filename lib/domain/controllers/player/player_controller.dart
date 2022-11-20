@@ -96,10 +96,10 @@ class PlayerController extends ChangeNotifier with Disposable {
 
   double getCurrentSongPositionPercentage() {
     var duration = getCurrentSongDuration() ?? currentSong?.duration;
-    if (duration == null) {
+    var position = getCurrentSongPosition();
+    if (duration == null || position == null) {
       return -1;
     }
-    var position = getCurrentSongPosition() ?? const Duration();
     return position.inMilliseconds / duration.inMilliseconds;
   }
 }

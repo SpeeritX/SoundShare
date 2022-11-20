@@ -65,20 +65,21 @@ class _PlayerWidgetState extends State<PlayerWidget> {
             ),
             Positioned.fill(
               child: Align(
-                alignment: Alignment(0, 0.745),
+                alignment: const Alignment(0, 1),
                 child: LinearPercentIndicator(
-                  padding: const EdgeInsets.only(left: 66, right: 28),
+                  padding: const EdgeInsets.only(left: 37, right: 32),
                   lineHeight: 2,
                   percent: widget.playerController
                       .getCurrentSongPositionPercentage(),
                   progressColor: AppColors.secondary,
                   backgroundColor: AppColors.primaryColor,
+                  barRadius: const Radius.circular(1),
                 ),
               ),
             ),
             ClipOval(
               child: SizedBox.fromSize(
-                size: const Size.fromRadius(40), // Image radius
+                size: const Size.fromRadius(35), // Image radius
                 child: Image.asset('assets/Music.png', fit: BoxFit.cover),
               ),
             ),
@@ -89,96 +90,83 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   }
 
   Widget _buildButtons() {
-    return Stack(children: [
-      Positioned.fill(
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: LinearPercentIndicator(
-            padding: const EdgeInsets.only(left: 80, right: 28),
-            lineHeight: 2,
-            percent: widget.playerController.getCurrentSongPositionPercentage(),
-            progressColor: AppColors.secondary,
-            backgroundColor: AppColors.primaryColor,
-          ),
-        ),
+    return Container(
+      padding: const EdgeInsets.only(
+        left: 80,
+        top: 10,
+        right: 10,
+        bottom: 10,
       ),
-      Container(
-        height: 60,
-        padding: const EdgeInsets.only(
-          left: 90,
-          top: 10,
-          right: 10,
-          bottom: 10,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50),
-          color: AppColors.primaryColor,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 6,
-              child: Container(
-                padding: EdgeInsets.only(right: Paddings.static.m1),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(widget.playerController.currentSong?.title ?? "",
-                        overflow: TextOverflow.fade,
-                        softWrap: false,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(color: AppColors.white)),
-                    Text(
-                      widget.playerController.currentSong?.artist ?? "",
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(35),
+        color: AppColors.primaryColor,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 6,
+            child: Container(
+              padding: EdgeInsets.only(right: Paddings.static.m1),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(widget.playerController.currentSong?.title ?? "",
                       overflow: TextOverflow.fade,
                       softWrap: false,
                       style: Theme.of(context)
                           .textTheme
-                          .subtitle1!
-                          .copyWith(color: AppColors.secondary),
-                    ),
-                  ],
-                ),
+                          .bodyText1!
+                          .copyWith(color: AppColors.white)),
+                  Text(
+                    widget.playerController.currentSong?.artist ?? "",
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                    style: Theme.of(context)
+                        .textTheme
+                        .subtitle1!
+                        .copyWith(color: AppColors.secondary),
+                  ),
+                ],
               ),
             ),
-            Expanded(
-                flex: 2,
-                child: SmallButton(
-                    onPressed: () {},
-                    child: const FaIcon(
-                      FontAwesomeIcons.backward,
-                      color: Colors.white,
-                      size: 25.0,
-                    ))),
-            Expanded(
+          ),
+          Expanded(
               flex: 2,
               child: SmallButton(
-                onPressed: () {
-                  if (!widget.playerController.isPlaying) {
-                    widget.playerController.play();
-                  } else {
-                    widget.playerController.pause();
-                  }
-                },
-                child: !widget.playerController.isPlaying ? PlayerWidget.playIcon : PlayerWidget.pauseIcon,
-              ),
+                  onPressed: () {},
+                  child: const FaIcon(
+                    FontAwesomeIcons.backward,
+                    color: Colors.white,
+                    size: 25.0,
+                  ))),
+          Expanded(
+            flex: 2,
+            child: SmallButton(
+              onPressed: () {
+                if (!widget.playerController.isPlaying) {
+                  widget.playerController.play();
+                } else {
+                  widget.playerController.pause();
+                }
+              },
+              child: !widget.playerController.isPlaying
+                  ? PlayerWidget.playIcon
+                  : PlayerWidget.pauseIcon,
             ),
-            Expanded(
-                flex: 2,
-                child: SmallButton(
-                    onPressed: () {},
-                    child: const FaIcon(
-                      FontAwesomeIcons.forward,
-                      color: Colors.white,
-                      size: 25.0,
-                    ))),
-          ],
-        ),
+          ),
+          Expanded(
+              flex: 2,
+              child: SmallButton(
+                  onPressed: () {},
+                  child: const FaIcon(
+                    FontAwesomeIcons.forward,
+                    color: Colors.white,
+                    size: 25.0,
+                  ))),
+        ],
       ),
-    ]);
+    );
   }
 
   @override
