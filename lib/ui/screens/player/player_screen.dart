@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:ntp/ntp.dart';
 import 'package:provider/provider.dart';
 import 'package:sound_share/domain/controllers/player/player_controller.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
@@ -181,18 +182,20 @@ class TimerWidget extends StatefulWidget {
 class _TimerWidgetState extends State<TimerWidget> {
   final timeFormat = DateFormat('HH:mm:ss:S');
   late final Timer timer;
+  Duration offset = const Duration();
 
   @override
   void initState() {
     timer = Timer.periodic(Duration(milliseconds: 50), (timer) {
       setState(() {});
     });
+    NTP.getNtpOffset().then((value) => offset = Duration(milliseconds: value));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Text(timeFormat.format(DateTime.now()));
+    return Text(timeFormat.format(DateTime.now().add(offset)));
   }
 
   @override

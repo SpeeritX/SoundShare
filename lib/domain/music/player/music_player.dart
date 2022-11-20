@@ -83,13 +83,12 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
       logger.e("onPlay song index '$index' is null");
       return;
     }
-    _playSong(song);
-    // _timer?.cancel();
-    // _timer = Timer(
-    //     DateTime.now().difference(time) + _offset + const Duration(seconds: 10),
-    //     () {
-    //   _playSong(song);
-    // });
+    _timer?.cancel();
+    _timer = Timer(
+        DateTime.now().difference(time) + _offset + const Duration(seconds: 5),
+        () {
+      _playSong(song);
+    });
   }
 
   @override

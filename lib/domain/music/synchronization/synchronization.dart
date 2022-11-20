@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:audio_streamer/audio_streamer.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 
 class Synchronization {
   Synchronization();
@@ -14,6 +14,8 @@ class Synchronization {
   final List<double> _maxSounds = [];
   final List<int> _miliseconds = [];
 
+  DateTime? started;
+
   void _onAudio(List<double> buffer) {
     _audio.addAll(buffer);
   }
@@ -23,11 +25,22 @@ class Synchronization {
   }
 
   void _chunkStats(int i) {
-    _maxSounds.add(_audio.reduce(max));
-    _miliseconds.add((_audio.indexOf(_maxSounds[i]).toDouble() /
-            AudioStreamer.sampleRate.toDouble() *
-            1000)
+    var duration =
+        (1000 * _audio.length.toDouble() / AudioStreamer.sampleRate.toDouble());
+    var actualDuration = DateTime.now().millisecondsSinceEpoch -
+        (started?.millisecondsSinceEpoch ?? 0);
+    var maxSound = _audio.reduce(max);
+    var maxInd = (_audio.indexOf(maxSound));
+    _maxSounds.add(maxSound);
+    var firstBeep = _audio.firstWhere((element) => element > maxSound * 0.9);
+    _miliseconds.add((((_audio.indexOf(firstBeep).toDouble() /
+                    AudioStreamer.sampleRate.toDouble() *
+                    1000) /
+                duration) *
+            actualDuration)
         .floor());
+    var idx = _audio.indexOf(_maxSounds[i]);
+    print(_audio.sublist(idx - 3, idx + 3));
     _audio.clear();
   }
 
@@ -37,21 +50,17 @@ class Synchronization {
     } catch (error) {
       throw Exception("Error recording");
     }
-    _player.setVolume(1);
+    started = DateTime.now();
     await Future.delayed(const Duration(milliseconds: 1700));
     _chunkStats(0);
-    _player.play(AssetSource('beep.mp3'));
-    await Future.delayed(const Duration(milliseconds: 1700));
-    _chunkStats(1);
-    _player.play(AssetSource('beep.mp3'));
-    await Future.delayed(const Duration(milliseconds: 1700));
-    _chunkStats(2);
-    _player.play(AssetSource('beep.mp3'));
-    await Future.delayed(const Duration(milliseconds: 1700));
-    _chunkStats(3);
-    _player.play(AssetSource('beep.mp3'));
-    await Future.delayed(const Duration(milliseconds: 1700));
-    _chunkStats(4);
+    started = DateTime.now();
+    for (int i = 1; i < 7; i++) {
+      _player.setAsset("assets/beep.mp3");
+      _player.play();
+      await Future.delayed(const Duration(milliseconds: 1700));
+      _chunkStats(i);
+      started = DateTime.now();
+    }
     return await _stop();
   }
 
