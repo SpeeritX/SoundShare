@@ -37,7 +37,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
   PageController controller = PageController();
   late final P2pNetwork _p2pNetwork;
   late final Duration _playOffset;
-  var viewType = ViewType.queuedSongs;
   var _pageNumber = 0;
 
   @override
@@ -203,13 +202,13 @@ class TimerWidget extends StatefulWidget {
 }
 
 class _TimerWidgetState extends State<TimerWidget> {
-  final timeFormat = DateFormat('HH:mm:ss:S');
+  final timeFormat = DateFormat('HH:mm:ss:SSS');
   late final Timer timer;
   Duration offset = const Duration();
 
   @override
   void initState() {
-    timer = Timer.periodic(Duration(milliseconds: 50), (timer) {
+    timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
       setState(() {});
     });
     NTP.getNtpOffset().then((value) => offset = Duration(milliseconds: value));

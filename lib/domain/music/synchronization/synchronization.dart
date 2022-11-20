@@ -53,13 +53,12 @@ class Synchronization {
     started = DateTime.now();
     await Future.delayed(const Duration(milliseconds: 1700));
     _chunkStats(0);
-    started = DateTime.now();
     for (int i = 1; i < 7; i++) {
       _player.setAsset("assets/beep.mp3");
+      started = DateTime.now();
       _player.play();
       await Future.delayed(const Duration(milliseconds: 1700));
       _chunkStats(i);
-      started = DateTime.now();
     }
     return await _stop();
   }

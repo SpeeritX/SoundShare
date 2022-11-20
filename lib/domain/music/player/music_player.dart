@@ -19,14 +19,14 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
   final MusicQueue _musicQueue;
   final Duration _playOffset;
   var _source = BytesAudioSource(null);
-  var _offset = const Duration();
+  var _timeOffset = const Duration();
   Timer? _timer;
 
   MusicPlayer(this._musicBuffer, this._musicQueue, this._playOffset) {
     _player.processingStateStream.listen((event) {
       if (event == ProcessingState.completed) {
         final song = _musicQueue.nextSong();
-        _playSong(song);
+        _playSong(song, DateTime.now().add(_timeOffset));
       }
     }).canceledBy(this);
   }
@@ -46,8 +46,14 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
     _source.addData(package.startIndex, package.data.toList());
   }
 
-  Future<void> play() async {
-    await _player.play();
+  void play(DateTime time) async {
+    _timer?.cancel();
+    _timer = Timer(
+        DateTime.now().difference(time) +
+            _timeOffset +
+            const Duration(seconds: 5), () {
+      _player.play();
+    });
   }
 
   Duration? getCurrentSongDuration() {
@@ -58,11 +64,11 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
     return _player.position;
   }
 
-  Future<void> _playSong(DetailsPackage song) async {
+  Future<void> _playSong(DetailsPackage song, DateTime time) async {
     logger.d("#### Set new song ${song.bytesLength}");
     final source = _musicBuffer.getSong(song);
     _setSong(source);
-    play();
+    play(time);
   }
 
   void pause() {
@@ -91,12 +97,7 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
       logger.e("onPlay song index '$index' is null");
       return;
     }
-    _timer?.cancel();
-    _timer = Timer(
-        DateTime.now().difference(time) + _offset + const Duration(seconds: 5),
-        () {
-      _playSong(song);
-    });
+    _playSong(song, time);
   }
 
   @override
@@ -112,6 +113,6 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
   @override
   void onSync() {
     NTP.getNtpOffset(localTime: DateTime.now()).then((timeOffset) =>
-        _offset = Duration(milliseconds: timeOffset) + _playOffset);
+        _timeOffset = Duration(milliseconds: timeOffset) + _playOffset);
   }
 }

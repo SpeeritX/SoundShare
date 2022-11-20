@@ -24,7 +24,7 @@ class _PlayerPageScreenState extends State<PlayerPageScreen> {
 
   @override
   void initState() {
-    timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+    timer = Timer.periodic(const Duration(milliseconds: 10), (timer) {
       setState(() {});
     });
     super.initState();
@@ -186,8 +186,9 @@ class _PlayerPageScreenState extends State<PlayerPageScreen> {
 
   String _durationToString(Duration duration) {
     var seconds = duration.inSeconds % 60;
+    var milliseconds = duration.inMilliseconds % 1000;
     var minutes = duration.inMinutes;
-    return "$minutes:${seconds < 10 ? "0" : ""}${seconds % 60}";
+    return "$minutes:${seconds < 10 ? "0" : ""}${seconds % 60}:$milliseconds";
   }
 
   @override
