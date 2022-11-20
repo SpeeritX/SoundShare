@@ -5,6 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:sound_share/domain/music/package/details_package.dart';
 
 part 'p2p_messages.freezed.dart';
+
 part 'p2p_messages.g.dart';
 
 class P2pMessageEvent {
@@ -45,7 +46,8 @@ class P2pMessage with _$P2pMessage {
     required List<String> devices,
   }) = StateUpdateMsg;
 
-  const factory P2pMessage.play(int index, DateTime time) = PlayMsg;
+  const factory P2pMessage.play(
+      int index, DateTime time, Duration? songPosition) = PlayMsg;
 
   const factory P2pMessage.pause() = PauseMsg;
 

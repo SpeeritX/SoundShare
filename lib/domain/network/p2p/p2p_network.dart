@@ -17,7 +17,7 @@ class Peer {
 }
 
 abstract class MusicPlayerListener {
-  void onPlay(int index, DateTime time);
+  void onPlay(int index, DateTime time, {Duration? songPosition});
 
   void onPause();
 
@@ -92,7 +92,10 @@ class P2pNetwork with Disposable {
     } else if (message is RequestResourceMsg) {
       _handelRequestResource(message, event.peerId);
     } else if (message is PlayMsg) {
-      _musicPlayerListener?.onPlay(message.index, message.time);
+      _musicPlayerListener?.onPlay(message.index, message.time,
+          songPosition: message.songPosition);
+    } else if (message is PauseMsg) {
+      _musicPlayerListener?.onPause();
     } else if (message is SyncMsg) {
       _musicPlayerListener?.onSync();
     } else if (message is ResourceAvailabilityMsg) {

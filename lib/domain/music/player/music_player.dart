@@ -20,11 +20,13 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
   var _offset = const Duration();
   Timer? _timer;
 
+  Stream<PlayerState> get playerState => _player.playerStateStream;
+
   MusicPlayer(this._musicBuffer, this._musicQueue) {
     _player.processingStateStream.listen((event) {
       if (event == ProcessingState.completed) {
         final song = _musicQueue.nextSong();
-        _playSong(song);
+        _playSong(song, Duration.zero);
       }
     }).canceledBy(this);
   }
@@ -37,6 +39,7 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
     } on PlayerInterruptedException catch (_) {
       logger.w("setAudioSource interrupted");
     }
+    _player.play();
   }
 
   void addPackage(MusicPackage package) {
@@ -48,14 +51,17 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
     await _player.play();
   }
 
-  Future<void> _playSong(DetailsPackage song) async {
+  Future<void> _playSong(DetailsPackage song, Duration? songPosition) async {
     logger.d("#### Set new song ${song.bytesLength}");
     final source = _musicBuffer.getSong(song);
-    _setSong(source);
-    play();
+    await _setSong(source);
+    _player.seek(songPosition);
   }
 
+  Duration? time = const Duration();
+
   void pause() {
+    time = _player.position;
     _player.pause();
   }
 
@@ -70,18 +76,18 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
 
   @override
   void onPause() {
-    // TODO: implement onPause
+    pause();
   }
 
   @override
-  void onPlay(int index, DateTime time) {
+  void onPlay(int index, DateTime time, {Duration? songPosition}) {
     _musicQueue.setIndex(index);
     final song = _musicQueue.currentSong;
     if (song == null) {
       logger.e("onPlay song index '$index' is null");
       return;
     }
-    _playSong(song);
+    _playSong(song, songPosition);
     // _timer?.cancel();
     // _timer = Timer(
     //     DateTime.now().difference(time) + _offset + const Duration(seconds: 10),
