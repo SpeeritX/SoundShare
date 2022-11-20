@@ -58,6 +58,14 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
     _player.seek(songPosition);
   }
 
+  Duration? getCurrentSongDuration() {
+    return _player.duration;
+  }
+
+  Duration? getCurrentSongPosition() {
+    return _player.position;
+  }
+
   Duration? time = const Duration();
 
   void pause() {

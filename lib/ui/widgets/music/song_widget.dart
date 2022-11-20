@@ -9,12 +9,14 @@ class SongWidget extends StatelessWidget {
   final DetailsPackage song;
   final PlayerController player;
   final Widget action;
+  final bool inQueue;
 
   const SongWidget({
     Key? key,
     required this.song,
     required this.player,
     required this.action,
+    required this.inQueue,
   }) : super(key: key);
 
   onPressed() {}
@@ -38,20 +40,17 @@ class SongWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                song.title ?? "Unknown title",
+                song.title ?? "",
                 overflow: TextOverflow.fade,
                 softWrap: false,
-                style: Theme.of(context).textTheme.bodyText2!,
+                style: _getTitleStyle(context),
               ),
               SizedBox(height: Paddings.dynamic.m1 / 2),
               Text(
-                song.artist ?? "Unknown artist",
+                song.artist ?? "",
                 overflow: TextOverflow.fade,
                 softWrap: false,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText2!
-                    .copyWith(color: AppColors.primaryColor),
+                style: _getArtistStyle(context),
               ),
             ],
           ),
@@ -59,5 +58,19 @@ class SongWidget extends StatelessWidget {
         action,
       ]),
     );
+  }
+
+  TextStyle _getTitleStyle(BuildContext context) {
+    var color = (!inQueue || player.currentSong?.songId == song.songId)
+        ? AppColors.darkGray
+        : AppColors.middleGray;
+    return Theme.of(context).textTheme.bodyText2!.copyWith(color: color);
+  }
+
+  TextStyle _getArtistStyle(BuildContext context) {
+    var color = (!inQueue || player.currentSong?.songId == song.songId)
+        ? AppColors.primaryColor
+        : AppColors.middleGray;
+    return Theme.of(context).textTheme.bodyText2!.copyWith(color: color);
   }
 }
