@@ -74,4 +74,21 @@ class PlayerController extends ChangeNotifier with Disposable {
     // final now = DateTime.now();
     _p2pNetwork.sendMessage(P2pMessage.play(_musicQueue.currentSongIndex, now));
   }
+
+  Duration? getCurrentSongDuration() {
+    return _player.getCurrentSongDuration();
+  }
+
+  Duration? getCurrentSongPosition() {
+    return _player.getCurrentSongPosition();
+  }
+
+  double getCurrentSongPositionPercentage() {
+    var duration = getCurrentSongDuration() ?? currentSong?.duration;
+    if (duration == null) {
+      return -1;
+    }
+    var position = getCurrentSongPosition() ?? const Duration();
+    return position.inMilliseconds / duration.inMilliseconds;
+  }
 }

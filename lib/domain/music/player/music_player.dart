@@ -50,6 +50,14 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
     await _player.play();
   }
 
+  Duration? getCurrentSongDuration() {
+    return _player.duration;
+  }
+
+  Duration? getCurrentSongPosition() {
+    return _player.position;
+  }
+
   Future<void> _playSong(DetailsPackage song) async {
     logger.d("#### Set new song ${song.bytesLength}");
     final source = _musicBuffer.getSong(song);
