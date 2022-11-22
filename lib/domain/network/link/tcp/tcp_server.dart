@@ -3,31 +3,40 @@ import 'dart:io';
 
 /// Listens for incoming connections
 class TcpServer {
-  static const defaultPort = 9999;
+  static const communicationPort = 9999;
+  static const dataPort = 9998;
 
-  final int port;
-
-  late final Future<ServerSocket> _server;
-  StreamSubscription? _subscription;
+  late final Future<ServerSocket> _communicationServer;
+  late final Future<ServerSocket> _dataServer;
+  StreamSubscription? _subscriptionCommunication;
+  StreamSubscription? _subscriptionData;
 
   final _incomingClients = StreamController<Socket>.broadcast();
 
   Stream<Socket> get incomingClients => _incomingClients.stream;
 
-  TcpServer({required this.port}) {
-    _server = ServerSocket.bind(InternetAddress.anyIPv4, port);
+  TcpServer() {
+    _communicationServer =
+        ServerSocket.bind(InternetAddress.anyIPv4, communicationPort);
+    _dataServer = ServerSocket.bind(InternetAddress.anyIPv4, dataPort);
     init();
   }
 
   void init() async {
-    final server = await _server;
-    _subscription = server.listen((client) {
+    final communicationServer = await _communicationServer;
+    final dataServer = await _dataServer;
+    _subscriptionCommunication = communicationServer.listen((client) {
+      _incomingClients.add(client);
+    });
+    _subscriptionData = dataServer.listen((client) {
       _incomingClients.add(client);
     });
   }
 
   Future<void> dispose() async {
-    (await _server).close();
-    _subscription?.cancel();
+    (await _communicationServer).close();
+    (await _dataServer).close();
+    _subscriptionCommunication?.cancel();
+    _subscriptionData?.cancel();
   }
 }

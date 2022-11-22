@@ -4,15 +4,15 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:sound_share/common/logger.dart';
 import 'package:sound_share/common/utils/disposable.dart';
-import 'package:sound_share/domain/network/link/direct_connection.dart';
 import 'package:sound_share/domain/network/link/tcp/tcp_server.dart';
 import 'package:sound_share/domain/network/p2p/p2p_messages.dart';
+import 'package:sound_share/domain/network/p2p/peer.dart';
 import 'package:sound_share/domain/network/p2p/peers_incubator.dart';
 
 class PeersContainer with Disposable {
   final TcpServer _tcpServer;
   late final PeersIncubator _incubator = PeersIncubator(_tcpServer);
-  final _peers = List<DirectConnection>.empty(growable: true);
+  final _peers = List<Peer>.empty(growable: true);
   final _receivedMessages = StreamController<P2pMessageEvent>.broadcast();
   final _peerConnected = StreamController<String>.broadcast();
 
@@ -38,7 +38,7 @@ class PeersContainer with Disposable {
   }
 
   Future<void> sendToAll(P2pMessage message) async {
-    await Future.wait(_peers.map((e) => _send(e, message)));
+    await Future.wait(_peers.map((peer) => peer.send(message)));
   }
 
   Future<void> sendToPeer(String peerId, P2pMessage message) async {
@@ -48,26 +48,20 @@ class PeersContainer with Disposable {
       logger.w("Peer with id '$peerId' not found");
       return;
     }
-    await _send(peer, message);
-  }
-
-  Future<void> _send(DirectConnection peer, P2pMessage message) async {
-    logger.d("SENDING to ${peer.id} - $message");
-    await peer.write(message.toBytes());
+    await peer.send(message);
   }
 
   bool contains(String peerId) {
     return _peers.any((e) => e.id == peerId) || _incubator.contains(peerId);
   }
 
-  void _addPeer(DirectConnection peer) {
+  void _addPeer(Peer peer) {
     _peers.add(peer);
-    peer.readStream.listen((data) {
+    peer.setListener((data) {
       final message = P2pMessage.fromJson(jsonDecode(data));
       logger.d("RECEIVED $message");
       _receivedMessages.add(P2pMessageEvent(message, peer.id));
-    }).canceledBy(this);
-
+    });
     _peerConnected.add(peer.id);
   }
 

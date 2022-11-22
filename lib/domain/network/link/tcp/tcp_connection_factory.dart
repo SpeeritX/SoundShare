@@ -18,16 +18,6 @@ class TcpConnectionFactory with Disposable {
     _readSocket = readSocket;
   }
 
-  factory TcpConnectionFactory.fromIncomingConnection(
-      TcpServer tcpServer, Socket readSocket) {
-    return TcpConnectionFactory(
-      tcpServer,
-      readSocket.remoteAddress.address,
-      readSocket.remotePort,
-      readSocket: readSocket,
-    );
-  }
-
   Future<TcpConnection> connect() async {
     await Future.wait([_createWriteSocket(), _createReadSocket()]);
 
@@ -50,7 +40,7 @@ class TcpConnectionFactory with Disposable {
 
     final completer = Completer<void>();
     final subscription = _tcpServer.incomingClients.listen((client) {
-      if (client.remoteAddress.address == remoteIp) {
+      if (client.remoteAddress.address == remoteIp && client.port == port) {
         _readSocket = client;
         completer.complete(null);
       }
