@@ -60,14 +60,14 @@ class PlayerController extends ChangeNotifier with Disposable {
     if (result != null && extension(result.files.single.path!) == '.mp3') {
       File file = File(result.files.single.path!);
       final currentSong = await MusicSong.create(file: file);
-      playSong(currentSong);
+      addSong(currentSong);
     } else {
       notifyListeners();
       _p2pNetwork.sendMessage(const P2pMessage.sync());
     }
   }
 
-  void playSong(MusicSong song) async {
+  void addSong(MusicSong song) async {
     _musicProvider.addSong(song);
     await _p2pNetwork.sendMessage(P2pMessage.addSongToQueue(song.details));
     notifyListeners();
@@ -81,7 +81,8 @@ class PlayerController extends ChangeNotifier with Disposable {
       _musicQueue.currentSongIndex = 0;
     }
     _p2pNetwork.sendMessage(
-        P2pMessage.play(_musicQueue.currentSongIndex, now, Duration.zero));
+      P2pMessage.play(_musicQueue.currentSongIndex, now, Duration.zero),
+    );
   }
 
   void previousSong() async {
@@ -91,7 +92,8 @@ class PlayerController extends ChangeNotifier with Disposable {
       _musicQueue.currentSongIndex = _musicQueue.songList.length - 1;
     }
     _p2pNetwork.sendMessage(
-        P2pMessage.play(_musicQueue.currentSongIndex, now, Duration.zero));
+      P2pMessage.play(_musicQueue.currentSongIndex, now, Duration.zero),
+    );
   }
 
   void removeSong(String song) async {
@@ -101,11 +103,19 @@ class PlayerController extends ChangeNotifier with Disposable {
   void play() async {
     var now = await NTP.now();
     _p2pNetwork.sendMessage(
-        P2pMessage.play(_musicQueue.currentSongIndex, now, _player.time));
+      P2pMessage.play(_musicQueue.currentSongIndex, now, _player.time),
+    );
   }
 
   void pause() {
     _p2pNetwork.sendMessage(const P2pMessage.pause());
+  }
+
+  void playSong(int index) async {
+    var now = await NTP.now();
+    _p2pNetwork.sendMessage(
+      P2pMessage.play(index, now, Duration.zero),
+    );
   }
 
   Duration? getCurrentSongDuration() {
@@ -120,7 +130,7 @@ class PlayerController extends ChangeNotifier with Disposable {
     var duration = getCurrentSongDuration() ?? currentSong?.duration;
     var position = getCurrentSongPosition();
     if (duration == null || position == null) {
-      return -1;
+      return 0;
     }
     return position.inMilliseconds / duration.inMilliseconds;
   }
