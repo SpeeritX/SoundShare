@@ -46,7 +46,7 @@ abstract class MusicBufferListener {
 }
 
 class P2pNetwork with Disposable {
-  final _peers = PeersContainer(TcpServer(port: TcpServer.defaultPort));
+  final _peers = PeersContainer(TcpServer());
 
   final _receivedMessage = StreamController<P2pMessageEvent>.broadcast();
   MusicPlayerListener? _musicPlayerListener;
