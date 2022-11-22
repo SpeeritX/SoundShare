@@ -158,7 +158,9 @@ class _PlayerWidgetState extends State<PlayerWidget> {
           Expanded(
               flex: 2,
               child: SmallButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    widget.playerController.nextSong();
+                  },
                   child: const FaIcon(
                     FontAwesomeIcons.forward,
                     color: Colors.white,
