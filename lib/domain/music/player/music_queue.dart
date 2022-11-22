@@ -11,10 +11,16 @@ class MusicQueue {
   int get currentSongIndex => _currentSongIndex;
 
   set currentSongIndex(int value) {
-    if (value < 0 || value >= songList.length) {
+    if (value < 0) {
+      logger.e("Index out of bound");
+      value = songList.length - 1;
+    }
+
+    if (value >= songList.length) {
       logger.e("Index out of bound");
       value = 0;
     }
+
     _currentSongIndex = value;
   }
 

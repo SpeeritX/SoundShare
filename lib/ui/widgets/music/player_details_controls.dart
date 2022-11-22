@@ -44,7 +44,9 @@ class _PlayerDetailsControlsState extends State<PlayerDetailsControls> {
           ),
           child: IconButton(
             iconSize: 30,
-            onPressed: () {},
+            onPressed: () {
+              widget.playerController.previousSong();
+            },
             icon: const FaIcon(
               FontAwesomeIcons.backward,
               color: AppColors.white,
