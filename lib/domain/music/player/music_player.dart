@@ -83,6 +83,11 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
   }
 
   @override
+  List<DetailsPackage> getQueue() {
+    return _musicQueue.songList;
+  }
+
+  @override
   void onPause() {
     pause();
   }
@@ -110,8 +115,12 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
   }
 
   @override
-  void updateQueue() {
-    // TODO: implement updateQueue
+  void updateQueue(List<DetailsPackage> songs) {
+    if (_musicQueue.songList.isEmpty) {
+      for (var song in songs) {
+        _musicQueue.addSong(song);
+      }
+    }
   }
 
   @override
@@ -119,5 +128,11 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
     NTP
         .getNtpOffset(localTime: DateTime.now())
         .then((value) => _offset = Duration(milliseconds: value));
+  }
+
+  @override
+  void dispose() {
+    _player.dispose();
+    super.dispose();
   }
 }

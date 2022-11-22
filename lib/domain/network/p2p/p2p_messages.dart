@@ -44,6 +44,8 @@ class P2pMessage with _$P2pMessage {
 
   const factory P2pMessage.stateUpdateMsg({
     required List<String> devices,
+    required List<DetailsPackage> queue,
+    required int queuePosition,
   }) = StateUpdateMsg;
 
   const factory P2pMessage.play(

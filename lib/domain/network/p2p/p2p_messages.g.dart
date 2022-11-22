@@ -91,12 +91,18 @@ _$StateUpdateMsg _$$StateUpdateMsgFromJson(Map<String, dynamic> json) =>
     _$StateUpdateMsg(
       devices:
           (json['devices'] as List<dynamic>).map((e) => e as String).toList(),
+      queue: (json['queue'] as List<dynamic>)
+          .map((e) => DetailsPackage.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      queuePosition: json['queuePosition'] as int,
       $type: json['type'] as String?,
     );
 
 Map<String, dynamic> _$$StateUpdateMsgToJson(_$StateUpdateMsg instance) =>
     <String, dynamic>{
       'devices': instance.devices,
+      'queue': instance.queue,
+      'queuePosition': instance.queuePosition,
       'type': instance.$type,
     };
 

@@ -1,67 +1,19 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
 import 'package:sound_share/common/logger.dart';
 import 'package:sound_share/common/utils/disposable.dart';
 import 'package:sound_share/domain/music/buffer/music_buffer_collection.dart';
+import 'package:sound_share/domain/music/buffer/songs_availability_index.dart';
 import 'package:sound_share/domain/music/package/details_package.dart';
 import 'package:sound_share/domain/music/player/bytes_audio_source.dart';
 import 'package:sound_share/domain/music/player/music_queue.dart';
 import 'package:sound_share/domain/network/p2p/p2p_messages.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
 
-class SongIndex {
-  final DateTime lastUpdate;
-
-  final Map<String, DateTime> _peers = {};
-
-  SongIndex(this.lastUpdate);
-
-  void addPeer(String peerId) {
-    _peers[peerId] = DateTime.now();
-  }
-
-  List<String> getActivePeers() {
-    return _peers.keys.toList();
-  }
-}
-
-class SongsAvailabilityIndex {
-  final P2pNetwork _p2pNetwork;
-  final Map<String, SongIndex> _songs = {};
-
-  SongsAvailabilityIndex(this._p2pNetwork);
-
-  Future<String?> getPeer(String songId, int startIndex) async {
-    if (!_songs.containsKey(songId)) {
-      _songs[songId] = SongIndex(DateTime(0));
-    }
-    final song = _songs[songId]!;
-
-    // TODO refactor
-    if (song._peers.isEmpty) {
-      _p2pNetwork.sendMessage(P2pMessage.searchResource(songId: songId));
-      await Future.delayed(const Duration(milliseconds: 200));
-      return _songs[songId]?.getActivePeers().firstOrNull;
-    }
-    return song.getActivePeers().firstOrNull;
-  }
-
-  void invalidatePeer(String peerId) {
-    //TODO
-  }
-
-  void onMusicAvailable(String peerId, ResourceAvailabilityMsg resource) {
-    final song = _songs[resource.songId] ?? SongIndex(DateTime.now());
-    song.addPeer(peerId);
-    _songs[resource.songId] = song;
-  }
-}
-
 class MusicBufferController with Disposable implements MusicBufferListener {
   final MusicQueue _queue;
   final P2pNetwork _p2pNetwork;
-  final _buffer = MusicBufferCollection();
+  final bufferCollection = MusicBufferCollection();
   late final _songsIndex = SongsAvailabilityIndex(_p2pNetwork);
 
   final Map<String, Timer> _requestsInProgress = {};
@@ -73,7 +25,7 @@ class MusicBufferController with Disposable implements MusicBufferListener {
       _updateBuffer();
     }).canceledBy(this);
 
-    _buffer.onDownloadFinished.listen((_) {
+    bufferCollection.onDownloadFinished.listen((_) {
       _updateBuffer();
     }).canceledBy(this);
   }
@@ -83,17 +35,17 @@ class MusicBufferController with Disposable implements MusicBufferListener {
     _requestsInProgress[package.requestId]?.cancel();
     _requestsInProgress.remove(package.requestId);
 
-    _buffer.onMusicPackage(
+    bufferCollection.onMusicPackage(
         package.songId, package.startIndex, package.deserializeBytes());
     _updateBuffer();
   }
 
   BytesAudioSource getSong(DetailsPackage song) {
-    if (!_buffer.contains(song.songId)) {
+    if (!bufferCollection.contains(song.songId)) {
       _addSongToBuffer(song);
     }
 
-    return _buffer.getSong(song.songId);
+    return bufferCollection.getSong(song.songId);
   }
 
   void _updateBuffer() {
@@ -104,11 +56,11 @@ class MusicBufferController with Disposable implements MusicBufferListener {
 
     final songs = _queue.getQueuedSongs();
     for (final song in songs.take(MusicBufferCollection.maxSongs)) {
-      if (!_buffer.contains(song.songId)) {
+      if (!bufferCollection.contains(song.songId)) {
         _addSongToBuffer(song);
       }
-      if (!_buffer.isSongDownloaded(song.songId)) {
-        final startIndex = _buffer.getNextPackageIndex(song.songId);
+      if (!bufferCollection.isSongDownloaded(song.songId)) {
+        final startIndex = bufferCollection.getNextPackageIndex(song.songId);
         _requestData(song.songId, startIndex);
         return;
       }
@@ -116,13 +68,13 @@ class MusicBufferController with Disposable implements MusicBufferListener {
   }
 
   void _addSongToBuffer(DetailsPackage song) {
-    _buffer.addSong(song);
+    bufferCollection.addSong(song);
   }
 
   Future<void> _requestData(String songId, int startIndex) async {
     final requestId = "$startIndex|$songId";
     // TODO: refactor
-    final timer = Timer(const Duration(seconds: 1), () {
+    final timer = Timer(const Duration(seconds: 2), () {
       _requestsInProgress.remove(requestId);
       logger.w("Request timeout $requestId");
       _updateBuffer();

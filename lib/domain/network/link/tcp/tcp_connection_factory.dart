@@ -66,7 +66,7 @@ class TcpConnectionFactory with Disposable {
     try {
       _writeSocket = await Socket.connect(remoteIp, port);
     } on Exception catch (e) {
-      logger.d(e);
+      logger.e(e);
     }
   }
 }

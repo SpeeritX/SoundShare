@@ -7,6 +7,7 @@ import 'package:sound_share/domain/music/package/details_package.dart';
 import 'package:sound_share/domain/network/link/tcp/tcp_server.dart';
 import 'package:sound_share/domain/network/p2p/peers_container.dart';
 
+import '../../../common/logger.dart';
 import 'p2p_messages.dart';
 
 class Peer {
@@ -21,9 +22,11 @@ abstract class MusicPlayerListener {
 
   void onPause();
 
-  void updateQueue();
+  void updateQueue(List<DetailsPackage> songs);
 
   void addToQueue(DetailsPackage songData);
+
+  List<DetailsPackage> getQueue();
 
   void removeFromQueue(int index);
 
@@ -33,7 +36,7 @@ abstract class MusicPlayerListener {
 abstract class MusicProviderListener {
   Future<bool> isSongAvailable(String id);
 
-  Future<Uint8List> getSongBytes(String songId, int startIndex);
+  Future<Uint8List?> getSongBytes(String songId, int startIndex);
 }
 
 abstract class MusicBufferListener {
@@ -49,6 +52,8 @@ class P2pNetwork with Disposable {
   MusicPlayerListener? _musicPlayerListener;
   MusicProviderListener? _musicProviderListener;
   MusicBufferListener? _musicBufferListener;
+
+  bool _initialized = false;
 
   Stream<P2pMessageEvent> get messageReceived => _receivedMessage.stream;
 
@@ -73,6 +78,10 @@ class P2pNetwork with Disposable {
     await _peers.sendToPeer(peerId, message);
   }
 
+  Future<void> sendToOthers(P2pMessage message) async {
+    await _peers.sendToAll(message);
+  }
+
   Future<void> sendMessage(P2pMessage message) async {
     await _peers.sendToAll(message);
   }
@@ -80,9 +89,16 @@ class P2pNetwork with Disposable {
   void _handleMessage(P2pMessageEvent event) {
     final message = event.message;
     if (message is RequestStateUpdateMsg) {
-      _peers.sendToAll(P2pMessage.stateUpdateMsg(devices: _peers.allIds));
+      _peers.sendToPeer(
+          event.peerId,
+          P2pMessage.stateUpdateMsg(
+            devices: _peers.allIds,
+            queue: _musicPlayerListener?.getQueue() ?? [],
+            queuePosition: 0,
+          ));
     } else if (message is StateUpdateMsg) {
       connectDevices(message.devices);
+      _musicPlayerListener!.updateQueue(message.queue);
     } else if (message is MusicPackageMsg) {
       _musicBufferListener?.onMusicPackage(message);
     } else if (message is AddSongToQueueMsg) {
@@ -90,7 +106,7 @@ class P2pNetwork with Disposable {
     } else if (message is SearchResourceMsg) {
       _handelSearchResource(message, event.peerId);
     } else if (message is RequestResourceMsg) {
-      _handelRequestResource(message, event.peerId);
+      _handleRequestResource(message, event.peerId);
     } else if (message is PlayMsg) {
       _musicPlayerListener?.onPlay(message.index, message.time,
           songPosition: message.songPosition);
@@ -114,9 +130,14 @@ class P2pNetwork with Disposable {
     }
   }
 
-  void _handelRequestResource(RequestResourceMsg msg, String peerId) async {
+  void _handleRequestResource(RequestResourceMsg msg, String peerId) async {
     final bytes =
-        await _musicProviderListener!.getSongBytes(msg.songId, msg.startIndex);
+        await _musicProviderListener?.getSongBytes(msg.songId, msg.startIndex);
+
+    if (bytes == null) {
+      logger.w("_handleRequestResource bytes == null");
+      return;
+    }
 
     sendToPeer(
         peerId,
@@ -129,7 +150,10 @@ class P2pNetwork with Disposable {
   }
 
   void _onPeerConnected(String peerId) {
-    _peers.sendToPeer(peerId, const P2pMessage.requestStateUpdate());
+    if (!_initialized) {
+      _initialized = true;
+      _peers.sendToPeer(peerId, const P2pMessage.requestStateUpdate());
+    }
   }
 
   void connectDevices(List<String> peersIds) {

@@ -8,5 +8,7 @@ abstract class DirectConnection {
 
   Future<bool> write(Uint8List msg);
 
+  bool isLocal();
+
   void dispose();
 }
