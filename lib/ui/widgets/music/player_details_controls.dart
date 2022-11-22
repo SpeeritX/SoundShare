@@ -80,7 +80,9 @@ class _PlayerDetailsControlsState extends State<PlayerDetailsControls> {
           ),
           child: IconButton(
             iconSize: 30,
-            onPressed: () {},
+            onPressed: () {
+              widget.playerController.nextSong();
+            },
             icon: const FaIcon(
               FontAwesomeIcons.forward,
               color: AppColors.white,

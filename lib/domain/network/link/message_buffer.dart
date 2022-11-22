@@ -1,8 +1,6 @@
 import 'dart:collection';
 import 'dart:typed_data';
 
-import 'package:sound_share/common/logger.dart';
-
 class MessageHeader {
   static const length = 4;
 
@@ -40,7 +38,6 @@ class MessageBuffer {
       _bytes.add(retrievedBytes.sublist(MessageHeader.length));
     }
     _nextMessageLength = MessageHeader.decode(headerBytes);
-    logger.d(_nextMessageLength);
   }
 
   _retrieveMessage() {

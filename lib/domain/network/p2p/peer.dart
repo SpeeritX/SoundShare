@@ -13,6 +13,7 @@ class Peer with Disposable {
         _communicationConnection = communicationConnection;
 
   String get id => _communicationConnection.id;
+  bool get isLocal => _communicationConnection.isLocal();
 
   Future<void> send(P2pMessage message) async {
     if (message is MusicPackageMsg || message is RequestResourceMsg) {

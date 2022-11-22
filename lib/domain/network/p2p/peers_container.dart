@@ -24,8 +24,14 @@ class PeersContainer with Disposable {
   PeersContainer(this._tcpServer) {
     _tcpServer.incomingClients.listen((readSocket) {
       final id = readSocket.remoteAddress.address;
-      if (contains(id)) {
+      if (_incubator.contains(id)) {
         return;
+      }
+      final connectedPeer = _peers.firstWhereOrNull((e) => e.id == id);
+
+      if (connectedPeer != null) {
+        connectedPeer.dispose();
+        _peers.remove(connectedPeer);
       }
 
       _incubator.connect(id, incomingReadSocket: readSocket);
@@ -39,6 +45,14 @@ class PeersContainer with Disposable {
 
   Future<void> sendToAll(P2pMessage message) async {
     await Future.wait(_peers.map((peer) => peer.send(message)));
+  }
+
+  Future<void> sendToOthers(P2pMessage message) async {
+    await Future.wait(_peers.map((peer) async {
+      if (!peer.isLocal) {
+        await peer.send(message);
+      }
+    }));
   }
 
   Future<void> sendToPeer(String peerId, P2pMessage message) async {
