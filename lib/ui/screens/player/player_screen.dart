@@ -59,9 +59,11 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       child: PrimaryFullButton(
                           text: "My Songs",
                           onPressed: () {
-                            setState(() {
-                              controller.jumpToPage(0);
-                            });
+                            setState(
+                              () {
+                                controller.jumpToPage(0);
+                              },
+                            );
                           },
                           style: getSwitchViewButtonStyle(_pageNumber == 0),
                           backgroundColor: Colors.transparent,
