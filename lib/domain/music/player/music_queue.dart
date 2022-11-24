@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:sound_share/common/logger.dart';
 import 'package:sound_share/domain/music/package/details_package.dart';
 
 class MusicQueue {
@@ -8,6 +9,20 @@ class MusicQueue {
   int _currentSongIndex = 0;
 
   int get currentSongIndex => _currentSongIndex;
+
+  set currentSongIndex(int value) {
+    if (value < 0) {
+      logger.e("Index out of bound");
+      value = songList.length - 1;
+    }
+
+    if (value >= songList.length) {
+      logger.e("Index out of bound");
+      value = 0;
+    }
+
+    _currentSongIndex = value;
+  }
 
   DetailsPackage? get currentSong {
     if (_currentSongIndex >= songList.length) {

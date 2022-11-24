@@ -91,24 +91,34 @@ _$StateUpdateMsg _$$StateUpdateMsgFromJson(Map<String, dynamic> json) =>
     _$StateUpdateMsg(
       devices:
           (json['devices'] as List<dynamic>).map((e) => e as String).toList(),
+      queue: (json['queue'] as List<dynamic>)
+          .map((e) => DetailsPackage.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      queuePosition: json['queuePosition'] as int,
       $type: json['type'] as String?,
     );
 
 Map<String, dynamic> _$$StateUpdateMsgToJson(_$StateUpdateMsg instance) =>
     <String, dynamic>{
       'devices': instance.devices,
+      'queue': instance.queue,
+      'queuePosition': instance.queuePosition,
       'type': instance.$type,
     };
 
 _$PlayMsg _$$PlayMsgFromJson(Map<String, dynamic> json) => _$PlayMsg(
       json['index'] as int,
       DateTime.parse(json['time'] as String),
+      json['songPosition'] == null
+          ? null
+          : Duration(microseconds: json['songPosition'] as int),
       $type: json['type'] as String?,
     );
 
 Map<String, dynamic> _$$PlayMsgToJson(_$PlayMsg instance) => <String, dynamic>{
       'index': instance.index,
       'time': instance.time.toIso8601String(),
+      'songPosition': instance.songPosition?.inMicroseconds,
       'type': instance.$type,
     };
 

@@ -21,19 +21,28 @@ class PlayerController extends ChangeNotifier with Disposable {
       MusicBufferController(_musicQueue, _p2pNetwork);
   late final MusicPlayer _player =
       MusicPlayer(_musicBufferController, _musicQueue);
-  late final MusicProvider _musicProvider = MusicProvider(_p2pNetwork);
+  late final MusicProvider _musicProvider;
+  bool _isPlaying = false;
 
   DetailsPackage? get currentSong => _musicQueue.currentSong;
   List<DetailsPackage> get songList => _musicQueue.songList;
 
+  bool get isPlaying => _isPlaying;
+
   PlayerController(this._p2pNetwork) {
     _p2pNetwork.musicPlayerListener = _player;
+    _musicProvider =
+        MusicProvider(_p2pNetwork, _musicBufferController.bufferCollection);
 
     _musicQueue.updateEvents.listen((_) {
       notifyListeners();
     }).canceledBy(this);
 
     _p2pNetwork.sendMessage(const P2pMessage.sync());
+    _player.playerState.listen((state) {
+      _isPlaying = state.playing;
+      notifyListeners();
+    }).canceledBy(this);
   }
 
   @override
@@ -52,17 +61,39 @@ class PlayerController extends ChangeNotifier with Disposable {
     if (result != null && extension(result.files.single.path!) == '.mp3') {
       File file = File(result.files.single.path!);
       final currentSong = await MusicSong.create(file: file);
-      playSong(currentSong);
+      addSong(currentSong);
     } else {
       notifyListeners();
     }
   }
 
-  void playSong(MusicSong song) async {
+  void addSong(MusicSong song) async {
     _musicProvider.addSong(song);
     await _p2pNetwork.sendMessage(const P2pMessage.sync());
     await _p2pNetwork.sendMessage(P2pMessage.addSongToQueue(song.details));
     notifyListeners();
+  }
+
+  void nextSong() async {
+    var now = await NTP.now();
+    _musicQueue.currentSongIndex = _musicQueue.currentSongIndex + 1;
+    if (_musicQueue.currentSongIndex >= _musicQueue.songList.length) {
+      _musicQueue.currentSongIndex = 0;
+    }
+    _p2pNetwork.sendMessage(
+      P2pMessage.play(_musicQueue.currentSongIndex, now, Duration.zero),
+    );
+  }
+
+  void previousSong() async {
+    var now = await NTP.now();
+    _musicQueue.currentSongIndex = _musicQueue.currentSongIndex - 1;
+    if (_musicQueue.currentSongIndex < 0) {
+      _musicQueue.currentSongIndex = _musicQueue.songList.length - 1;
+    }
+    _p2pNetwork.sendMessage(
+      P2pMessage.play(_musicQueue.currentSongIndex, now, Duration.zero),
+    );
   }
 
   void removeSong(String song) async {
@@ -72,8 +103,20 @@ class PlayerController extends ChangeNotifier with Disposable {
   void play() async {
     _p2pNetwork.sendMessage(const P2pMessage.sync());
     var now = await NTP.now();
-    // final now = DateTime.now();
-    _p2pNetwork.sendMessage(P2pMessage.play(_musicQueue.currentSongIndex, now));
+    _p2pNetwork.sendMessage(
+      P2pMessage.play(_musicQueue.currentSongIndex, now, _player.time),
+    );
+  }
+
+  void pause() {
+    _p2pNetwork.sendMessage(const P2pMessage.pause());
+  }
+
+  void playSong(int index) async {
+    var now = await NTP.now();
+    _p2pNetwork.sendMessage(
+      P2pMessage.play(index, now, Duration.zero),
+    );
   }
 
   Duration? getCurrentSongDuration() {
@@ -86,10 +129,10 @@ class PlayerController extends ChangeNotifier with Disposable {
 
   double getCurrentSongPositionPercentage() {
     var duration = getCurrentSongDuration() ?? currentSong?.duration;
-    if (duration == null) {
-      return -1;
+    var position = getCurrentSongPosition();
+    if (duration == null || position == null) {
+      return 0;
     }
-    var position = getCurrentSongPosition() ?? const Duration();
     return position.inMilliseconds / duration.inMilliseconds;
   }
 }

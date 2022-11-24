@@ -12,6 +12,8 @@ class BytesAudioSource extends StreamAudioSource {
   int _currentStart = 0;
   int _currentEnd = 0;
 
+  List<int> get bytes => _bytes;
+
   BytesAudioSource(this._dataLength) {
     logger.d("BytesAudioSource($_dataLength)");
   }

@@ -142,13 +142,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   Iterable<SongWidget> _createLocalSongsWidgets(
       PlayerController playerController) {
-    return widget.localSongs.map((musicSong) => SongWidget(
+    return widget.localSongs.map((song) => SongWidget(
           inQueue: false,
-          song: musicSong.details,
+          song: song.details,
           player: playerController,
           action: SmallButton(
             onPressed: () {
-              playerController.playSong(musicSong);
+              playerController.addSong(song);
             },
             child: const FaIcon(
               FontAwesomeIcons.circlePlus,
@@ -161,13 +161,14 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   Iterable<SongWidget> _createQueuedSongsWidgets(
       PlayerController playerController) {
-    return playerController.songList.map((song) => SongWidget(
+    return playerController.songList.asMap().entries.map((entry) => SongWidget(
           inQueue: true,
-          song: song,
+          song: entry.value,
+          index: entry.key,
           player: playerController,
           action: SmallButton(
             onPressed: () {
-              playerController.removeSong(song.songId);
+              playerController.removeSong(entry.value.songId);
             },
             child: const FaIcon(
               FontAwesomeIcons.circleMinus,

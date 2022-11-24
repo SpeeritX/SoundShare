@@ -21,11 +21,9 @@ class TcpConnection with Disposable implements DirectConnection {
       : _readSocket = readSocket,
         _writeSocket = writeSocket {
     _readSocket.listen((data) async {
-      logger.d("Add to buffer");
       buffer.add(data);
       var nextMessage = buffer.next();
       while (nextMessage != null) {
-        logger.d("Next message");
         _handleMessage(String.fromCharCodes(nextMessage));
         nextMessage = buffer.next();
       }
@@ -45,8 +43,6 @@ class TcpConnection with Disposable implements DirectConnection {
   Future<bool> write(Uint8List msg) async {
     final msgLength = msg.length;
     final header = MessageHeader.encode(msgLength);
-    logger.d(header);
-    logger.d(header.toString());
     _writeSocket.add(header);
     _writeSocket.add(msg);
     await _writeSocket.flush();
@@ -55,4 +51,9 @@ class TcpConnection with Disposable implements DirectConnection {
 
   @override
   String get id => _readSocket.remoteAddress.address;
+
+  @override
+  bool isLocal() {
+    return _readSocket.remoteAddress.address == _readSocket.address.address;
+  }
 }

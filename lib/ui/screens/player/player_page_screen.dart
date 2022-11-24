@@ -94,7 +94,7 @@ class _PlayerPageScreenState extends State<PlayerPageScreen> {
                     style: TextStyle(fontSize: 3),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 30, right: 30),
+                    padding: const EdgeInsets.only(left: 30, right: 30),
                     child: Text(
                       widget.playerController.currentSong?.artist ?? "",
                       overflow: TextOverflow.fade,
@@ -156,9 +156,10 @@ class _PlayerPageScreenState extends State<PlayerPageScreen> {
                   ],
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(bottom: 60),
-                child: PlayerDetailsControls(),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 60),
+                child: PlayerDetailsControls(
+                    playerController: widget.playerController),
               ),
             ],
           ),

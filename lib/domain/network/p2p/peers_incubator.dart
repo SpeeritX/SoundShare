@@ -3,24 +3,23 @@ import 'dart:io';
 
 import 'package:sound_share/common/utils/disposable.dart';
 import 'package:sound_share/domain/network/link/tcp/tcp_server.dart';
-import 'package:sound_share/domain/network/link/direct_connection.dart';
-import 'package:sound_share/domain/network/link/tcp/tcp_connection_factory.dart';
+import 'package:sound_share/domain/network/p2p/peer.dart';
+import 'package:sound_share/domain/network/p2p/peer_factory.dart';
 
 class PeersIncubator with Disposable {
   final TcpServer _tcpServer;
-  final _connectingPeers = List<TcpConnectionFactory>.empty(growable: true);
+  final _connectingPeers = List<PeerFactory>.empty(growable: true);
 
-  final _peerConnected = StreamController<DirectConnection>.broadcast();
+  final _peerConnected = StreamController<Peer>.broadcast();
 
-  Stream<DirectConnection> get peerConnected => _peerConnected.stream;
+  Stream<Peer> get peerConnected => _peerConnected.stream;
 
   PeersIncubator(this._tcpServer);
 
   Future<void> connect(String peerId, {Socket? incomingReadSocket}) async {
-    final factory = TcpConnectionFactory(
+    final factory = PeerFactory(
       _tcpServer,
       peerId,
-      TcpServer.defaultPort,
       readSocket: incomingReadSocket,
     );
 

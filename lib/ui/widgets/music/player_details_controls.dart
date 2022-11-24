@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../domain/controllers/player/player_controller.dart';
 import '../../style/app_colors.dart';
 
 const playIcon =
@@ -9,7 +10,10 @@ const pauseIcon =
     FaIcon(FontAwesomeIcons.pause, color: AppColors.white, size: 35.0);
 
 class PlayerDetailsControls extends StatefulWidget {
+  final PlayerController playerController;
+
   const PlayerDetailsControls({
+    required this.playerController,
     Key? key,
   }) : super(key: key);
 
@@ -18,8 +22,6 @@ class PlayerDetailsControls extends StatefulWidget {
 }
 
 class _PlayerDetailsControlsState extends State<PlayerDetailsControls> {
-  bool toggle = false;
-
   @override
   Widget build(BuildContext context) {
     return Row(children: [
@@ -42,7 +44,9 @@ class _PlayerDetailsControlsState extends State<PlayerDetailsControls> {
           ),
           child: IconButton(
             iconSize: 30,
-            onPressed: () {},
+            onPressed: () {
+              widget.playerController.previousSong();
+            },
             icon: const FaIcon(
               FontAwesomeIcons.backward,
               color: AppColors.white,
@@ -60,11 +64,13 @@ class _PlayerDetailsControlsState extends State<PlayerDetailsControls> {
           child: IconButton(
             iconSize: 45,
             onPressed: () {
-              setState(() {
-                toggle = !toggle;
-              });
+              if (!widget.playerController.isPlaying) {
+                widget.playerController.play();
+              } else {
+                widget.playerController.pause();
+              }
             },
-            icon: !toggle ? playIcon : pauseIcon,
+            icon: !widget.playerController.isPlaying ? playIcon : pauseIcon,
           ),
         ),
       ),
@@ -76,7 +82,9 @@ class _PlayerDetailsControlsState extends State<PlayerDetailsControls> {
           ),
           child: IconButton(
             iconSize: 30,
-            onPressed: () {},
+            onPressed: () {
+              widget.playerController.nextSong();
+            },
             icon: const FaIcon(
               FontAwesomeIcons.forward,
               color: AppColors.white,
