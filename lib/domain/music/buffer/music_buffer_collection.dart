@@ -7,6 +7,8 @@ import 'package:sound_share/domain/music/player/bytes_audio_source.dart';
 class MusicBufferCollection {
   static const maxSongs = 2;
   final Map<String, BytesAudioSource> _songs = {};
+  final Map<String, DateTime> _songsTime = {};
+  final Map<String, Duration> _songsDownloadDuration = {};
 
   final _onDownloadFinished = StreamController<void>.broadcast();
 
@@ -17,6 +19,7 @@ class MusicBufferCollection {
       return;
     }
     _songs[songData.songId] = BytesAudioSource(songData.bytesLength);
+    _songsTime[songData.songId] = DateTime.now();
   }
 
   void removeSong(String id) {
@@ -32,6 +35,8 @@ class MusicBufferCollection {
     song.addData(startIndex, bytes);
     if (song.isDownloaded) {
       _onDownloadFinished.add(null);
+      _songsDownloadDuration[id] = DateTime.now().difference(_songsTime[id]!);
+      logger.w(_songsDownloadDuration.values.toString());
     }
   }
 

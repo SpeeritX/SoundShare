@@ -6,15 +6,23 @@ import 'package:sound_share/common/utils/disposable.dart';
 import 'package:sound_share/domain/music/buffer/music_buffer_collection.dart';
 import 'package:sound_share/domain/music/reader/music_reader.dart';
 import 'package:sound_share/domain/music/song/song.dart';
+import 'package:sound_share/domain/network/p2p/p2p_messages.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
 
 class MusicProvider with Disposable implements MusicProviderListener {
   final MusicBufferCollection _bufferCollection;
   final P2pNetwork _p2pNetwork;
   final _songs = List<MusicSong>.empty(growable: true);
+  var musicChunkSize = MusicReader.defaultChunkSize;
 
   MusicProvider(this._p2pNetwork, this._bufferCollection) {
     _p2pNetwork.musicProviderListener = this;
+    _p2pNetwork.messageReceived.listen((event) {
+      final message = event.message;
+      if (message is SetMusicChunkSizeMsg) {
+        musicChunkSize = message.size;
+      }
+    }).canceledBy(this);
   }
 
   void addSong(MusicSong song) {
@@ -45,10 +53,8 @@ class MusicProvider with Disposable implements MusicProviderListener {
     if (_bufferCollection.contains(songId)) {
       final song = _bufferCollection.getSong(songId);
       if (song.isDownloaded) {
-        return Uint8List.fromList((song.bytes
-            .sublist(startIndex)
-            .take(MusicReader.chunkSize)
-            .toList()));
+        return Uint8List.fromList(
+            (song.bytes.sublist(startIndex).take(musicChunkSize).toList()));
       }
     }
 
@@ -57,7 +63,7 @@ class MusicProvider with Disposable implements MusicProviderListener {
       logger.w("Failed to find loaded song $songId");
       return null;
     }
-    var reader = MusicReader(song);
+    var reader = MusicReader(song, musicChunkSize);
     return await reader.getBytes(startIndex);
   }
 }

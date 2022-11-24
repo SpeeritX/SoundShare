@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sound_share/domain/controllers/player/player_controller.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
+import 'package:sound_share/ui/screens/settings/settings_screen.dart';
 import 'package:sound_share/ui/style/app_colors.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
@@ -31,9 +32,7 @@ class PlayerScreen extends StatefulWidget {
 }
 
 class _PlayerScreenState extends State<PlayerScreen> {
-  PageController controller = PageController();
   late final P2pNetwork _p2pNetwork;
-  var _pageNumber = 0;
 
   @override
   void initState() {
@@ -45,95 +44,159 @@ class _PlayerScreenState extends State<PlayerScreen> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: ((context) => PlayerController(_p2pNetwork)),
-      child: Scaffold(
-        appBar: DefaultAppBar(title: "Player"),
-        body: Stack(
-          children: <Widget>[
-            Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.only(
-                      left: Paddings.dynamic.m2, right: Paddings.dynamic.m2),
-                  child: Row(children: [
-                    Expanded(
-                      child: PrimaryFullButton(
-                          text: "My Songs",
-                          onPressed: () {
-                            setState(() {
-                              controller.jumpToPage(0);
-                            });
-                          },
-                          style: getSwitchViewButtonStyle(_pageNumber == 0),
-                          backgroundColor: Colors.transparent,
-                          shadow: false,
-                          animation: false),
-                    ),
-                    Expanded(
-                      child: PrimaryFullButton(
-                        text: "Queued Songs",
+      child: PlayerContent(localSongs: widget.localSongs),
+    );
+  }
+}
+
+class TimerWidget extends StatefulWidget {
+  const TimerWidget({Key? key}) : super(key: key);
+
+  @override
+  State<TimerWidget> createState() => _TimerWidgetState();
+}
+
+class _TimerWidgetState extends State<TimerWidget> {
+  final timeFormat = DateFormat('HH:mm:ss:S');
+  late final Timer timer;
+
+  @override
+  void initState() {
+    timer = Timer.periodic(Duration(milliseconds: 50), (timer) {
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(timeFormat.format(DateTime.now()));
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+}
+
+class PlayerContent extends StatefulWidget {
+  final List<MusicSong> localSongs;
+
+  const PlayerContent({
+    required this.localSongs,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<PlayerContent> createState() => _PlayerContentState();
+}
+
+class _PlayerContentState extends State<PlayerContent> {
+  PageController controller = PageController();
+  var _pageNumber = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: DefaultAppBar(title: "Player", actions: [
+        SmallButton(
+          onPressed: () {
+            _openSettings();
+          },
+          child: const FaIcon(
+            FontAwesomeIcons.gear,
+            color: AppColors.white,
+            size: 25.0,
+          ),
+        ),
+      ]),
+      body: Stack(
+        children: <Widget>[
+          Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(
+                    left: Paddings.dynamic.m2, right: Paddings.dynamic.m2),
+                child: Row(children: [
+                  Expanded(
+                    child: PrimaryFullButton(
+                        text: "My Songs",
                         onPressed: () {
                           setState(() {
-                            controller.jumpToPage(1);
+                            controller.jumpToPage(0);
                           });
                         },
-                        style: getSwitchViewButtonStyle(_pageNumber == 1),
+                        style: getSwitchViewButtonStyle(_pageNumber == 0),
                         backgroundColor: Colors.transparent,
                         shadow: false,
-                        animation: false,
+                        animation: false),
+                  ),
+                  Expanded(
+                    child: PrimaryFullButton(
+                      text: "Queued Songs",
+                      onPressed: () {
+                        setState(() {
+                          controller.jumpToPage(1);
+                        });
+                      },
+                      style: getSwitchViewButtonStyle(_pageNumber == 1),
+                      backgroundColor: Colors.transparent,
+                      shadow: false,
+                      animation: false,
+                    ),
+                  ),
+                ]),
+              ),
+              Expanded(
+                child: PageView(
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  controller: controller,
+                  onPageChanged: (num) {
+                    setState(() {
+                      _pageNumber = num;
+                    });
+                  },
+                  children: [
+                    SingleChildScrollView(
+                      child: Consumer<PlayerController>(
+                        builder: (context, playerController, child) => Column(
+                          children: [
+                            ..._createLocalSongsWidgets(playerController),
+                            SizedBox(height: 4 * Paddings.dynamic.m4),
+                          ],
+                        ),
                       ),
                     ),
-                  ]),
-                ),
-                Expanded(
-                  child: PageView(
-                    scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(),
-                    controller: controller,
-                    onPageChanged: (num) {
-                      setState(() {
-                        _pageNumber = num;
-                      });
-                    },
-                    children: [
-                      SingleChildScrollView(
-                        child: Consumer<PlayerController>(
-                          builder: (context, playerController, child) => Column(
-                            children: [
-                              ..._createLocalSongsWidgets(playerController),
-                              SizedBox(height: 4 * Paddings.dynamic.m4),
-                            ],
-                          ),
+                    SingleChildScrollView(
+                      child: Consumer<PlayerController>(
+                        builder: (context, playerController, child) => Column(
+                          children: [
+                            SizedBox(height: Paddings.dynamic.m3),
+                            const TimerWidget(),
+                            ..._createQueuedSongsWidgets(playerController),
+                            SizedBox(height: 4 * Paddings.dynamic.m4),
+                          ],
                         ),
                       ),
-                      SingleChildScrollView(
-                        child: Consumer<PlayerController>(
-                          builder: (context, playerController, child) => Column(
-                            children: [
-                              SizedBox(height: Paddings.dynamic.m3),
-                              const TimerWidget(),
-                              ..._createQueuedSongsWidgets(playerController),
-                              SizedBox(height: 4 * Paddings.dynamic.m4),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            Positioned.fill(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Consumer<PlayerController>(
-                    builder: (context, playerController, child) =>
-                        (playerController.songList.isNotEmpty)
-                            ? PlayerWidget(playerController: playerController)
-                            : const SizedBox.shrink()),
               ),
+            ],
+          ),
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Consumer<PlayerController>(
+                  builder: (context, playerController, child) =>
+                      (playerController.songList.isNotEmpty)
+                          ? PlayerWidget(playerController: playerController)
+                          : const SizedBox.shrink()),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -176,6 +239,18 @@ class _PlayerScreenState extends State<PlayerScreen> {
         ));
   }
 
+  void _openSettings() {
+    final playerController =
+        Provider.of<PlayerController>(context, listen: false);
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) =>
+            SettingsScreen(playerController: playerController),
+      ),
+    );
+  }
+
   TextStyle getSwitchViewButtonStyle(bool selected) {
     return selected
         ? Theme.of(context)
@@ -186,36 +261,5 @@ class _PlayerScreenState extends State<PlayerScreen> {
             .textTheme
             .bodyText2!
             .copyWith(color: AppColors.middleGray);
-  }
-}
-
-class TimerWidget extends StatefulWidget {
-  const TimerWidget({Key? key}) : super(key: key);
-
-  @override
-  State<TimerWidget> createState() => _TimerWidgetState();
-}
-
-class _TimerWidgetState extends State<TimerWidget> {
-  final timeFormat = DateFormat('HH:mm:ss:S');
-  late final Timer timer;
-
-  @override
-  void initState() {
-    timer = Timer.periodic(Duration(milliseconds: 50), (timer) {
-      setState(() {});
-    });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(timeFormat.format(DateTime.now()));
-  }
-
-  @override
-  void dispose() {
-    timer.cancel();
-    super.dispose();
   }
 }

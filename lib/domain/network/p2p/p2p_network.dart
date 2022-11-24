@@ -98,7 +98,7 @@ class P2pNetwork with Disposable {
           ));
     } else if (message is StateUpdateMsg) {
       connectDevices(message.devices);
-      _musicPlayerListener!.updateQueue(message.queue);
+      _musicPlayerListener?.updateQueue(message.queue);
     } else if (message is MusicPackageMsg) {
       _musicBufferListener?.onMusicPackage(message);
     } else if (message is AddSongToQueueMsg) {
