@@ -42,6 +42,8 @@ P2pMessage _$P2pMessageFromJson(Map<String, dynamic> json) {
       return AddSongToQueueMsg.fromJson(json);
     case 'removeSongFromQueue':
       return RemoveSongFromQueueMsg.fromJson(json);
+    case 'setMusicChunkSize':
+      return SetMusicChunkSizeMsg.fromJson(json);
 
     default:
       throw CheckedFromJsonException(
@@ -72,6 +74,7 @@ mixin _$P2pMessage {
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
+    required TResult Function(int size) setMusicChunkSize,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -94,6 +97,7 @@ mixin _$P2pMessage {
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
+    TResult? Function(int size)? setMusicChunkSize,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -116,6 +120,7 @@ mixin _$P2pMessage {
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
+    TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -135,6 +140,7 @@ mixin _$P2pMessage {
     required TResult Function(PreviousSongMsg value) previousSong,
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
+    required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -152,6 +158,7 @@ mixin _$P2pMessage {
     TResult? Function(PreviousSongMsg value)? previousSong,
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -169,6 +176,7 @@ mixin _$P2pMessage {
     TResult Function(PreviousSongMsg value)? previousSong,
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -261,6 +269,7 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
+    required TResult Function(int size) setMusicChunkSize,
   }) {
     return sync();
   }
@@ -286,6 +295,7 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
+    TResult? Function(int size)? setMusicChunkSize,
   }) {
     return sync?.call();
   }
@@ -311,6 +321,7 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
+    TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (sync != null) {
@@ -336,6 +347,7 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
     required TResult Function(PreviousSongMsg value) previousSong,
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
+    required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
   }) {
     return sync(this);
   }
@@ -356,6 +368,7 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
     TResult? Function(PreviousSongMsg value)? previousSong,
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
   }) {
     return sync?.call(this);
   }
@@ -376,6 +389,7 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
     TResult Function(PreviousSongMsg value)? previousSong,
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (sync != null) {
@@ -499,6 +513,7 @@ class _$SearchResourceMsg
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
+    required TResult Function(int size) setMusicChunkSize,
   }) {
     return searchResource(songId);
   }
@@ -524,6 +539,7 @@ class _$SearchResourceMsg
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
+    TResult? Function(int size)? setMusicChunkSize,
   }) {
     return searchResource?.call(songId);
   }
@@ -549,6 +565,7 @@ class _$SearchResourceMsg
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
+    TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (searchResource != null) {
@@ -574,6 +591,7 @@ class _$SearchResourceMsg
     required TResult Function(PreviousSongMsg value) previousSong,
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
+    required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
   }) {
     return searchResource(this);
   }
@@ -594,6 +612,7 @@ class _$SearchResourceMsg
     TResult? Function(PreviousSongMsg value)? previousSong,
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
   }) {
     return searchResource?.call(this);
   }
@@ -614,6 +633,7 @@ class _$SearchResourceMsg
     TResult Function(PreviousSongMsg value)? previousSong,
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (searchResource != null) {
@@ -769,6 +789,7 @@ class _$RequestResourceMsg
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
+    required TResult Function(int size) setMusicChunkSize,
   }) {
     return requestResource(requestId, songId, startIndex);
   }
@@ -794,6 +815,7 @@ class _$RequestResourceMsg
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
+    TResult? Function(int size)? setMusicChunkSize,
   }) {
     return requestResource?.call(requestId, songId, startIndex);
   }
@@ -819,6 +841,7 @@ class _$RequestResourceMsg
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
+    TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (requestResource != null) {
@@ -844,6 +867,7 @@ class _$RequestResourceMsg
     required TResult Function(PreviousSongMsg value) previousSong,
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
+    required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
   }) {
     return requestResource(this);
   }
@@ -864,6 +888,7 @@ class _$RequestResourceMsg
     TResult? Function(PreviousSongMsg value)? previousSong,
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
   }) {
     return requestResource?.call(this);
   }
@@ -884,6 +909,7 @@ class _$RequestResourceMsg
     TResult Function(PreviousSongMsg value)? previousSong,
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (requestResource != null) {
@@ -1019,6 +1045,7 @@ class _$ResourceAvailabilityMsg
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
+    required TResult Function(int size) setMusicChunkSize,
   }) {
     return resourceAvailability(songId);
   }
@@ -1044,6 +1071,7 @@ class _$ResourceAvailabilityMsg
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
+    TResult? Function(int size)? setMusicChunkSize,
   }) {
     return resourceAvailability?.call(songId);
   }
@@ -1069,6 +1097,7 @@ class _$ResourceAvailabilityMsg
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
+    TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (resourceAvailability != null) {
@@ -1094,6 +1123,7 @@ class _$ResourceAvailabilityMsg
     required TResult Function(PreviousSongMsg value) previousSong,
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
+    required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
   }) {
     return resourceAvailability(this);
   }
@@ -1114,6 +1144,7 @@ class _$ResourceAvailabilityMsg
     TResult? Function(PreviousSongMsg value)? previousSong,
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
   }) {
     return resourceAvailability?.call(this);
   }
@@ -1134,6 +1165,7 @@ class _$ResourceAvailabilityMsg
     TResult Function(PreviousSongMsg value)? previousSong,
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (resourceAvailability != null) {
@@ -1304,6 +1336,7 @@ class _$MusicPackageMsg
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
+    required TResult Function(int size) setMusicChunkSize,
   }) {
     return musicPackage(requestId, songId, startIndex, serializedBytes);
   }
@@ -1329,6 +1362,7 @@ class _$MusicPackageMsg
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
+    TResult? Function(int size)? setMusicChunkSize,
   }) {
     return musicPackage?.call(requestId, songId, startIndex, serializedBytes);
   }
@@ -1354,6 +1388,7 @@ class _$MusicPackageMsg
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
+    TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (musicPackage != null) {
@@ -1379,6 +1414,7 @@ class _$MusicPackageMsg
     required TResult Function(PreviousSongMsg value) previousSong,
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
+    required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
   }) {
     return musicPackage(this);
   }
@@ -1399,6 +1435,7 @@ class _$MusicPackageMsg
     TResult? Function(PreviousSongMsg value)? previousSong,
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
   }) {
     return musicPackage?.call(this);
   }
@@ -1419,6 +1456,7 @@ class _$MusicPackageMsg
     TResult Function(PreviousSongMsg value)? previousSong,
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (musicPackage != null) {
@@ -1528,6 +1566,7 @@ class _$RequestStateUpdateMsg
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
+    required TResult Function(int size) setMusicChunkSize,
   }) {
     return requestStateUpdate();
   }
@@ -1553,6 +1592,7 @@ class _$RequestStateUpdateMsg
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
+    TResult? Function(int size)? setMusicChunkSize,
   }) {
     return requestStateUpdate?.call();
   }
@@ -1578,6 +1618,7 @@ class _$RequestStateUpdateMsg
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
+    TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (requestStateUpdate != null) {
@@ -1603,6 +1644,7 @@ class _$RequestStateUpdateMsg
     required TResult Function(PreviousSongMsg value) previousSong,
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
+    required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
   }) {
     return requestStateUpdate(this);
   }
@@ -1623,6 +1665,7 @@ class _$RequestStateUpdateMsg
     TResult? Function(PreviousSongMsg value)? previousSong,
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
   }) {
     return requestStateUpdate?.call(this);
   }
@@ -1643,6 +1686,7 @@ class _$RequestStateUpdateMsg
     TResult Function(PreviousSongMsg value)? previousSong,
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (requestStateUpdate != null) {
@@ -1805,6 +1849,7 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
+    required TResult Function(int size) setMusicChunkSize,
   }) {
     return stateUpdateMsg(devices, queue, queuePosition);
   }
@@ -1830,6 +1875,7 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
+    TResult? Function(int size)? setMusicChunkSize,
   }) {
     return stateUpdateMsg?.call(devices, queue, queuePosition);
   }
@@ -1855,6 +1901,7 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
+    TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (stateUpdateMsg != null) {
@@ -1880,6 +1927,7 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     required TResult Function(PreviousSongMsg value) previousSong,
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
+    required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
   }) {
     return stateUpdateMsg(this);
   }
@@ -1900,6 +1948,7 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     TResult? Function(PreviousSongMsg value)? previousSong,
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
   }) {
     return stateUpdateMsg?.call(this);
   }
@@ -1920,6 +1969,7 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     TResult Function(PreviousSongMsg value)? previousSong,
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (stateUpdateMsg != null) {
@@ -2070,6 +2120,7 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
+    required TResult Function(int size) setMusicChunkSize,
   }) {
     return play(index, time, songPosition);
   }
@@ -2095,6 +2146,7 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
+    TResult? Function(int size)? setMusicChunkSize,
   }) {
     return play?.call(index, time, songPosition);
   }
@@ -2120,6 +2172,7 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
+    TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (play != null) {
@@ -2145,6 +2198,7 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     required TResult Function(PreviousSongMsg value) previousSong,
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
+    required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
   }) {
     return play(this);
   }
@@ -2165,6 +2219,7 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     TResult? Function(PreviousSongMsg value)? previousSong,
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
   }) {
     return play?.call(this);
   }
@@ -2185,6 +2240,7 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     TResult Function(PreviousSongMsg value)? previousSong,
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (play != null) {
@@ -2285,6 +2341,7 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
+    required TResult Function(int size) setMusicChunkSize,
   }) {
     return pause();
   }
@@ -2310,6 +2367,7 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
+    TResult? Function(int size)? setMusicChunkSize,
   }) {
     return pause?.call();
   }
@@ -2335,6 +2393,7 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
+    TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (pause != null) {
@@ -2360,6 +2419,7 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     required TResult Function(PreviousSongMsg value) previousSong,
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
+    required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
   }) {
     return pause(this);
   }
@@ -2380,6 +2440,7 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     TResult? Function(PreviousSongMsg value)? previousSong,
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
   }) {
     return pause?.call(this);
   }
@@ -2400,6 +2461,7 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     TResult Function(PreviousSongMsg value)? previousSong,
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (pause != null) {
@@ -2492,6 +2554,7 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
+    required TResult Function(int size) setMusicChunkSize,
   }) {
     return skipSong();
   }
@@ -2517,6 +2580,7 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
+    TResult? Function(int size)? setMusicChunkSize,
   }) {
     return skipSong?.call();
   }
@@ -2542,6 +2606,7 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
+    TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (skipSong != null) {
@@ -2567,6 +2632,7 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     required TResult Function(PreviousSongMsg value) previousSong,
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
+    required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
   }) {
     return skipSong(this);
   }
@@ -2587,6 +2653,7 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     TResult? Function(PreviousSongMsg value)? previousSong,
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
   }) {
     return skipSong?.call(this);
   }
@@ -2607,6 +2674,7 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     TResult Function(PreviousSongMsg value)? previousSong,
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (skipSong != null) {
@@ -2703,6 +2771,7 @@ class _$PreviousSongMsg
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
+    required TResult Function(int size) setMusicChunkSize,
   }) {
     return previousSong();
   }
@@ -2728,6 +2797,7 @@ class _$PreviousSongMsg
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
+    TResult? Function(int size)? setMusicChunkSize,
   }) {
     return previousSong?.call();
   }
@@ -2753,6 +2823,7 @@ class _$PreviousSongMsg
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
+    TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (previousSong != null) {
@@ -2778,6 +2849,7 @@ class _$PreviousSongMsg
     required TResult Function(PreviousSongMsg value) previousSong,
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
+    required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
   }) {
     return previousSong(this);
   }
@@ -2798,6 +2870,7 @@ class _$PreviousSongMsg
     TResult? Function(PreviousSongMsg value)? previousSong,
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
   }) {
     return previousSong?.call(this);
   }
@@ -2818,6 +2891,7 @@ class _$PreviousSongMsg
     TResult Function(PreviousSongMsg value)? previousSong,
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (previousSong != null) {
@@ -2943,6 +3017,7 @@ class _$AddSongToQueueMsg
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
+    required TResult Function(int size) setMusicChunkSize,
   }) {
     return addSongToQueue(songData);
   }
@@ -2968,6 +3043,7 @@ class _$AddSongToQueueMsg
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
+    TResult? Function(int size)? setMusicChunkSize,
   }) {
     return addSongToQueue?.call(songData);
   }
@@ -2993,6 +3069,7 @@ class _$AddSongToQueueMsg
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
+    TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (addSongToQueue != null) {
@@ -3018,6 +3095,7 @@ class _$AddSongToQueueMsg
     required TResult Function(PreviousSongMsg value) previousSong,
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
+    required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
   }) {
     return addSongToQueue(this);
   }
@@ -3038,6 +3116,7 @@ class _$AddSongToQueueMsg
     TResult? Function(PreviousSongMsg value)? previousSong,
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
   }) {
     return addSongToQueue?.call(this);
   }
@@ -3058,6 +3137,7 @@ class _$AddSongToQueueMsg
     TResult Function(PreviousSongMsg value)? previousSong,
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (addSongToQueue != null) {
@@ -3161,6 +3241,7 @@ class _$RemoveSongFromQueueMsg
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
+    required TResult Function(int size) setMusicChunkSize,
   }) {
     return removeSongFromQueue();
   }
@@ -3186,6 +3267,7 @@ class _$RemoveSongFromQueueMsg
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
+    TResult? Function(int size)? setMusicChunkSize,
   }) {
     return removeSongFromQueue?.call();
   }
@@ -3211,6 +3293,7 @@ class _$RemoveSongFromQueueMsg
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
+    TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (removeSongFromQueue != null) {
@@ -3236,6 +3319,7 @@ class _$RemoveSongFromQueueMsg
     required TResult Function(PreviousSongMsg value) previousSong,
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
+    required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
   }) {
     return removeSongFromQueue(this);
   }
@@ -3256,6 +3340,7 @@ class _$RemoveSongFromQueueMsg
     TResult? Function(PreviousSongMsg value)? previousSong,
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
   }) {
     return removeSongFromQueue?.call(this);
   }
@@ -3276,6 +3361,7 @@ class _$RemoveSongFromQueueMsg
     TResult Function(PreviousSongMsg value)? previousSong,
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (removeSongFromQueue != null) {
@@ -3297,4 +3383,255 @@ abstract class RemoveSongFromQueueMsg implements P2pMessage {
 
   factory RemoveSongFromQueueMsg.fromJson(Map<String, dynamic> json) =
       _$RemoveSongFromQueueMsg.fromJson;
+}
+
+/// @nodoc
+abstract class _$$SetMusicChunkSizeMsgCopyWith<$Res> {
+  factory _$$SetMusicChunkSizeMsgCopyWith(_$SetMusicChunkSizeMsg value,
+          $Res Function(_$SetMusicChunkSizeMsg) then) =
+      __$$SetMusicChunkSizeMsgCopyWithImpl<$Res>;
+  @useResult
+  $Res call({int size});
+}
+
+/// @nodoc
+class __$$SetMusicChunkSizeMsgCopyWithImpl<$Res>
+    extends _$P2pMessageCopyWithImpl<$Res, _$SetMusicChunkSizeMsg>
+    implements _$$SetMusicChunkSizeMsgCopyWith<$Res> {
+  __$$SetMusicChunkSizeMsgCopyWithImpl(_$SetMusicChunkSizeMsg _value,
+      $Res Function(_$SetMusicChunkSizeMsg) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? size = null,
+  }) {
+    return _then(_$SetMusicChunkSizeMsg(
+      null == size
+          ? _value.size
+          : size // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SetMusicChunkSizeMsg
+    with DiagnosticableTreeMixin
+    implements SetMusicChunkSizeMsg {
+  const _$SetMusicChunkSizeMsg(this.size, {final String? $type})
+      : $type = $type ?? 'setMusicChunkSize';
+
+  factory _$SetMusicChunkSizeMsg.fromJson(Map<String, dynamic> json) =>
+      _$$SetMusicChunkSizeMsgFromJson(json);
+
+  @override
+  final int size;
+
+  @JsonKey(name: 'type')
+  final String $type;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'P2pMessage.setMusicChunkSize(size: $size)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'P2pMessage.setMusicChunkSize'))
+      ..add(DiagnosticsProperty('size', size));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SetMusicChunkSizeMsg &&
+            (identical(other.size, size) || other.size == size));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, size);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SetMusicChunkSizeMsgCopyWith<_$SetMusicChunkSizeMsg> get copyWith =>
+      __$$SetMusicChunkSizeMsgCopyWithImpl<_$SetMusicChunkSizeMsg>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() sync,
+    required TResult Function(String songId) searchResource,
+    required TResult Function(String requestId, String songId, int startIndex)
+        requestResource,
+    required TResult Function(String songId) resourceAvailability,
+    required TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)
+        musicPackage,
+    required TResult Function() requestStateUpdate,
+    required TResult Function(
+            List<String> devices, List<DetailsPackage> queue, int queuePosition)
+        stateUpdateMsg,
+    required TResult Function(int index, DateTime time, Duration? songPosition)
+        play,
+    required TResult Function() pause,
+    required TResult Function() skipSong,
+    required TResult Function() previousSong,
+    required TResult Function(DetailsPackage songData) addSongToQueue,
+    required TResult Function() removeSongFromQueue,
+    required TResult Function(int size) setMusicChunkSize,
+  }) {
+    return setMusicChunkSize(size);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? sync,
+    TResult? Function(String songId)? searchResource,
+    TResult? Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult? Function(String songId)? resourceAvailability,
+    TResult? Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
+    TResult? Function()? requestStateUpdate,
+    TResult? Function(List<String> devices, List<DetailsPackage> queue,
+            int queuePosition)?
+        stateUpdateMsg,
+    TResult? Function(int index, DateTime time, Duration? songPosition)? play,
+    TResult? Function()? pause,
+    TResult? Function()? skipSong,
+    TResult? Function()? previousSong,
+    TResult? Function(DetailsPackage songData)? addSongToQueue,
+    TResult? Function()? removeSongFromQueue,
+    TResult? Function(int size)? setMusicChunkSize,
+  }) {
+    return setMusicChunkSize?.call(size);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? sync,
+    TResult Function(String songId)? searchResource,
+    TResult Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult Function(String songId)? resourceAvailability,
+    TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
+    TResult Function()? requestStateUpdate,
+    TResult Function(List<String> devices, List<DetailsPackage> queue,
+            int queuePosition)?
+        stateUpdateMsg,
+    TResult Function(int index, DateTime time, Duration? songPosition)? play,
+    TResult Function()? pause,
+    TResult Function()? skipSong,
+    TResult Function()? previousSong,
+    TResult Function(DetailsPackage songData)? addSongToQueue,
+    TResult Function()? removeSongFromQueue,
+    TResult Function(int size)? setMusicChunkSize,
+    required TResult orElse(),
+  }) {
+    if (setMusicChunkSize != null) {
+      return setMusicChunkSize(size);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(SyncMsg value) sync,
+    required TResult Function(SearchResourceMsg value) searchResource,
+    required TResult Function(RequestResourceMsg value) requestResource,
+    required TResult Function(ResourceAvailabilityMsg value)
+        resourceAvailability,
+    required TResult Function(MusicPackageMsg value) musicPackage,
+    required TResult Function(RequestStateUpdateMsg value) requestStateUpdate,
+    required TResult Function(StateUpdateMsg value) stateUpdateMsg,
+    required TResult Function(PlayMsg value) play,
+    required TResult Function(PauseMsg value) pause,
+    required TResult Function(SkipSongMsg value) skipSong,
+    required TResult Function(PreviousSongMsg value) previousSong,
+    required TResult Function(AddSongToQueueMsg value) addSongToQueue,
+    required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
+    required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
+  }) {
+    return setMusicChunkSize(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(SyncMsg value)? sync,
+    TResult? Function(SearchResourceMsg value)? searchResource,
+    TResult? Function(RequestResourceMsg value)? requestResource,
+    TResult? Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult? Function(MusicPackageMsg value)? musicPackage,
+    TResult? Function(RequestStateUpdateMsg value)? requestStateUpdate,
+    TResult? Function(StateUpdateMsg value)? stateUpdateMsg,
+    TResult? Function(PlayMsg value)? play,
+    TResult? Function(PauseMsg value)? pause,
+    TResult? Function(SkipSongMsg value)? skipSong,
+    TResult? Function(PreviousSongMsg value)? previousSong,
+    TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
+    TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+  }) {
+    return setMusicChunkSize?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(SyncMsg value)? sync,
+    TResult Function(SearchResourceMsg value)? searchResource,
+    TResult Function(RequestResourceMsg value)? requestResource,
+    TResult Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult Function(MusicPackageMsg value)? musicPackage,
+    TResult Function(RequestStateUpdateMsg value)? requestStateUpdate,
+    TResult Function(StateUpdateMsg value)? stateUpdateMsg,
+    TResult Function(PlayMsg value)? play,
+    TResult Function(PauseMsg value)? pause,
+    TResult Function(SkipSongMsg value)? skipSong,
+    TResult Function(PreviousSongMsg value)? previousSong,
+    TResult Function(AddSongToQueueMsg value)? addSongToQueue,
+    TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    required TResult orElse(),
+  }) {
+    if (setMusicChunkSize != null) {
+      return setMusicChunkSize(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SetMusicChunkSizeMsgToJson(
+      this,
+    );
+  }
+}
+
+abstract class SetMusicChunkSizeMsg implements P2pMessage {
+  const factory SetMusicChunkSizeMsg(final int size) = _$SetMusicChunkSizeMsg;
+
+  factory SetMusicChunkSizeMsg.fromJson(Map<String, dynamic> json) =
+      _$SetMusicChunkSizeMsg.fromJson;
+
+  int get size;
+  @JsonKey(ignore: true)
+  _$$SetMusicChunkSizeMsgCopyWith<_$SetMusicChunkSizeMsg> get copyWith =>
+      throw _privateConstructorUsedError;
 }

@@ -26,6 +26,7 @@ class PlayerController extends ChangeNotifier with Disposable {
 
   DetailsPackage? get currentSong => _musicQueue.currentSong;
   List<DetailsPackage> get songList => _musicQueue.songList;
+  int get musicChunkSize => _musicProvider.musicChunkSize;
 
   bool get isPlaying => _isPlaying;
 
@@ -98,6 +99,10 @@ class PlayerController extends ChangeNotifier with Disposable {
 
   void removeSong(String song) async {
     // TODO: Implement
+  }
+
+  void setMusicChunkSize(int size) {
+    _p2pNetwork.sendMessage(P2pMessage.setMusicChunkSize(size));
   }
 
   void play() async {

@@ -174,3 +174,17 @@ Map<String, dynamic> _$$RemoveSongFromQueueMsgToJson(
     <String, dynamic>{
       'type': instance.$type,
     };
+
+_$SetMusicChunkSizeMsg _$$SetMusicChunkSizeMsgFromJson(
+        Map<String, dynamic> json) =>
+    _$SetMusicChunkSizeMsg(
+      json['size'] as int,
+      $type: json['type'] as String?,
+    );
+
+Map<String, dynamic> _$$SetMusicChunkSizeMsgToJson(
+        _$SetMusicChunkSizeMsg instance) =>
+    <String, dynamic>{
+      'size': instance.size,
+      'type': instance.$type,
+    };

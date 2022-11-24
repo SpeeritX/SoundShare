@@ -16,6 +16,7 @@ import '../../widgets/buttons/small_button.dart';
 import '../../widgets/music/player_widget.dart';
 import '../../widgets/music/song_widget.dart';
 import '../../widgets/scaffold/app_bar.dart';
+import '../settings/settings_screen.dart';
 
 class PlayerScreen extends StatefulWidget {
   final P2pNetwork p2pNetwork;
@@ -32,10 +33,7 @@ class PlayerScreen extends StatefulWidget {
 }
 
 class _PlayerScreenState extends State<PlayerScreen> {
-  PageController controller = PageController();
   late final P2pNetwork _p2pNetwork;
-  late final Duration _playOffset;
-  var _pageNumber = 0;
 
   @override
   void initState() {
@@ -47,97 +45,129 @@ class _PlayerScreenState extends State<PlayerScreen> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: ((context) => PlayerController(_p2pNetwork)),
-      child: Scaffold(
-        appBar: DefaultAppBar(title: "Player"),
-        body: Stack(
-          children: <Widget>[
-            Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.only(
-                      left: Paddings.dynamic.m2, right: Paddings.dynamic.m2),
-                  child: Row(children: [
-                    Expanded(
-                      child: PrimaryFullButton(
-                          text: "My Songs",
-                          onPressed: () {
-                            setState(
-                              () {
-                                controller.jumpToPage(0);
-                              },
-                            );
-                          },
-                          style: getSwitchViewButtonStyle(_pageNumber == 0),
-                          backgroundColor: Colors.transparent,
-                          shadow: false,
-                          animation: false),
-                    ),
-                    Expanded(
-                      child: PrimaryFullButton(
-                        text: "Queue",
+      child: PlayerContent(localSongs: widget.localSongs),
+    );
+  }
+}
+
+class PlayerContent extends StatefulWidget {
+  final List<MusicSong> localSongs;
+
+  const PlayerContent({
+    required this.localSongs,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<PlayerContent> createState() => _PlayerContentState();
+}
+
+class _PlayerContentState extends State<PlayerContent> {
+  PageController controller = PageController();
+  var _pageNumber = 0;
+  late final Duration _playOffset;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: DefaultAppBar(title: "Player", actions: [
+        SmallButton(
+          onPressed: () {
+            _openSettings();
+          },
+          child: const FaIcon(
+            FontAwesomeIcons.gear,
+            color: AppColors.white,
+            size: 25.0,
+          ),
+        ),
+      ]),
+      body: Stack(
+        children: <Widget>[
+          Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(
+                    left: Paddings.dynamic.m2, right: Paddings.dynamic.m2),
+                child: Row(children: [
+                  Expanded(
+                    child: PrimaryFullButton(
+                        text: "My Songs",
                         onPressed: () {
                           setState(() {
-                            controller.jumpToPage(1);
+                            controller.jumpToPage(0);
                           });
                         },
-                        style: getSwitchViewButtonStyle(_pageNumber == 1),
+                        style: getSwitchViewButtonStyle(_pageNumber == 0),
                         backgroundColor: Colors.transparent,
                         shadow: false,
-                        animation: false,
+                        animation: false),
+                  ),
+                  Expanded(
+                    child: PrimaryFullButton(
+                      text: "Queue",
+                      onPressed: () {
+                        setState(() {
+                          controller.jumpToPage(1);
+                        });
+                      },
+                      style: getSwitchViewButtonStyle(_pageNumber == 1),
+                      backgroundColor: Colors.transparent,
+                      shadow: false,
+                      animation: false,
+                    ),
+                  ),
+                ]),
+              ),
+              Expanded(
+                child: PageView(
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  controller: controller,
+                  onPageChanged: (num) {
+                    setState(() {
+                      _pageNumber = num;
+                    });
+                  },
+                  children: [
+                    SingleChildScrollView(
+                      child: Consumer<PlayerController>(
+                        builder: (context, playerController, child) => Column(
+                          children: [
+                            ..._createLocalSongsWidgets(playerController),
+                            SizedBox(height: 4 * Paddings.dynamic.m4),
+                          ],
+                        ),
                       ),
                     ),
-                  ]),
-                ),
-                Expanded(
-                  child: PageView(
-                    scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(),
-                    controller: controller,
-                    onPageChanged: (num) {
-                      setState(() {
-                        _pageNumber = num;
-                      });
-                    },
-                    children: [
-                      SingleChildScrollView(
-                        child: Consumer<PlayerController>(
-                          builder: (context, playerController, child) => Column(
-                            children: [
-                              ..._createLocalSongsWidgets(playerController),
-                              SizedBox(height: 4 * Paddings.dynamic.m4),
-                            ],
-                          ),
+                    SingleChildScrollView(
+                      child: Consumer<PlayerController>(
+                        builder: (context, playerController, child) => Column(
+                          children: [
+                            SizedBox(height: Paddings.dynamic.m3),
+                            const TimerWidget(),
+                            ..._createQueuedSongsWidgets(playerController),
+                            SizedBox(height: 4 * Paddings.dynamic.m4),
+                          ],
                         ),
                       ),
-                      SingleChildScrollView(
-                        child: Consumer<PlayerController>(
-                          builder: (context, playerController, child) => Column(
-                            children: [
-                              SizedBox(height: Paddings.dynamic.m3),
-                              const TimerWidget(),
-                              ..._createQueuedSongsWidgets(playerController),
-                              SizedBox(height: 4 * Paddings.dynamic.m4),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            Positioned.fill(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Consumer<PlayerController>(
-                    builder: (context, playerController, child) =>
-                        (playerController.songList.isNotEmpty)
-                            ? PlayerWidget(playerController: playerController)
-                            : const SizedBox.shrink()),
               ),
+            ],
+          ),
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Consumer<PlayerController>(
+                  builder: (context, playerController, child) =>
+                      (playerController.songList.isNotEmpty)
+                          ? PlayerWidget(playerController: playerController)
+                          : const SizedBox.shrink()),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -179,6 +209,18 @@ class _PlayerScreenState extends State<PlayerScreen> {
             ),
           ),
         ));
+  }
+
+  void _openSettings() {
+    final playerController =
+        Provider.of<PlayerController>(context, listen: false);
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) =>
+            SettingsScreen(playerController: playerController),
+      ),
+    );
   }
 
   TextStyle getSwitchViewButtonStyle(bool selected) {

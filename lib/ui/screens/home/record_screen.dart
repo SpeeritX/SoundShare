@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:noise_meter/noise_meter.dart';
 
 import '../../widgets/buttons/primary_full_button.dart';
-import '../settings/settings_screen.dart';
 
 class RecordScreen extends StatefulWidget {
   const RecordScreen({Key? key}) : super(key: key);
@@ -19,15 +18,6 @@ class _RecordScreenState extends State<RecordScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("SoundShare"),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const SettingsScreen()));
-            },
-            icon: const Icon(Icons.settings),
-          )
-        ],
       ),
       body: SizedBox(
         width: double.infinity,

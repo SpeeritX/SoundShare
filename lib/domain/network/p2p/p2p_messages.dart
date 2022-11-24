@@ -5,7 +5,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:sound_share/domain/music/package/details_package.dart';
 
 part 'p2p_messages.freezed.dart';
-
 part 'p2p_messages.g.dart';
 
 class P2pMessageEvent {
@@ -62,6 +61,9 @@ class P2pMessage with _$P2pMessage {
   ) = AddSongToQueueMsg;
 
   const factory P2pMessage.removeSongFromQueue() = RemoveSongFromQueueMsg;
+  const factory P2pMessage.setMusicChunkSize(
+    int size,
+  ) = SetMusicChunkSizeMsg;
 
   factory P2pMessage.fromJson(Map<String, dynamic> json) =>
       _$P2pMessageFromJson(json);

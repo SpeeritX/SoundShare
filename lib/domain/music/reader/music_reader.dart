@@ -4,11 +4,12 @@ import 'package:sound_share/domain/music/song/song.dart';
 
 /// Reads the music in packages from the selected file
 class MusicReader {
-  static const chunkSize = 10000;
+  static const defaultChunkSize = 100000;
+  final chunkSize;
   final MusicSong _song;
   late Iterator<MusicPackage> _packages;
 
-  MusicReader(this._song) {
+  MusicReader(this._song, this.chunkSize) {
     // List<MusicPackage> arr = [];
     // _song.file
     //     .readAsBytesSync()
