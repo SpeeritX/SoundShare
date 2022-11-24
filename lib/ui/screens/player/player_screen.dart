@@ -72,7 +72,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     ),
                     Expanded(
                       child: PrimaryFullButton(
-                        text: "Queued Songs",
+                        text: "Queue",
                         onPressed: () {
                           setState(() {
                             controller.jumpToPage(1);
