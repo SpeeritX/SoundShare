@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:ntp/ntp.dart';
 import 'package:provider/provider.dart';
 import 'package:sound_share/domain/controllers/player/player_controller.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
@@ -33,6 +34,7 @@ class PlayerScreen extends StatefulWidget {
 class _PlayerScreenState extends State<PlayerScreen> {
   PageController controller = PageController();
   late final P2pNetwork _p2pNetwork;
+  late final Duration _playOffset;
   var _pageNumber = 0;
 
   @override
@@ -200,20 +202,22 @@ class TimerWidget extends StatefulWidget {
 }
 
 class _TimerWidgetState extends State<TimerWidget> {
-  final timeFormat = DateFormat('HH:mm:ss:S');
+  final timeFormat = DateFormat('HH:mm:ss:SSS');
   late final Timer timer;
+  Duration offset = const Duration();
 
   @override
   void initState() {
-    timer = Timer.periodic(Duration(milliseconds: 50), (timer) {
+    timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
       setState(() {});
     });
+    NTP.getNtpOffset().then((value) => offset = Duration(milliseconds: value));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Text(timeFormat.format(DateTime.now()));
+    return Text(timeFormat.format(DateTime.now().add(offset)));
   }
 
   @override
