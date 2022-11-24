@@ -19,12 +19,10 @@ import '../../widgets/scaffold/app_bar.dart';
 
 class PlayerScreen extends StatefulWidget {
   final P2pNetwork p2pNetwork;
-  final Duration playOffset;
   final List<MusicSong> localSongs;
 
   const PlayerScreen({
     required this.p2pNetwork,
-    required this.playOffset,
     required this.localSongs,
     Key? key,
   }) : super(key: key);
@@ -42,14 +40,13 @@ class _PlayerScreenState extends State<PlayerScreen> {
   @override
   void initState() {
     _p2pNetwork = widget.p2pNetwork;
-    _playOffset = widget.playOffset;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: ((context) => PlayerController(_p2pNetwork, _playOffset)),
+      create: ((context) => PlayerController(_p2pNetwork)),
       child: Scaffold(
         appBar: DefaultAppBar(title: "Player"),
         body: Stack(

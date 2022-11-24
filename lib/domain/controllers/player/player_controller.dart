@@ -17,17 +17,16 @@ import 'package:sound_share/domain/network/p2p/p2p_network.dart';
 class PlayerController extends ChangeNotifier with Disposable {
   final _musicQueue = MusicQueue();
   final P2pNetwork _p2pNetwork;
-  final Duration _playOffset;
   late final _musicBufferController =
       MusicBufferController(_musicQueue, _p2pNetwork);
   late final MusicPlayer _player =
-      MusicPlayer(_musicBufferController, _musicQueue, _playOffset);
+      MusicPlayer(_musicBufferController, _musicQueue);
   late final MusicProvider _musicProvider = MusicProvider(_p2pNetwork);
 
   DetailsPackage? get currentSong => _musicQueue.currentSong;
   List<DetailsPackage> get songList => _musicQueue.songList;
 
-  PlayerController(this._p2pNetwork, this._playOffset) {
+  PlayerController(this._p2pNetwork) {
     _p2pNetwork.musicPlayerListener = _player;
 
     _musicQueue.updateEvents.listen((_) {
@@ -39,6 +38,7 @@ class PlayerController extends ChangeNotifier with Disposable {
 
   @override
   void dispose() {
+    _player.stop();
     _player.dispose();
     _musicProvider.dispose();
     _musicBufferController.dispose();

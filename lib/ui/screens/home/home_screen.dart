@@ -24,7 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
   var _ip = "192.168.";
   late final TextEditingController _ipController =
       TextEditingController(text: _ip);
-  Duration _offset = const Duration();
 
   List<MusicSong> localSongs = [];
 
@@ -35,11 +34,11 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       return;
     }
-    _openPlayer(p2pNetwork, _offset);
+    _openPlayer(p2pNetwork);
   }
 
   _createNetwork() {
-    _openPlayer(P2pNetwork(), _offset);
+    _openPlayer(P2pNetwork());
   }
 
   @override
@@ -111,9 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     PrimaryFullButton(
                       onPressed: () async {
                         if (await Permission.microphone.request().isGranted) {
-                          Synchronization()
-                              .sync()
-                              .then((playOffset) => _offset = playOffset);
+                          Synchronization().sync();
                         }
                       },
                       text: "Calibrate",
@@ -155,11 +152,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _openPlayer(P2pNetwork p2pNetwork, Duration playOffset) {
+  void _openPlayer(P2pNetwork p2pNetwork) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => PlayerScreen(
               p2pNetwork: p2pNetwork,
-              playOffset: playOffset,
               localSongs: localSongs,
             )));
   }

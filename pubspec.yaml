@@ -55,9 +55,10 @@ dependencies:
   ntp: ^2.0.0
   permission_handler: ^10.2.0
   audio_streamer: ^2.2.0
-  audioplayers: ^1.1.1
+  audio_session: ^0.1.11
   font_awesome_flutter: ^10.2.1
   percent_indicator: ^4.2.2
+  shared_preferences: ^2.0.15
 
 dev_dependencies:
   flutter_test:

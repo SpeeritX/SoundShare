@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:audio_session/audio_session.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:ntp/ntp.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sound_share/common/logger.dart';
 import 'package:sound_share/common/utils/disposable.dart';
 import 'package:sound_share/domain/music/buffer/music_buffer_controller.dart';
@@ -17,18 +19,25 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
   final _player = AudioPlayer();
   final MusicBufferController _musicBuffer;
   final MusicQueue _musicQueue;
-  final Duration _playOffset;
+  late final Duration _playOffset;
+  AudioSession? _session;
   var _source = BytesAudioSource(null);
   var _timeOffset = const Duration();
   Timer? _timer;
 
-  MusicPlayer(this._musicBuffer, this._musicQueue, this._playOffset) {
+  MusicPlayer(this._musicBuffer, this._musicQueue) {
     _player.processingStateStream.listen((event) {
       if (event == ProcessingState.completed) {
         final song = _musicQueue.nextSong();
         _playSong(song, DateTime.now().add(_timeOffset));
       }
     }).canceledBy(this);
+    AudioSession.instance.then((value) {
+      _session = value;
+      _session!.configure(const AudioSessionConfiguration.music());
+    });
+    SharedPreferences.getInstance().then((value) =>
+        _playOffset = Duration(milliseconds: value.getInt('playOffset') ?? 0));
   }
 
   Future<void> _setSong(BytesAudioSource source) async {
@@ -47,13 +56,17 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
   }
 
   void play(DateTime time) async {
-    _timer?.cancel();
-    _timer = Timer(
-        DateTime.now().difference(time) +
-            _timeOffset +
-            const Duration(seconds: 5), () {
-      _player.play();
-    });
+    if (await _session!.setActive(true)) {
+      _timer?.cancel();
+      _timer = Timer(
+          DateTime.now().add(_timeOffset).difference(time) +
+              const Duration(seconds: 2), () {
+        _player.play();
+      });
+    } else {
+      print("Session did not activate.");
+      return;
+    }
   }
 
   Duration? getCurrentSongDuration() {
@@ -112,7 +125,12 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
 
   @override
   void onSync() {
-    NTP.getNtpOffset(localTime: DateTime.now()).then((timeOffset) =>
-        _timeOffset = Duration(milliseconds: timeOffset) + _playOffset);
+    NTP
+        .getNtpOffset(
+          localTime: DateTime.now(),
+          lookUpAddress: 'time.facebook.com',
+        )
+        .then((timeOffset) =>
+            _timeOffset = Duration(milliseconds: timeOffset) - _playOffset);
   }
 }
