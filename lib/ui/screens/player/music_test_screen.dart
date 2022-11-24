@@ -64,9 +64,6 @@ class _MusicTestScreenState extends State<MusicTestScreen> {
   }
 
   void _play() async {
-    _player.play();
-    _player.stop();
-    _player.play();
     var song = await MusicSong.create(file: File(_currentFileName));
     var packages = MusicReader(song, 100000);
     while (true) {

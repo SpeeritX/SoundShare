@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:ntp/ntp.dart';
 import 'package:provider/provider.dart';
 import 'package:sound_share/domain/controllers/player/player_controller.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
-import 'package:sound_share/ui/screens/settings/settings_screen.dart';
 import 'package:sound_share/ui/style/app_colors.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
@@ -16,6 +16,7 @@ import '../../widgets/buttons/small_button.dart';
 import '../../widgets/music/player_widget.dart';
 import '../../widgets/music/song_widget.dart';
 import '../../widgets/scaffold/app_bar.dart';
+import '../settings/settings_screen.dart';
 
 class PlayerScreen extends StatefulWidget {
   final P2pNetwork p2pNetwork;
@@ -49,37 +50,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 }
 
-class TimerWidget extends StatefulWidget {
-  const TimerWidget({Key? key}) : super(key: key);
-
-  @override
-  State<TimerWidget> createState() => _TimerWidgetState();
-}
-
-class _TimerWidgetState extends State<TimerWidget> {
-  final timeFormat = DateFormat('HH:mm:ss:S');
-  late final Timer timer;
-
-  @override
-  void initState() {
-    timer = Timer.periodic(Duration(milliseconds: 50), (timer) {
-      setState(() {});
-    });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(timeFormat.format(DateTime.now()));
-  }
-
-  @override
-  void dispose() {
-    timer.cancel();
-    super.dispose();
-  }
-}
-
 class PlayerContent extends StatefulWidget {
   final List<MusicSong> localSongs;
 
@@ -95,6 +65,7 @@ class PlayerContent extends StatefulWidget {
 class _PlayerContentState extends State<PlayerContent> {
   PageController controller = PageController();
   var _pageNumber = 0;
+  late final Duration _playOffset;
 
   @override
   Widget build(BuildContext context) {
@@ -203,13 +174,13 @@ class _PlayerContentState extends State<PlayerContent> {
 
   Iterable<SongWidget> _createLocalSongsWidgets(
       PlayerController playerController) {
-    return widget.localSongs.map((musicSong) => SongWidget(
+    return widget.localSongs.map((song) => SongWidget(
           inQueue: false,
-          song: musicSong.details,
+          song: song.details,
           player: playerController,
           action: SmallButton(
             onPressed: () {
-              playerController.playSong(musicSong);
+              playerController.addSong(song);
             },
             child: const FaIcon(
               FontAwesomeIcons.circlePlus,
@@ -222,13 +193,14 @@ class _PlayerContentState extends State<PlayerContent> {
 
   Iterable<SongWidget> _createQueuedSongsWidgets(
       PlayerController playerController) {
-    return playerController.songList.map((song) => SongWidget(
+    return playerController.songList.asMap().entries.map((entry) => SongWidget(
           inQueue: true,
-          song: song,
+          song: entry.value,
+          index: entry.key,
           player: playerController,
           action: SmallButton(
             onPressed: () {
-              playerController.removeSong(song.songId);
+              playerController.removeSong(entry.value.songId);
             },
             child: const FaIcon(
               FontAwesomeIcons.circleMinus,
@@ -261,5 +233,38 @@ class _PlayerContentState extends State<PlayerContent> {
             .textTheme
             .bodyText2!
             .copyWith(color: AppColors.middleGray);
+  }
+}
+
+class TimerWidget extends StatefulWidget {
+  const TimerWidget({Key? key}) : super(key: key);
+
+  @override
+  State<TimerWidget> createState() => _TimerWidgetState();
+}
+
+class _TimerWidgetState extends State<TimerWidget> {
+  final timeFormat = DateFormat('HH:mm:ss:SSS');
+  late final Timer timer;
+  Duration offset = const Duration();
+
+  @override
+  void initState() {
+    timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+      setState(() {});
+    });
+    NTP.getNtpOffset().then((value) => offset = Duration(milliseconds: value));
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(timeFormat.format(DateTime.now().add(offset)));
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 }

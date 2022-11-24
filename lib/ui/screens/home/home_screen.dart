@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:ntp/ntp.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:sound_share/domain/music/synchronization/synchronization.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
 import 'package:sound_share/ui/screens/home/pick_directory_dialog.dart';
 import 'package:sound_share/ui/screens/player/music_test_screen.dart';
@@ -103,6 +106,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       text: "Test music",
                     ),
+                    SizedBox(height: Paddings.dynamic.m2),
+                    PrimaryFullButton(
+                      onPressed: () async {
+                        if (await Permission.microphone.request().isGranted) {
+                          Synchronization().sync();
+                        }
+                      },
+                      text: "Calibrate",
+                    ),
                     SizedBox(height: Paddings.dynamic.m4),
                     SizedBox(height: Paddings.dynamic.m4),
                     Container(
@@ -142,8 +154,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _openPlayer(P2pNetwork p2pNetwork) {
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>
-            PlayerScreen(p2pNetwork: p2pNetwork, localSongs: localSongs)));
+        builder: (context) => PlayerScreen(
+              p2pNetwork: p2pNetwork,
+              localSongs: localSongs,
+            )));
   }
 
   void _openTestMusic() {

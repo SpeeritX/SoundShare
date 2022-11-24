@@ -10,6 +10,7 @@ class SongWidget extends StatelessWidget {
   final PlayerController player;
   final Widget action;
   final bool inQueue;
+  final int? index;
 
   const SongWidget({
     Key? key,
@@ -17,46 +18,52 @@ class SongWidget extends StatelessWidget {
     required this.player,
     required this.action,
     required this.inQueue,
+    this.index,
   }) : super(key: key);
 
   onPressed() {}
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(
-          left: Paddings.dynamic.m2,
-          top: Paddings.dynamic.m1,
-          right: Paddings.dynamic.m2,
-          bottom: Paddings.dynamic.m1),
-      child: Row(children: [
-        SizedBox(
-            height: 70,
-            width: 70,
-            child: Image.asset('assets/Music.png', fit: BoxFit.cover)),
-        SizedBox(width: Paddings.dynamic.m1),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                song.title ?? "",
-                overflow: TextOverflow.fade,
-                softWrap: false,
-                style: _getTitleStyle(context),
-              ),
-              SizedBox(height: Paddings.dynamic.m1 / 2),
-              Text(
-                song.artist ?? "",
-                overflow: TextOverflow.fade,
-                softWrap: false,
-                style: _getArtistStyle(context),
-              ),
-            ],
+    return GestureDetector(
+      onTap: () => {
+        if (index != null) {player.playSong(index!)}
+      },
+      child: Container(
+        padding: EdgeInsets.only(
+            left: Paddings.dynamic.m2,
+            top: Paddings.dynamic.m1,
+            right: Paddings.dynamic.m2,
+            bottom: Paddings.dynamic.m1),
+        child: Row(children: [
+          SizedBox(
+              height: 70,
+              width: 70,
+              child: Image.asset('assets/Music.png', fit: BoxFit.cover)),
+          SizedBox(width: Paddings.dynamic.m1),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  song.title ?? "",
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                  style: _getTitleStyle(context),
+                ),
+                SizedBox(height: Paddings.dynamic.m1 / 2),
+                Text(
+                  song.artist ?? "",
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                  style: _getArtistStyle(context),
+                ),
+              ],
+            ),
           ),
-        ),
-        action,
-      ]),
+          action,
+        ]),
+      ),
     );
   }
 
