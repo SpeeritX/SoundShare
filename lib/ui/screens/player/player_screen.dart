@@ -65,7 +65,6 @@ class PlayerContent extends StatefulWidget {
 class _PlayerContentState extends State<PlayerContent> {
   PageController controller = PageController();
   var _pageNumber = 0;
-  late final Duration _playOffset;
 
   @override
   Widget build(BuildContext context) {
@@ -200,7 +199,7 @@ class _PlayerContentState extends State<PlayerContent> {
           player: playerController,
           action: SmallButton(
             onPressed: () {
-              playerController.removeSong(entry.value.songId);
+              playerController.removeSong(entry.key);
             },
             child: const FaIcon(
               FontAwesomeIcons.circleMinus,

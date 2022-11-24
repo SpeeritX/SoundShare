@@ -25,7 +25,9 @@ class PlayerController extends ChangeNotifier with Disposable {
   bool _isPlaying = false;
 
   DetailsPackage? get currentSong => _musicQueue.currentSong;
+
   List<DetailsPackage> get songList => _musicQueue.songList;
+
   int get musicChunkSize => _musicProvider.musicChunkSize;
 
   bool get isPlaying => _isPlaying;
@@ -97,8 +99,13 @@ class PlayerController extends ChangeNotifier with Disposable {
     );
   }
 
-  void removeSong(String song) async {
-    // TODO: Implement
+  void removeSong(int index) async {
+    if (_musicQueue.currentSongIndex == index) {
+      _player.pause();
+    }
+    _musicProvider.removeSong(index);
+    notifyListeners();
+    await _p2pNetwork.sendMessage(P2pMessage.removeSongFromQueue(index));
   }
 
   void setMusicChunkSize(int size) {

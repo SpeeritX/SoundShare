@@ -103,6 +103,8 @@ class P2pNetwork with Disposable {
       _musicBufferListener?.onMusicPackage(message);
     } else if (message is AddSongToQueueMsg) {
       _musicPlayerListener?.addToQueue(message.songData);
+    } else if (message is RemoveSongFromQueueMsg) {
+      _musicPlayerListener?.removeFromQueue(message.index);
     } else if (message is SearchResourceMsg) {
       _handelSearchResource(message, event.peerId);
     } else if (message is RequestResourceMsg) {

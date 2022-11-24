@@ -11,7 +11,6 @@ import 'package:sound_share/domain/music/package/details_package.dart';
 import 'package:sound_share/domain/music/package/music_package.dart';
 import 'package:sound_share/domain/music/player/bytes_audio_source.dart';
 import 'package:sound_share/domain/music/player/music_queue.dart';
-import 'package:sound_share/domain/music/synchronization/synchronization.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
 
 /// Plays the music from the received packages
@@ -134,7 +133,9 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
 
   @override
   void removeFromQueue(int index) {
-    // TODO: implement removeFromQueue
+    if (index >= 0 && index < _musicQueue.songList.length) {
+      _musicQueue.songList.removeAt(index);
+    }
   }
 
   @override

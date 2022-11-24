@@ -73,7 +73,7 @@ mixin _$P2pMessage {
     required TResult Function() skipSong,
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
-    required TResult Function() removeSongFromQueue,
+    required TResult Function(int index) removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
   }) =>
       throw _privateConstructorUsedError;
@@ -96,7 +96,7 @@ mixin _$P2pMessage {
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
-    TResult? Function()? removeSongFromQueue,
+    TResult? Function(int index)? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
   }) =>
       throw _privateConstructorUsedError;
@@ -119,7 +119,7 @@ mixin _$P2pMessage {
     TResult Function()? skipSong,
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
-    TResult Function()? removeSongFromQueue,
+    TResult Function(int index)? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) =>
@@ -268,7 +268,7 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
     required TResult Function() skipSong,
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
-    required TResult Function() removeSongFromQueue,
+    required TResult Function(int index) removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
   }) {
     return sync();
@@ -294,7 +294,7 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
-    TResult? Function()? removeSongFromQueue,
+    TResult? Function(int index)? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
   }) {
     return sync?.call();
@@ -320,7 +320,7 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
     TResult Function()? skipSong,
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
-    TResult Function()? removeSongFromQueue,
+    TResult Function(int index)? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
@@ -512,7 +512,7 @@ class _$SearchResourceMsg
     required TResult Function() skipSong,
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
-    required TResult Function() removeSongFromQueue,
+    required TResult Function(int index) removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
   }) {
     return searchResource(songId);
@@ -538,7 +538,7 @@ class _$SearchResourceMsg
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
-    TResult? Function()? removeSongFromQueue,
+    TResult? Function(int index)? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
   }) {
     return searchResource?.call(songId);
@@ -564,7 +564,7 @@ class _$SearchResourceMsg
     TResult Function()? skipSong,
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
-    TResult Function()? removeSongFromQueue,
+    TResult Function(int index)? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
@@ -788,7 +788,7 @@ class _$RequestResourceMsg
     required TResult Function() skipSong,
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
-    required TResult Function() removeSongFromQueue,
+    required TResult Function(int index) removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
   }) {
     return requestResource(requestId, songId, startIndex);
@@ -814,7 +814,7 @@ class _$RequestResourceMsg
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
-    TResult? Function()? removeSongFromQueue,
+    TResult? Function(int index)? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
   }) {
     return requestResource?.call(requestId, songId, startIndex);
@@ -840,7 +840,7 @@ class _$RequestResourceMsg
     TResult Function()? skipSong,
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
-    TResult Function()? removeSongFromQueue,
+    TResult Function(int index)? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
@@ -1044,7 +1044,7 @@ class _$ResourceAvailabilityMsg
     required TResult Function() skipSong,
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
-    required TResult Function() removeSongFromQueue,
+    required TResult Function(int index) removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
   }) {
     return resourceAvailability(songId);
@@ -1070,7 +1070,7 @@ class _$ResourceAvailabilityMsg
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
-    TResult? Function()? removeSongFromQueue,
+    TResult? Function(int index)? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
   }) {
     return resourceAvailability?.call(songId);
@@ -1096,7 +1096,7 @@ class _$ResourceAvailabilityMsg
     TResult Function()? skipSong,
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
-    TResult Function()? removeSongFromQueue,
+    TResult Function(int index)? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
@@ -1335,7 +1335,7 @@ class _$MusicPackageMsg
     required TResult Function() skipSong,
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
-    required TResult Function() removeSongFromQueue,
+    required TResult Function(int index) removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
   }) {
     return musicPackage(requestId, songId, startIndex, serializedBytes);
@@ -1361,7 +1361,7 @@ class _$MusicPackageMsg
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
-    TResult? Function()? removeSongFromQueue,
+    TResult? Function(int index)? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
   }) {
     return musicPackage?.call(requestId, songId, startIndex, serializedBytes);
@@ -1387,7 +1387,7 @@ class _$MusicPackageMsg
     TResult Function()? skipSong,
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
-    TResult Function()? removeSongFromQueue,
+    TResult Function(int index)? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
@@ -1565,7 +1565,7 @@ class _$RequestStateUpdateMsg
     required TResult Function() skipSong,
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
-    required TResult Function() removeSongFromQueue,
+    required TResult Function(int index) removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
   }) {
     return requestStateUpdate();
@@ -1591,7 +1591,7 @@ class _$RequestStateUpdateMsg
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
-    TResult? Function()? removeSongFromQueue,
+    TResult? Function(int index)? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
   }) {
     return requestStateUpdate?.call();
@@ -1617,7 +1617,7 @@ class _$RequestStateUpdateMsg
     TResult Function()? skipSong,
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
-    TResult Function()? removeSongFromQueue,
+    TResult Function(int index)? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
@@ -1848,7 +1848,7 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     required TResult Function() skipSong,
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
-    required TResult Function() removeSongFromQueue,
+    required TResult Function(int index) removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
   }) {
     return stateUpdateMsg(devices, queue, queuePosition);
@@ -1874,7 +1874,7 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
-    TResult? Function()? removeSongFromQueue,
+    TResult? Function(int index)? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
   }) {
     return stateUpdateMsg?.call(devices, queue, queuePosition);
@@ -1900,7 +1900,7 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     TResult Function()? skipSong,
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
-    TResult Function()? removeSongFromQueue,
+    TResult Function(int index)? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
@@ -2119,7 +2119,7 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     required TResult Function() skipSong,
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
-    required TResult Function() removeSongFromQueue,
+    required TResult Function(int index) removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
   }) {
     return play(index, time, songPosition);
@@ -2145,7 +2145,7 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
-    TResult? Function()? removeSongFromQueue,
+    TResult? Function(int index)? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
   }) {
     return play?.call(index, time, songPosition);
@@ -2171,7 +2171,7 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     TResult Function()? skipSong,
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
-    TResult Function()? removeSongFromQueue,
+    TResult Function(int index)? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
@@ -2340,7 +2340,7 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     required TResult Function() skipSong,
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
-    required TResult Function() removeSongFromQueue,
+    required TResult Function(int index) removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
   }) {
     return pause();
@@ -2366,7 +2366,7 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
-    TResult? Function()? removeSongFromQueue,
+    TResult? Function(int index)? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
   }) {
     return pause?.call();
@@ -2392,7 +2392,7 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     TResult Function()? skipSong,
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
-    TResult Function()? removeSongFromQueue,
+    TResult Function(int index)? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
@@ -2553,7 +2553,7 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     required TResult Function() skipSong,
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
-    required TResult Function() removeSongFromQueue,
+    required TResult Function(int index) removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
   }) {
     return skipSong();
@@ -2579,7 +2579,7 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
-    TResult? Function()? removeSongFromQueue,
+    TResult? Function(int index)? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
   }) {
     return skipSong?.call();
@@ -2605,7 +2605,7 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     TResult Function()? skipSong,
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
-    TResult Function()? removeSongFromQueue,
+    TResult Function(int index)? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
@@ -2770,7 +2770,7 @@ class _$PreviousSongMsg
     required TResult Function() skipSong,
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
-    required TResult Function() removeSongFromQueue,
+    required TResult Function(int index) removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
   }) {
     return previousSong();
@@ -2796,7 +2796,7 @@ class _$PreviousSongMsg
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
-    TResult? Function()? removeSongFromQueue,
+    TResult? Function(int index)? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
   }) {
     return previousSong?.call();
@@ -2822,7 +2822,7 @@ class _$PreviousSongMsg
     TResult Function()? skipSong,
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
-    TResult Function()? removeSongFromQueue,
+    TResult Function(int index)? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
@@ -3016,7 +3016,7 @@ class _$AddSongToQueueMsg
     required TResult Function() skipSong,
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
-    required TResult Function() removeSongFromQueue,
+    required TResult Function(int index) removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
   }) {
     return addSongToQueue(songData);
@@ -3042,7 +3042,7 @@ class _$AddSongToQueueMsg
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
-    TResult? Function()? removeSongFromQueue,
+    TResult? Function(int index)? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
   }) {
     return addSongToQueue?.call(songData);
@@ -3068,7 +3068,7 @@ class _$AddSongToQueueMsg
     TResult Function()? skipSong,
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
-    TResult Function()? removeSongFromQueue,
+    TResult Function(int index)? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
@@ -3172,6 +3172,8 @@ abstract class _$$RemoveSongFromQueueMsgCopyWith<$Res> {
   factory _$$RemoveSongFromQueueMsgCopyWith(_$RemoveSongFromQueueMsg value,
           $Res Function(_$RemoveSongFromQueueMsg) then) =
       __$$RemoveSongFromQueueMsgCopyWithImpl<$Res>;
+  @useResult
+  $Res call({int index});
 }
 
 /// @nodoc
@@ -3181,6 +3183,19 @@ class __$$RemoveSongFromQueueMsgCopyWithImpl<$Res>
   __$$RemoveSongFromQueueMsgCopyWithImpl(_$RemoveSongFromQueueMsg _value,
       $Res Function(_$RemoveSongFromQueueMsg) _then)
       : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? index = null,
+  }) {
+    return _then(_$RemoveSongFromQueueMsg(
+      null == index
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
 }
 
 /// @nodoc
@@ -3188,36 +3203,49 @@ class __$$RemoveSongFromQueueMsgCopyWithImpl<$Res>
 class _$RemoveSongFromQueueMsg
     with DiagnosticableTreeMixin
     implements RemoveSongFromQueueMsg {
-  const _$RemoveSongFromQueueMsg({final String? $type})
+  const _$RemoveSongFromQueueMsg(this.index, {final String? $type})
       : $type = $type ?? 'removeSongFromQueue';
 
   factory _$RemoveSongFromQueueMsg.fromJson(Map<String, dynamic> json) =>
       _$$RemoveSongFromQueueMsgFromJson(json);
+
+  @override
+  final int index;
 
   @JsonKey(name: 'type')
   final String $type;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'P2pMessage.removeSongFromQueue()';
+    return 'P2pMessage.removeSongFromQueue(index: $index)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-        .add(DiagnosticsProperty('type', 'P2pMessage.removeSongFromQueue'));
+      ..add(DiagnosticsProperty('type', 'P2pMessage.removeSongFromQueue'))
+      ..add(DiagnosticsProperty('index', index));
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$RemoveSongFromQueueMsg);
+        (other.runtimeType == runtimeType &&
+            other is _$RemoveSongFromQueueMsg &&
+            (identical(other.index, index) || other.index == index));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, index);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$RemoveSongFromQueueMsgCopyWith<_$RemoveSongFromQueueMsg> get copyWith =>
+      __$$RemoveSongFromQueueMsgCopyWithImpl<_$RemoveSongFromQueueMsg>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -3240,10 +3268,10 @@ class _$RemoveSongFromQueueMsg
     required TResult Function() skipSong,
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
-    required TResult Function() removeSongFromQueue,
+    required TResult Function(int index) removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
   }) {
-    return removeSongFromQueue();
+    return removeSongFromQueue(index);
   }
 
   @override
@@ -3266,10 +3294,10 @@ class _$RemoveSongFromQueueMsg
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
-    TResult? Function()? removeSongFromQueue,
+    TResult? Function(int index)? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
   }) {
-    return removeSongFromQueue?.call();
+    return removeSongFromQueue?.call(index);
   }
 
   @override
@@ -3292,12 +3320,12 @@ class _$RemoveSongFromQueueMsg
     TResult Function()? skipSong,
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
-    TResult Function()? removeSongFromQueue,
+    TResult Function(int index)? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
     if (removeSongFromQueue != null) {
-      return removeSongFromQueue();
+      return removeSongFromQueue(index);
     }
     return orElse();
   }
@@ -3379,10 +3407,16 @@ class _$RemoveSongFromQueueMsg
 }
 
 abstract class RemoveSongFromQueueMsg implements P2pMessage {
-  const factory RemoveSongFromQueueMsg() = _$RemoveSongFromQueueMsg;
+  const factory RemoveSongFromQueueMsg(final int index) =
+      _$RemoveSongFromQueueMsg;
 
   factory RemoveSongFromQueueMsg.fromJson(Map<String, dynamic> json) =
       _$RemoveSongFromQueueMsg.fromJson;
+
+  int get index;
+  @JsonKey(ignore: true)
+  _$$RemoveSongFromQueueMsgCopyWith<_$RemoveSongFromQueueMsg> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -3486,7 +3520,7 @@ class _$SetMusicChunkSizeMsg
     required TResult Function() skipSong,
     required TResult Function() previousSong,
     required TResult Function(DetailsPackage songData) addSongToQueue,
-    required TResult Function() removeSongFromQueue,
+    required TResult Function(int index) removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
   }) {
     return setMusicChunkSize(size);
@@ -3512,7 +3546,7 @@ class _$SetMusicChunkSizeMsg
     TResult? Function()? skipSong,
     TResult? Function()? previousSong,
     TResult? Function(DetailsPackage songData)? addSongToQueue,
-    TResult? Function()? removeSongFromQueue,
+    TResult? Function(int index)? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
   }) {
     return setMusicChunkSize?.call(size);
@@ -3538,7 +3572,7 @@ class _$SetMusicChunkSizeMsg
     TResult Function()? skipSong,
     TResult Function()? previousSong,
     TResult Function(DetailsPackage songData)? addSongToQueue,
-    TResult Function()? removeSongFromQueue,
+    TResult Function(int index)? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
     required TResult orElse(),
   }) {
