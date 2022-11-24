@@ -72,11 +72,16 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
     }
   }
 
-  Future<void> _playSong(DetailsPackage song, Duration? songPosition) async {
+  Future<void> _playSong(DetailsPackage song, Duration songPosition) async {
     logger.d("#### Set new song ${song.bytesLength}");
     final source = _musicBuffer.getSong(song);
     await _setSong(source);
-    _player.seek(songPosition);
+    if (songPosition.isNegative) {
+      await Future.delayed(songPosition);
+      _player.seek(const Duration());
+    } else {
+      _player.seek(songPosition);
+    }
   }
 
   Duration? getCurrentSongDuration() {
@@ -121,13 +126,10 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
       logger.e("onPlay song index '$index' is null");
       return;
     }
-    _playSong(song, songPosition);
-    // _timer?.cancel();
-    // _timer = Timer(
-    //     DateTime.now().difference(time) + _offset + const Duration(seconds: 10),
-    //     () {
-    //   _playSong(song);
-    // });
+    _playSong(
+        song,
+        DateTime.now().add(_timeOffset).difference(time) +
+            (songPosition ?? const Duration()));
   }
 
   @override
