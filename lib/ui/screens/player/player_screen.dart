@@ -1,12 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:ntp/ntp.dart';
 import 'package:provider/provider.dart';
 import 'package:sound_share/domain/controllers/player/player_controller.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
+import 'package:sound_share/domain/network/p2p/synchronized_clock.dart';
 import 'package:sound_share/ui/style/app_colors.dart';
 import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
 
@@ -65,7 +64,6 @@ class PlayerContent extends StatefulWidget {
 class _PlayerContentState extends State<PlayerContent> {
   PageController controller = PageController();
   var _pageNumber = 0;
-  late final Duration _playOffset;
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +143,12 @@ class _PlayerContentState extends State<PlayerContent> {
                         builder: (context, playerController, child) => Column(
                           children: [
                             SizedBox(height: Paddings.dynamic.m3),
-                            const TimerWidget(),
+                            PrimaryFullButton(
+                                text: 'Synchronize',
+                                onPressed: () {
+                                  playerController.synchronizeClock();
+                                }),
+                            TimerWidget(),
                             ..._createQueuedSongsWidgets(playerController),
                             SizedBox(height: 4 * Paddings.dynamic.m4),
                           ],
@@ -237,34 +240,46 @@ class _PlayerContentState extends State<PlayerContent> {
 }
 
 class TimerWidget extends StatefulWidget {
-  const TimerWidget({Key? key}) : super(key: key);
+  const TimerWidget({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<TimerWidget> createState() => _TimerWidgetState();
 }
 
-class _TimerWidgetState extends State<TimerWidget> {
+class _TimerWidgetState extends State<TimerWidget>
+    with SingleTickerProviderStateMixin {
   final timeFormat = DateFormat('HH:mm:ss:SSS');
-  late final Timer timer;
-  Duration offset = const Duration();
+  late final Ticker _ticker;
 
   @override
   void initState() {
-    timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
+    _ticker = createTicker((elapsed) {
       setState(() {});
     });
-    NTP.getNtpOffset().then((value) => offset = Duration(milliseconds: value));
+    _ticker.start();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Text(timeFormat.format(DateTime.now().add(offset)));
+    return Column(
+      children: [
+        Text(SynchronizedClock.instance.clockOffset.inMilliseconds.toString()),
+        Text(
+          timeFormat.format(SynchronizedClock.now()),
+          style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                fontFamily: 'Roboto',
+              ),
+        ),
+      ],
+    );
   }
 
   @override
   void dispose() {
-    timer.cancel();
+    _ticker.dispose();
     super.dispose();
   }
 }

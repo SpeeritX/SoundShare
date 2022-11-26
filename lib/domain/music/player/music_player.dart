@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:audio_session/audio_session.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:ntp/ntp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sound_share/common/logger.dart';
 import 'package:sound_share/common/utils/disposable.dart';
@@ -11,8 +10,8 @@ import 'package:sound_share/domain/music/package/details_package.dart';
 import 'package:sound_share/domain/music/package/music_package.dart';
 import 'package:sound_share/domain/music/player/bytes_audio_source.dart';
 import 'package:sound_share/domain/music/player/music_queue.dart';
-import 'package:sound_share/domain/music/synchronization/synchronization.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
+import 'package:sound_share/domain/network/p2p/synchronized_clock.dart';
 
 /// Plays the music from the received packages
 class MusicPlayer with Disposable implements MusicPlayerListener {
@@ -22,8 +21,6 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
   late final Duration _playOffset;
   AudioSession? _session;
   var _source = BytesAudioSource(null);
-  var _timeOffset = const Duration();
-  Timer? _timer;
 
   Stream<PlayerState> get playerState => _player.playerStateStream;
 
@@ -56,20 +53,6 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
   void addPackage(MusicPackage package) {
     logger.d("#### Add song package ${package.data.length}");
     _source.addData(package.startIndex, package.data.toList());
-  }
-
-  void play(DateTime time) async {
-    if (await _session!.setActive(true)) {
-      _timer?.cancel();
-      _timer = Timer(
-          DateTime.now().add(_timeOffset).difference(time) +
-              const Duration(seconds: 2), () {
-        _player.play();
-      });
-    } else {
-      print("Session did not activate.");
-      return;
-    }
   }
 
   Future<void> _playSong(DetailsPackage song, Duration songPosition) async {
@@ -128,7 +111,7 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
     }
     _playSong(
         song,
-        DateTime.now().add(_timeOffset).difference(time) +
+        SynchronizedClock.now().difference(time) +
             (songPosition ?? const Duration()));
   }
 
@@ -144,17 +127,6 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
         _musicQueue.addSong(song);
       }
     }
-  }
-
-  @override
-  void onSync() {
-    NTP
-        .getNtpOffset(
-          localTime: DateTime.now(),
-          lookUpAddress: 'time.facebook.com',
-        )
-        .then((timeOffset) =>
-            _timeOffset = Duration(milliseconds: timeOffset) - _playOffset);
   }
 
   @override

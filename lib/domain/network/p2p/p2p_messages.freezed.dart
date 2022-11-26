@@ -44,6 +44,10 @@ P2pMessage _$P2pMessageFromJson(Map<String, dynamic> json) {
       return RemoveSongFromQueueMsg.fromJson(json);
     case 'setMusicChunkSize':
       return SetMusicChunkSizeMsg.fromJson(json);
+    case 'ping':
+      return PingMsg.fromJson(json);
+    case 'pong':
+      return PongMsg.fromJson(json);
 
     default:
       throw CheckedFromJsonException(
@@ -55,7 +59,7 @@ P2pMessage _$P2pMessageFromJson(Map<String, dynamic> json) {
 mixin _$P2pMessage {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() sync,
+    required TResult Function(Duration clockOffset) sync,
     required TResult Function(String songId) searchResource,
     required TResult Function(String requestId, String songId, int startIndex)
         requestResource,
@@ -75,11 +79,13 @@ mixin _$P2pMessage {
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
+    required TResult Function(String id) ping,
+    required TResult Function(String pingId, DateTime time) pong,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? sync,
+    TResult? Function(Duration clockOffset)? sync,
     TResult? Function(String songId)? searchResource,
     TResult? Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -98,11 +104,13 @@ mixin _$P2pMessage {
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
+    TResult? Function(String id)? ping,
+    TResult? Function(String pingId, DateTime time)? pong,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? sync,
+    TResult Function(Duration clockOffset)? sync,
     TResult Function(String songId)? searchResource,
     TResult Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -121,6 +129,8 @@ mixin _$P2pMessage {
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
+    TResult Function(String id)? ping,
+    TResult Function(String pingId, DateTime time)? pong,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -141,6 +151,8 @@ mixin _$P2pMessage {
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
     required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
+    required TResult Function(PingMsg value) ping,
+    required TResult Function(PongMsg value) pong,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -159,6 +171,8 @@ mixin _$P2pMessage {
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult? Function(PingMsg value)? ping,
+    TResult? Function(PongMsg value)? pong,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -177,6 +191,8 @@ mixin _$P2pMessage {
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult Function(PingMsg value)? ping,
+    TResult Function(PongMsg value)? pong,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -205,6 +221,8 @@ class _$P2pMessageCopyWithImpl<$Res, $Val extends P2pMessage>
 abstract class _$$SyncMsgCopyWith<$Res> {
   factory _$$SyncMsgCopyWith(_$SyncMsg value, $Res Function(_$SyncMsg) then) =
       __$$SyncMsgCopyWithImpl<$Res>;
+  @useResult
+  $Res call({Duration clockOffset});
 }
 
 /// @nodoc
@@ -213,44 +231,72 @@ class __$$SyncMsgCopyWithImpl<$Res>
     implements _$$SyncMsgCopyWith<$Res> {
   __$$SyncMsgCopyWithImpl(_$SyncMsg _value, $Res Function(_$SyncMsg) _then)
       : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? clockOffset = null,
+  }) {
+    return _then(_$SyncMsg(
+      clockOffset: null == clockOffset
+          ? _value.clockOffset
+          : clockOffset // ignore: cast_nullable_to_non_nullable
+              as Duration,
+    ));
+  }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
-  const _$SyncMsg({final String? $type}) : $type = $type ?? 'sync';
+  const _$SyncMsg({required this.clockOffset, final String? $type})
+      : $type = $type ?? 'sync';
 
   factory _$SyncMsg.fromJson(Map<String, dynamic> json) =>
       _$$SyncMsgFromJson(json);
+
+  @override
+  final Duration clockOffset;
 
   @JsonKey(name: 'type')
   final String $type;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'P2pMessage.sync()';
+    return 'P2pMessage.sync(clockOffset: $clockOffset)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty('type', 'P2pMessage.sync'));
+    properties
+      ..add(DiagnosticsProperty('type', 'P2pMessage.sync'))
+      ..add(DiagnosticsProperty('clockOffset', clockOffset));
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$SyncMsg);
+        (other.runtimeType == runtimeType &&
+            other is _$SyncMsg &&
+            (identical(other.clockOffset, clockOffset) ||
+                other.clockOffset == clockOffset));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, clockOffset);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SyncMsgCopyWith<_$SyncMsg> get copyWith =>
+      __$$SyncMsgCopyWithImpl<_$SyncMsg>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() sync,
+    required TResult Function(Duration clockOffset) sync,
     required TResult Function(String songId) searchResource,
     required TResult Function(String requestId, String songId, int startIndex)
         requestResource,
@@ -270,14 +316,16 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
+    required TResult Function(String id) ping,
+    required TResult Function(String pingId, DateTime time) pong,
   }) {
-    return sync();
+    return sync(clockOffset);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? sync,
+    TResult? Function(Duration clockOffset)? sync,
     TResult? Function(String songId)? searchResource,
     TResult? Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -296,14 +344,16 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
+    TResult? Function(String id)? ping,
+    TResult? Function(String pingId, DateTime time)? pong,
   }) {
-    return sync?.call();
+    return sync?.call(clockOffset);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? sync,
+    TResult Function(Duration clockOffset)? sync,
     TResult Function(String songId)? searchResource,
     TResult Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -322,10 +372,12 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
+    TResult Function(String id)? ping,
+    TResult Function(String pingId, DateTime time)? pong,
     required TResult orElse(),
   }) {
     if (sync != null) {
-      return sync();
+      return sync(clockOffset);
     }
     return orElse();
   }
@@ -348,6 +400,8 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
     required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
+    required TResult Function(PingMsg value) ping,
+    required TResult Function(PongMsg value) pong,
   }) {
     return sync(this);
   }
@@ -369,6 +423,8 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult? Function(PingMsg value)? ping,
+    TResult? Function(PongMsg value)? pong,
   }) {
     return sync?.call(this);
   }
@@ -390,6 +446,8 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult Function(PingMsg value)? ping,
+    TResult Function(PongMsg value)? pong,
     required TResult orElse(),
   }) {
     if (sync != null) {
@@ -407,9 +465,14 @@ class _$SyncMsg with DiagnosticableTreeMixin implements SyncMsg {
 }
 
 abstract class SyncMsg implements P2pMessage {
-  const factory SyncMsg() = _$SyncMsg;
+  const factory SyncMsg({required final Duration clockOffset}) = _$SyncMsg;
 
   factory SyncMsg.fromJson(Map<String, dynamic> json) = _$SyncMsg.fromJson;
+
+  Duration get clockOffset;
+  @JsonKey(ignore: true)
+  _$$SyncMsgCopyWith<_$SyncMsg> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -494,7 +557,7 @@ class _$SearchResourceMsg
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() sync,
+    required TResult Function(Duration clockOffset) sync,
     required TResult Function(String songId) searchResource,
     required TResult Function(String requestId, String songId, int startIndex)
         requestResource,
@@ -514,6 +577,8 @@ class _$SearchResourceMsg
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
+    required TResult Function(String id) ping,
+    required TResult Function(String pingId, DateTime time) pong,
   }) {
     return searchResource(songId);
   }
@@ -521,7 +586,7 @@ class _$SearchResourceMsg
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? sync,
+    TResult? Function(Duration clockOffset)? sync,
     TResult? Function(String songId)? searchResource,
     TResult? Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -540,6 +605,8 @@ class _$SearchResourceMsg
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
+    TResult? Function(String id)? ping,
+    TResult? Function(String pingId, DateTime time)? pong,
   }) {
     return searchResource?.call(songId);
   }
@@ -547,7 +614,7 @@ class _$SearchResourceMsg
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? sync,
+    TResult Function(Duration clockOffset)? sync,
     TResult Function(String songId)? searchResource,
     TResult Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -566,6 +633,8 @@ class _$SearchResourceMsg
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
+    TResult Function(String id)? ping,
+    TResult Function(String pingId, DateTime time)? pong,
     required TResult orElse(),
   }) {
     if (searchResource != null) {
@@ -592,6 +661,8 @@ class _$SearchResourceMsg
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
     required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
+    required TResult Function(PingMsg value) ping,
+    required TResult Function(PongMsg value) pong,
   }) {
     return searchResource(this);
   }
@@ -613,6 +684,8 @@ class _$SearchResourceMsg
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult? Function(PingMsg value)? ping,
+    TResult? Function(PongMsg value)? pong,
   }) {
     return searchResource?.call(this);
   }
@@ -634,6 +707,8 @@ class _$SearchResourceMsg
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult Function(PingMsg value)? ping,
+    TResult Function(PongMsg value)? pong,
     required TResult orElse(),
   }) {
     if (searchResource != null) {
@@ -770,7 +845,7 @@ class _$RequestResourceMsg
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() sync,
+    required TResult Function(Duration clockOffset) sync,
     required TResult Function(String songId) searchResource,
     required TResult Function(String requestId, String songId, int startIndex)
         requestResource,
@@ -790,6 +865,8 @@ class _$RequestResourceMsg
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
+    required TResult Function(String id) ping,
+    required TResult Function(String pingId, DateTime time) pong,
   }) {
     return requestResource(requestId, songId, startIndex);
   }
@@ -797,7 +874,7 @@ class _$RequestResourceMsg
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? sync,
+    TResult? Function(Duration clockOffset)? sync,
     TResult? Function(String songId)? searchResource,
     TResult? Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -816,6 +893,8 @@ class _$RequestResourceMsg
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
+    TResult? Function(String id)? ping,
+    TResult? Function(String pingId, DateTime time)? pong,
   }) {
     return requestResource?.call(requestId, songId, startIndex);
   }
@@ -823,7 +902,7 @@ class _$RequestResourceMsg
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? sync,
+    TResult Function(Duration clockOffset)? sync,
     TResult Function(String songId)? searchResource,
     TResult Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -842,6 +921,8 @@ class _$RequestResourceMsg
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
+    TResult Function(String id)? ping,
+    TResult Function(String pingId, DateTime time)? pong,
     required TResult orElse(),
   }) {
     if (requestResource != null) {
@@ -868,6 +949,8 @@ class _$RequestResourceMsg
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
     required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
+    required TResult Function(PingMsg value) ping,
+    required TResult Function(PongMsg value) pong,
   }) {
     return requestResource(this);
   }
@@ -889,6 +972,8 @@ class _$RequestResourceMsg
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult? Function(PingMsg value)? ping,
+    TResult? Function(PongMsg value)? pong,
   }) {
     return requestResource?.call(this);
   }
@@ -910,6 +995,8 @@ class _$RequestResourceMsg
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult Function(PingMsg value)? ping,
+    TResult Function(PongMsg value)? pong,
     required TResult orElse(),
   }) {
     if (requestResource != null) {
@@ -1026,7 +1113,7 @@ class _$ResourceAvailabilityMsg
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() sync,
+    required TResult Function(Duration clockOffset) sync,
     required TResult Function(String songId) searchResource,
     required TResult Function(String requestId, String songId, int startIndex)
         requestResource,
@@ -1046,6 +1133,8 @@ class _$ResourceAvailabilityMsg
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
+    required TResult Function(String id) ping,
+    required TResult Function(String pingId, DateTime time) pong,
   }) {
     return resourceAvailability(songId);
   }
@@ -1053,7 +1142,7 @@ class _$ResourceAvailabilityMsg
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? sync,
+    TResult? Function(Duration clockOffset)? sync,
     TResult? Function(String songId)? searchResource,
     TResult? Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -1072,6 +1161,8 @@ class _$ResourceAvailabilityMsg
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
+    TResult? Function(String id)? ping,
+    TResult? Function(String pingId, DateTime time)? pong,
   }) {
     return resourceAvailability?.call(songId);
   }
@@ -1079,7 +1170,7 @@ class _$ResourceAvailabilityMsg
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? sync,
+    TResult Function(Duration clockOffset)? sync,
     TResult Function(String songId)? searchResource,
     TResult Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -1098,6 +1189,8 @@ class _$ResourceAvailabilityMsg
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
+    TResult Function(String id)? ping,
+    TResult Function(String pingId, DateTime time)? pong,
     required TResult orElse(),
   }) {
     if (resourceAvailability != null) {
@@ -1124,6 +1217,8 @@ class _$ResourceAvailabilityMsg
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
     required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
+    required TResult Function(PingMsg value) ping,
+    required TResult Function(PongMsg value) pong,
   }) {
     return resourceAvailability(this);
   }
@@ -1145,6 +1240,8 @@ class _$ResourceAvailabilityMsg
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult? Function(PingMsg value)? ping,
+    TResult? Function(PongMsg value)? pong,
   }) {
     return resourceAvailability?.call(this);
   }
@@ -1166,6 +1263,8 @@ class _$ResourceAvailabilityMsg
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult Function(PingMsg value)? ping,
+    TResult Function(PongMsg value)? pong,
     required TResult orElse(),
   }) {
     if (resourceAvailability != null) {
@@ -1317,7 +1416,7 @@ class _$MusicPackageMsg
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() sync,
+    required TResult Function(Duration clockOffset) sync,
     required TResult Function(String songId) searchResource,
     required TResult Function(String requestId, String songId, int startIndex)
         requestResource,
@@ -1337,6 +1436,8 @@ class _$MusicPackageMsg
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
+    required TResult Function(String id) ping,
+    required TResult Function(String pingId, DateTime time) pong,
   }) {
     return musicPackage(requestId, songId, startIndex, serializedBytes);
   }
@@ -1344,7 +1445,7 @@ class _$MusicPackageMsg
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? sync,
+    TResult? Function(Duration clockOffset)? sync,
     TResult? Function(String songId)? searchResource,
     TResult? Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -1363,6 +1464,8 @@ class _$MusicPackageMsg
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
+    TResult? Function(String id)? ping,
+    TResult? Function(String pingId, DateTime time)? pong,
   }) {
     return musicPackage?.call(requestId, songId, startIndex, serializedBytes);
   }
@@ -1370,7 +1473,7 @@ class _$MusicPackageMsg
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? sync,
+    TResult Function(Duration clockOffset)? sync,
     TResult Function(String songId)? searchResource,
     TResult Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -1389,6 +1492,8 @@ class _$MusicPackageMsg
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
+    TResult Function(String id)? ping,
+    TResult Function(String pingId, DateTime time)? pong,
     required TResult orElse(),
   }) {
     if (musicPackage != null) {
@@ -1415,6 +1520,8 @@ class _$MusicPackageMsg
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
     required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
+    required TResult Function(PingMsg value) ping,
+    required TResult Function(PongMsg value) pong,
   }) {
     return musicPackage(this);
   }
@@ -1436,6 +1543,8 @@ class _$MusicPackageMsg
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult? Function(PingMsg value)? ping,
+    TResult? Function(PongMsg value)? pong,
   }) {
     return musicPackage?.call(this);
   }
@@ -1457,6 +1566,8 @@ class _$MusicPackageMsg
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult Function(PingMsg value)? ping,
+    TResult Function(PongMsg value)? pong,
     required TResult orElse(),
   }) {
     if (musicPackage != null) {
@@ -1547,7 +1658,7 @@ class _$RequestStateUpdateMsg
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() sync,
+    required TResult Function(Duration clockOffset) sync,
     required TResult Function(String songId) searchResource,
     required TResult Function(String requestId, String songId, int startIndex)
         requestResource,
@@ -1567,6 +1678,8 @@ class _$RequestStateUpdateMsg
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
+    required TResult Function(String id) ping,
+    required TResult Function(String pingId, DateTime time) pong,
   }) {
     return requestStateUpdate();
   }
@@ -1574,7 +1687,7 @@ class _$RequestStateUpdateMsg
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? sync,
+    TResult? Function(Duration clockOffset)? sync,
     TResult? Function(String songId)? searchResource,
     TResult? Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -1593,6 +1706,8 @@ class _$RequestStateUpdateMsg
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
+    TResult? Function(String id)? ping,
+    TResult? Function(String pingId, DateTime time)? pong,
   }) {
     return requestStateUpdate?.call();
   }
@@ -1600,7 +1715,7 @@ class _$RequestStateUpdateMsg
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? sync,
+    TResult Function(Duration clockOffset)? sync,
     TResult Function(String songId)? searchResource,
     TResult Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -1619,6 +1734,8 @@ class _$RequestStateUpdateMsg
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
+    TResult Function(String id)? ping,
+    TResult Function(String pingId, DateTime time)? pong,
     required TResult orElse(),
   }) {
     if (requestStateUpdate != null) {
@@ -1645,6 +1762,8 @@ class _$RequestStateUpdateMsg
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
     required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
+    required TResult Function(PingMsg value) ping,
+    required TResult Function(PongMsg value) pong,
   }) {
     return requestStateUpdate(this);
   }
@@ -1666,6 +1785,8 @@ class _$RequestStateUpdateMsg
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult? Function(PingMsg value)? ping,
+    TResult? Function(PongMsg value)? pong,
   }) {
     return requestStateUpdate?.call(this);
   }
@@ -1687,6 +1808,8 @@ class _$RequestStateUpdateMsg
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult Function(PingMsg value)? ping,
+    TResult Function(PongMsg value)? pong,
     required TResult orElse(),
   }) {
     if (requestStateUpdate != null) {
@@ -1830,7 +1953,7 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() sync,
+    required TResult Function(Duration clockOffset) sync,
     required TResult Function(String songId) searchResource,
     required TResult Function(String requestId, String songId, int startIndex)
         requestResource,
@@ -1850,6 +1973,8 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
+    required TResult Function(String id) ping,
+    required TResult Function(String pingId, DateTime time) pong,
   }) {
     return stateUpdateMsg(devices, queue, queuePosition);
   }
@@ -1857,7 +1982,7 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? sync,
+    TResult? Function(Duration clockOffset)? sync,
     TResult? Function(String songId)? searchResource,
     TResult? Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -1876,6 +2001,8 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
+    TResult? Function(String id)? ping,
+    TResult? Function(String pingId, DateTime time)? pong,
   }) {
     return stateUpdateMsg?.call(devices, queue, queuePosition);
   }
@@ -1883,7 +2010,7 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? sync,
+    TResult Function(Duration clockOffset)? sync,
     TResult Function(String songId)? searchResource,
     TResult Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -1902,6 +2029,8 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
+    TResult Function(String id)? ping,
+    TResult Function(String pingId, DateTime time)? pong,
     required TResult orElse(),
   }) {
     if (stateUpdateMsg != null) {
@@ -1928,6 +2057,8 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
     required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
+    required TResult Function(PingMsg value) ping,
+    required TResult Function(PongMsg value) pong,
   }) {
     return stateUpdateMsg(this);
   }
@@ -1949,6 +2080,8 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult? Function(PingMsg value)? ping,
+    TResult? Function(PongMsg value)? pong,
   }) {
     return stateUpdateMsg?.call(this);
   }
@@ -1970,6 +2103,8 @@ class _$StateUpdateMsg with DiagnosticableTreeMixin implements StateUpdateMsg {
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult Function(PingMsg value)? ping,
+    TResult Function(PongMsg value)? pong,
     required TResult orElse(),
   }) {
     if (stateUpdateMsg != null) {
@@ -2101,7 +2236,7 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() sync,
+    required TResult Function(Duration clockOffset) sync,
     required TResult Function(String songId) searchResource,
     required TResult Function(String requestId, String songId, int startIndex)
         requestResource,
@@ -2121,6 +2256,8 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
+    required TResult Function(String id) ping,
+    required TResult Function(String pingId, DateTime time) pong,
   }) {
     return play(index, time, songPosition);
   }
@@ -2128,7 +2265,7 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? sync,
+    TResult? Function(Duration clockOffset)? sync,
     TResult? Function(String songId)? searchResource,
     TResult? Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -2147,6 +2284,8 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
+    TResult? Function(String id)? ping,
+    TResult? Function(String pingId, DateTime time)? pong,
   }) {
     return play?.call(index, time, songPosition);
   }
@@ -2154,7 +2293,7 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? sync,
+    TResult Function(Duration clockOffset)? sync,
     TResult Function(String songId)? searchResource,
     TResult Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -2173,6 +2312,8 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
+    TResult Function(String id)? ping,
+    TResult Function(String pingId, DateTime time)? pong,
     required TResult orElse(),
   }) {
     if (play != null) {
@@ -2199,6 +2340,8 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
     required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
+    required TResult Function(PingMsg value) ping,
+    required TResult Function(PongMsg value) pong,
   }) {
     return play(this);
   }
@@ -2220,6 +2363,8 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult? Function(PingMsg value)? ping,
+    TResult? Function(PongMsg value)? pong,
   }) {
     return play?.call(this);
   }
@@ -2241,6 +2386,8 @@ class _$PlayMsg with DiagnosticableTreeMixin implements PlayMsg {
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult Function(PingMsg value)? ping,
+    TResult Function(PongMsg value)? pong,
     required TResult orElse(),
   }) {
     if (play != null) {
@@ -2322,7 +2469,7 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() sync,
+    required TResult Function(Duration clockOffset) sync,
     required TResult Function(String songId) searchResource,
     required TResult Function(String requestId, String songId, int startIndex)
         requestResource,
@@ -2342,6 +2489,8 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
+    required TResult Function(String id) ping,
+    required TResult Function(String pingId, DateTime time) pong,
   }) {
     return pause();
   }
@@ -2349,7 +2498,7 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? sync,
+    TResult? Function(Duration clockOffset)? sync,
     TResult? Function(String songId)? searchResource,
     TResult? Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -2368,6 +2517,8 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
+    TResult? Function(String id)? ping,
+    TResult? Function(String pingId, DateTime time)? pong,
   }) {
     return pause?.call();
   }
@@ -2375,7 +2526,7 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? sync,
+    TResult Function(Duration clockOffset)? sync,
     TResult Function(String songId)? searchResource,
     TResult Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -2394,6 +2545,8 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
+    TResult Function(String id)? ping,
+    TResult Function(String pingId, DateTime time)? pong,
     required TResult orElse(),
   }) {
     if (pause != null) {
@@ -2420,6 +2573,8 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
     required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
+    required TResult Function(PingMsg value) ping,
+    required TResult Function(PongMsg value) pong,
   }) {
     return pause(this);
   }
@@ -2441,6 +2596,8 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult? Function(PingMsg value)? ping,
+    TResult? Function(PongMsg value)? pong,
   }) {
     return pause?.call(this);
   }
@@ -2462,6 +2619,8 @@ class _$PauseMsg with DiagnosticableTreeMixin implements PauseMsg {
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult Function(PingMsg value)? ping,
+    TResult Function(PongMsg value)? pong,
     required TResult orElse(),
   }) {
     if (pause != null) {
@@ -2535,7 +2694,7 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() sync,
+    required TResult Function(Duration clockOffset) sync,
     required TResult Function(String songId) searchResource,
     required TResult Function(String requestId, String songId, int startIndex)
         requestResource,
@@ -2555,6 +2714,8 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
+    required TResult Function(String id) ping,
+    required TResult Function(String pingId, DateTime time) pong,
   }) {
     return skipSong();
   }
@@ -2562,7 +2723,7 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? sync,
+    TResult? Function(Duration clockOffset)? sync,
     TResult? Function(String songId)? searchResource,
     TResult? Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -2581,6 +2742,8 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
+    TResult? Function(String id)? ping,
+    TResult? Function(String pingId, DateTime time)? pong,
   }) {
     return skipSong?.call();
   }
@@ -2588,7 +2751,7 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? sync,
+    TResult Function(Duration clockOffset)? sync,
     TResult Function(String songId)? searchResource,
     TResult Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -2607,6 +2770,8 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
+    TResult Function(String id)? ping,
+    TResult Function(String pingId, DateTime time)? pong,
     required TResult orElse(),
   }) {
     if (skipSong != null) {
@@ -2633,6 +2798,8 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
     required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
+    required TResult Function(PingMsg value) ping,
+    required TResult Function(PongMsg value) pong,
   }) {
     return skipSong(this);
   }
@@ -2654,6 +2821,8 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult? Function(PingMsg value)? ping,
+    TResult? Function(PongMsg value)? pong,
   }) {
     return skipSong?.call(this);
   }
@@ -2675,6 +2844,8 @@ class _$SkipSongMsg with DiagnosticableTreeMixin implements SkipSongMsg {
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult Function(PingMsg value)? ping,
+    TResult Function(PongMsg value)? pong,
     required TResult orElse(),
   }) {
     if (skipSong != null) {
@@ -2752,7 +2923,7 @@ class _$PreviousSongMsg
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() sync,
+    required TResult Function(Duration clockOffset) sync,
     required TResult Function(String songId) searchResource,
     required TResult Function(String requestId, String songId, int startIndex)
         requestResource,
@@ -2772,6 +2943,8 @@ class _$PreviousSongMsg
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
+    required TResult Function(String id) ping,
+    required TResult Function(String pingId, DateTime time) pong,
   }) {
     return previousSong();
   }
@@ -2779,7 +2952,7 @@ class _$PreviousSongMsg
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? sync,
+    TResult? Function(Duration clockOffset)? sync,
     TResult? Function(String songId)? searchResource,
     TResult? Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -2798,6 +2971,8 @@ class _$PreviousSongMsg
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
+    TResult? Function(String id)? ping,
+    TResult? Function(String pingId, DateTime time)? pong,
   }) {
     return previousSong?.call();
   }
@@ -2805,7 +2980,7 @@ class _$PreviousSongMsg
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? sync,
+    TResult Function(Duration clockOffset)? sync,
     TResult Function(String songId)? searchResource,
     TResult Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -2824,6 +2999,8 @@ class _$PreviousSongMsg
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
+    TResult Function(String id)? ping,
+    TResult Function(String pingId, DateTime time)? pong,
     required TResult orElse(),
   }) {
     if (previousSong != null) {
@@ -2850,6 +3027,8 @@ class _$PreviousSongMsg
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
     required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
+    required TResult Function(PingMsg value) ping,
+    required TResult Function(PongMsg value) pong,
   }) {
     return previousSong(this);
   }
@@ -2871,6 +3050,8 @@ class _$PreviousSongMsg
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult? Function(PingMsg value)? ping,
+    TResult? Function(PongMsg value)? pong,
   }) {
     return previousSong?.call(this);
   }
@@ -2892,6 +3073,8 @@ class _$PreviousSongMsg
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult Function(PingMsg value)? ping,
+    TResult Function(PongMsg value)? pong,
     required TResult orElse(),
   }) {
     if (previousSong != null) {
@@ -2998,7 +3181,7 @@ class _$AddSongToQueueMsg
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() sync,
+    required TResult Function(Duration clockOffset) sync,
     required TResult Function(String songId) searchResource,
     required TResult Function(String requestId, String songId, int startIndex)
         requestResource,
@@ -3018,6 +3201,8 @@ class _$AddSongToQueueMsg
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
+    required TResult Function(String id) ping,
+    required TResult Function(String pingId, DateTime time) pong,
   }) {
     return addSongToQueue(songData);
   }
@@ -3025,7 +3210,7 @@ class _$AddSongToQueueMsg
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? sync,
+    TResult? Function(Duration clockOffset)? sync,
     TResult? Function(String songId)? searchResource,
     TResult? Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -3044,6 +3229,8 @@ class _$AddSongToQueueMsg
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
+    TResult? Function(String id)? ping,
+    TResult? Function(String pingId, DateTime time)? pong,
   }) {
     return addSongToQueue?.call(songData);
   }
@@ -3051,7 +3238,7 @@ class _$AddSongToQueueMsg
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? sync,
+    TResult Function(Duration clockOffset)? sync,
     TResult Function(String songId)? searchResource,
     TResult Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -3070,6 +3257,8 @@ class _$AddSongToQueueMsg
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
+    TResult Function(String id)? ping,
+    TResult Function(String pingId, DateTime time)? pong,
     required TResult orElse(),
   }) {
     if (addSongToQueue != null) {
@@ -3096,6 +3285,8 @@ class _$AddSongToQueueMsg
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
     required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
+    required TResult Function(PingMsg value) ping,
+    required TResult Function(PongMsg value) pong,
   }) {
     return addSongToQueue(this);
   }
@@ -3117,6 +3308,8 @@ class _$AddSongToQueueMsg
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult? Function(PingMsg value)? ping,
+    TResult? Function(PongMsg value)? pong,
   }) {
     return addSongToQueue?.call(this);
   }
@@ -3138,6 +3331,8 @@ class _$AddSongToQueueMsg
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult Function(PingMsg value)? ping,
+    TResult Function(PongMsg value)? pong,
     required TResult orElse(),
   }) {
     if (addSongToQueue != null) {
@@ -3222,7 +3417,7 @@ class _$RemoveSongFromQueueMsg
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() sync,
+    required TResult Function(Duration clockOffset) sync,
     required TResult Function(String songId) searchResource,
     required TResult Function(String requestId, String songId, int startIndex)
         requestResource,
@@ -3242,6 +3437,8 @@ class _$RemoveSongFromQueueMsg
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
+    required TResult Function(String id) ping,
+    required TResult Function(String pingId, DateTime time) pong,
   }) {
     return removeSongFromQueue();
   }
@@ -3249,7 +3446,7 @@ class _$RemoveSongFromQueueMsg
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? sync,
+    TResult? Function(Duration clockOffset)? sync,
     TResult? Function(String songId)? searchResource,
     TResult? Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -3268,6 +3465,8 @@ class _$RemoveSongFromQueueMsg
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
+    TResult? Function(String id)? ping,
+    TResult? Function(String pingId, DateTime time)? pong,
   }) {
     return removeSongFromQueue?.call();
   }
@@ -3275,7 +3474,7 @@ class _$RemoveSongFromQueueMsg
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? sync,
+    TResult Function(Duration clockOffset)? sync,
     TResult Function(String songId)? searchResource,
     TResult Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -3294,6 +3493,8 @@ class _$RemoveSongFromQueueMsg
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
+    TResult Function(String id)? ping,
+    TResult Function(String pingId, DateTime time)? pong,
     required TResult orElse(),
   }) {
     if (removeSongFromQueue != null) {
@@ -3320,6 +3521,8 @@ class _$RemoveSongFromQueueMsg
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
     required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
+    required TResult Function(PingMsg value) ping,
+    required TResult Function(PongMsg value) pong,
   }) {
     return removeSongFromQueue(this);
   }
@@ -3341,6 +3544,8 @@ class _$RemoveSongFromQueueMsg
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult? Function(PingMsg value)? ping,
+    TResult? Function(PongMsg value)? pong,
   }) {
     return removeSongFromQueue?.call(this);
   }
@@ -3362,6 +3567,8 @@ class _$RemoveSongFromQueueMsg
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult Function(PingMsg value)? ping,
+    TResult Function(PongMsg value)? pong,
     required TResult orElse(),
   }) {
     if (removeSongFromQueue != null) {
@@ -3468,7 +3675,7 @@ class _$SetMusicChunkSizeMsg
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() sync,
+    required TResult Function(Duration clockOffset) sync,
     required TResult Function(String songId) searchResource,
     required TResult Function(String requestId, String songId, int startIndex)
         requestResource,
@@ -3488,6 +3695,8 @@ class _$SetMusicChunkSizeMsg
     required TResult Function(DetailsPackage songData) addSongToQueue,
     required TResult Function() removeSongFromQueue,
     required TResult Function(int size) setMusicChunkSize,
+    required TResult Function(String id) ping,
+    required TResult Function(String pingId, DateTime time) pong,
   }) {
     return setMusicChunkSize(size);
   }
@@ -3495,7 +3704,7 @@ class _$SetMusicChunkSizeMsg
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? sync,
+    TResult? Function(Duration clockOffset)? sync,
     TResult? Function(String songId)? searchResource,
     TResult? Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -3514,6 +3723,8 @@ class _$SetMusicChunkSizeMsg
     TResult? Function(DetailsPackage songData)? addSongToQueue,
     TResult? Function()? removeSongFromQueue,
     TResult? Function(int size)? setMusicChunkSize,
+    TResult? Function(String id)? ping,
+    TResult? Function(String pingId, DateTime time)? pong,
   }) {
     return setMusicChunkSize?.call(size);
   }
@@ -3521,7 +3732,7 @@ class _$SetMusicChunkSizeMsg
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? sync,
+    TResult Function(Duration clockOffset)? sync,
     TResult Function(String songId)? searchResource,
     TResult Function(String requestId, String songId, int startIndex)?
         requestResource,
@@ -3540,6 +3751,8 @@ class _$SetMusicChunkSizeMsg
     TResult Function(DetailsPackage songData)? addSongToQueue,
     TResult Function()? removeSongFromQueue,
     TResult Function(int size)? setMusicChunkSize,
+    TResult Function(String id)? ping,
+    TResult Function(String pingId, DateTime time)? pong,
     required TResult orElse(),
   }) {
     if (setMusicChunkSize != null) {
@@ -3566,6 +3779,8 @@ class _$SetMusicChunkSizeMsg
     required TResult Function(AddSongToQueueMsg value) addSongToQueue,
     required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
     required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
+    required TResult Function(PingMsg value) ping,
+    required TResult Function(PongMsg value) pong,
   }) {
     return setMusicChunkSize(this);
   }
@@ -3587,6 +3802,8 @@ class _$SetMusicChunkSizeMsg
     TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult? Function(PingMsg value)? ping,
+    TResult? Function(PongMsg value)? pong,
   }) {
     return setMusicChunkSize?.call(this);
   }
@@ -3608,6 +3825,8 @@ class _$SetMusicChunkSizeMsg
     TResult Function(AddSongToQueueMsg value)? addSongToQueue,
     TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
     TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult Function(PingMsg value)? ping,
+    TResult Function(PongMsg value)? pong,
     required TResult orElse(),
   }) {
     if (setMusicChunkSize != null) {
@@ -3633,5 +3852,528 @@ abstract class SetMusicChunkSizeMsg implements P2pMessage {
   int get size;
   @JsonKey(ignore: true)
   _$$SetMusicChunkSizeMsgCopyWith<_$SetMusicChunkSizeMsg> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$PingMsgCopyWith<$Res> {
+  factory _$$PingMsgCopyWith(_$PingMsg value, $Res Function(_$PingMsg) then) =
+      __$$PingMsgCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String id});
+}
+
+/// @nodoc
+class __$$PingMsgCopyWithImpl<$Res>
+    extends _$P2pMessageCopyWithImpl<$Res, _$PingMsg>
+    implements _$$PingMsgCopyWith<$Res> {
+  __$$PingMsgCopyWithImpl(_$PingMsg _value, $Res Function(_$PingMsg) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+  }) {
+    return _then(_$PingMsg(
+      null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$PingMsg with DiagnosticableTreeMixin implements PingMsg {
+  const _$PingMsg(this.id, {final String? $type}) : $type = $type ?? 'ping';
+
+  factory _$PingMsg.fromJson(Map<String, dynamic> json) =>
+      _$$PingMsgFromJson(json);
+
+  @override
+  final String id;
+
+  @JsonKey(name: 'type')
+  final String $type;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'P2pMessage.ping(id: $id)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'P2pMessage.ping'))
+      ..add(DiagnosticsProperty('id', id));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PingMsg &&
+            (identical(other.id, id) || other.id == id));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, id);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PingMsgCopyWith<_$PingMsg> get copyWith =>
+      __$$PingMsgCopyWithImpl<_$PingMsg>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(Duration clockOffset) sync,
+    required TResult Function(String songId) searchResource,
+    required TResult Function(String requestId, String songId, int startIndex)
+        requestResource,
+    required TResult Function(String songId) resourceAvailability,
+    required TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)
+        musicPackage,
+    required TResult Function() requestStateUpdate,
+    required TResult Function(
+            List<String> devices, List<DetailsPackage> queue, int queuePosition)
+        stateUpdateMsg,
+    required TResult Function(int index, DateTime time, Duration? songPosition)
+        play,
+    required TResult Function() pause,
+    required TResult Function() skipSong,
+    required TResult Function() previousSong,
+    required TResult Function(DetailsPackage songData) addSongToQueue,
+    required TResult Function() removeSongFromQueue,
+    required TResult Function(int size) setMusicChunkSize,
+    required TResult Function(String id) ping,
+    required TResult Function(String pingId, DateTime time) pong,
+  }) {
+    return ping(id);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(Duration clockOffset)? sync,
+    TResult? Function(String songId)? searchResource,
+    TResult? Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult? Function(String songId)? resourceAvailability,
+    TResult? Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
+    TResult? Function()? requestStateUpdate,
+    TResult? Function(List<String> devices, List<DetailsPackage> queue,
+            int queuePosition)?
+        stateUpdateMsg,
+    TResult? Function(int index, DateTime time, Duration? songPosition)? play,
+    TResult? Function()? pause,
+    TResult? Function()? skipSong,
+    TResult? Function()? previousSong,
+    TResult? Function(DetailsPackage songData)? addSongToQueue,
+    TResult? Function()? removeSongFromQueue,
+    TResult? Function(int size)? setMusicChunkSize,
+    TResult? Function(String id)? ping,
+    TResult? Function(String pingId, DateTime time)? pong,
+  }) {
+    return ping?.call(id);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(Duration clockOffset)? sync,
+    TResult Function(String songId)? searchResource,
+    TResult Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult Function(String songId)? resourceAvailability,
+    TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
+    TResult Function()? requestStateUpdate,
+    TResult Function(List<String> devices, List<DetailsPackage> queue,
+            int queuePosition)?
+        stateUpdateMsg,
+    TResult Function(int index, DateTime time, Duration? songPosition)? play,
+    TResult Function()? pause,
+    TResult Function()? skipSong,
+    TResult Function()? previousSong,
+    TResult Function(DetailsPackage songData)? addSongToQueue,
+    TResult Function()? removeSongFromQueue,
+    TResult Function(int size)? setMusicChunkSize,
+    TResult Function(String id)? ping,
+    TResult Function(String pingId, DateTime time)? pong,
+    required TResult orElse(),
+  }) {
+    if (ping != null) {
+      return ping(id);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(SyncMsg value) sync,
+    required TResult Function(SearchResourceMsg value) searchResource,
+    required TResult Function(RequestResourceMsg value) requestResource,
+    required TResult Function(ResourceAvailabilityMsg value)
+        resourceAvailability,
+    required TResult Function(MusicPackageMsg value) musicPackage,
+    required TResult Function(RequestStateUpdateMsg value) requestStateUpdate,
+    required TResult Function(StateUpdateMsg value) stateUpdateMsg,
+    required TResult Function(PlayMsg value) play,
+    required TResult Function(PauseMsg value) pause,
+    required TResult Function(SkipSongMsg value) skipSong,
+    required TResult Function(PreviousSongMsg value) previousSong,
+    required TResult Function(AddSongToQueueMsg value) addSongToQueue,
+    required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
+    required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
+    required TResult Function(PingMsg value) ping,
+    required TResult Function(PongMsg value) pong,
+  }) {
+    return ping(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(SyncMsg value)? sync,
+    TResult? Function(SearchResourceMsg value)? searchResource,
+    TResult? Function(RequestResourceMsg value)? requestResource,
+    TResult? Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult? Function(MusicPackageMsg value)? musicPackage,
+    TResult? Function(RequestStateUpdateMsg value)? requestStateUpdate,
+    TResult? Function(StateUpdateMsg value)? stateUpdateMsg,
+    TResult? Function(PlayMsg value)? play,
+    TResult? Function(PauseMsg value)? pause,
+    TResult? Function(SkipSongMsg value)? skipSong,
+    TResult? Function(PreviousSongMsg value)? previousSong,
+    TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
+    TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult? Function(PingMsg value)? ping,
+    TResult? Function(PongMsg value)? pong,
+  }) {
+    return ping?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(SyncMsg value)? sync,
+    TResult Function(SearchResourceMsg value)? searchResource,
+    TResult Function(RequestResourceMsg value)? requestResource,
+    TResult Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult Function(MusicPackageMsg value)? musicPackage,
+    TResult Function(RequestStateUpdateMsg value)? requestStateUpdate,
+    TResult Function(StateUpdateMsg value)? stateUpdateMsg,
+    TResult Function(PlayMsg value)? play,
+    TResult Function(PauseMsg value)? pause,
+    TResult Function(SkipSongMsg value)? skipSong,
+    TResult Function(PreviousSongMsg value)? previousSong,
+    TResult Function(AddSongToQueueMsg value)? addSongToQueue,
+    TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult Function(PingMsg value)? ping,
+    TResult Function(PongMsg value)? pong,
+    required TResult orElse(),
+  }) {
+    if (ping != null) {
+      return ping(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$PingMsgToJson(
+      this,
+    );
+  }
+}
+
+abstract class PingMsg implements P2pMessage {
+  const factory PingMsg(final String id) = _$PingMsg;
+
+  factory PingMsg.fromJson(Map<String, dynamic> json) = _$PingMsg.fromJson;
+
+  String get id;
+  @JsonKey(ignore: true)
+  _$$PingMsgCopyWith<_$PingMsg> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$PongMsgCopyWith<$Res> {
+  factory _$$PongMsgCopyWith(_$PongMsg value, $Res Function(_$PongMsg) then) =
+      __$$PongMsgCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String pingId, DateTime time});
+}
+
+/// @nodoc
+class __$$PongMsgCopyWithImpl<$Res>
+    extends _$P2pMessageCopyWithImpl<$Res, _$PongMsg>
+    implements _$$PongMsgCopyWith<$Res> {
+  __$$PongMsgCopyWithImpl(_$PongMsg _value, $Res Function(_$PongMsg) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? pingId = null,
+    Object? time = null,
+  }) {
+    return _then(_$PongMsg(
+      null == pingId
+          ? _value.pingId
+          : pingId // ignore: cast_nullable_to_non_nullable
+              as String,
+      null == time
+          ? _value.time
+          : time // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$PongMsg with DiagnosticableTreeMixin implements PongMsg {
+  const _$PongMsg(this.pingId, this.time, {final String? $type})
+      : $type = $type ?? 'pong';
+
+  factory _$PongMsg.fromJson(Map<String, dynamic> json) =>
+      _$$PongMsgFromJson(json);
+
+  @override
+  final String pingId;
+  @override
+  final DateTime time;
+
+  @JsonKey(name: 'type')
+  final String $type;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'P2pMessage.pong(pingId: $pingId, time: $time)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'P2pMessage.pong'))
+      ..add(DiagnosticsProperty('pingId', pingId))
+      ..add(DiagnosticsProperty('time', time));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PongMsg &&
+            (identical(other.pingId, pingId) || other.pingId == pingId) &&
+            (identical(other.time, time) || other.time == time));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, pingId, time);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PongMsgCopyWith<_$PongMsg> get copyWith =>
+      __$$PongMsgCopyWithImpl<_$PongMsg>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(Duration clockOffset) sync,
+    required TResult Function(String songId) searchResource,
+    required TResult Function(String requestId, String songId, int startIndex)
+        requestResource,
+    required TResult Function(String songId) resourceAvailability,
+    required TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)
+        musicPackage,
+    required TResult Function() requestStateUpdate,
+    required TResult Function(
+            List<String> devices, List<DetailsPackage> queue, int queuePosition)
+        stateUpdateMsg,
+    required TResult Function(int index, DateTime time, Duration? songPosition)
+        play,
+    required TResult Function() pause,
+    required TResult Function() skipSong,
+    required TResult Function() previousSong,
+    required TResult Function(DetailsPackage songData) addSongToQueue,
+    required TResult Function() removeSongFromQueue,
+    required TResult Function(int size) setMusicChunkSize,
+    required TResult Function(String id) ping,
+    required TResult Function(String pingId, DateTime time) pong,
+  }) {
+    return pong(pingId, time);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(Duration clockOffset)? sync,
+    TResult? Function(String songId)? searchResource,
+    TResult? Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult? Function(String songId)? resourceAvailability,
+    TResult? Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
+    TResult? Function()? requestStateUpdate,
+    TResult? Function(List<String> devices, List<DetailsPackage> queue,
+            int queuePosition)?
+        stateUpdateMsg,
+    TResult? Function(int index, DateTime time, Duration? songPosition)? play,
+    TResult? Function()? pause,
+    TResult? Function()? skipSong,
+    TResult? Function()? previousSong,
+    TResult? Function(DetailsPackage songData)? addSongToQueue,
+    TResult? Function()? removeSongFromQueue,
+    TResult? Function(int size)? setMusicChunkSize,
+    TResult? Function(String id)? ping,
+    TResult? Function(String pingId, DateTime time)? pong,
+  }) {
+    return pong?.call(pingId, time);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(Duration clockOffset)? sync,
+    TResult Function(String songId)? searchResource,
+    TResult Function(String requestId, String songId, int startIndex)?
+        requestResource,
+    TResult Function(String songId)? resourceAvailability,
+    TResult Function(String requestId, String songId, int startIndex,
+            String serializedBytes)?
+        musicPackage,
+    TResult Function()? requestStateUpdate,
+    TResult Function(List<String> devices, List<DetailsPackage> queue,
+            int queuePosition)?
+        stateUpdateMsg,
+    TResult Function(int index, DateTime time, Duration? songPosition)? play,
+    TResult Function()? pause,
+    TResult Function()? skipSong,
+    TResult Function()? previousSong,
+    TResult Function(DetailsPackage songData)? addSongToQueue,
+    TResult Function()? removeSongFromQueue,
+    TResult Function(int size)? setMusicChunkSize,
+    TResult Function(String id)? ping,
+    TResult Function(String pingId, DateTime time)? pong,
+    required TResult orElse(),
+  }) {
+    if (pong != null) {
+      return pong(pingId, time);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(SyncMsg value) sync,
+    required TResult Function(SearchResourceMsg value) searchResource,
+    required TResult Function(RequestResourceMsg value) requestResource,
+    required TResult Function(ResourceAvailabilityMsg value)
+        resourceAvailability,
+    required TResult Function(MusicPackageMsg value) musicPackage,
+    required TResult Function(RequestStateUpdateMsg value) requestStateUpdate,
+    required TResult Function(StateUpdateMsg value) stateUpdateMsg,
+    required TResult Function(PlayMsg value) play,
+    required TResult Function(PauseMsg value) pause,
+    required TResult Function(SkipSongMsg value) skipSong,
+    required TResult Function(PreviousSongMsg value) previousSong,
+    required TResult Function(AddSongToQueueMsg value) addSongToQueue,
+    required TResult Function(RemoveSongFromQueueMsg value) removeSongFromQueue,
+    required TResult Function(SetMusicChunkSizeMsg value) setMusicChunkSize,
+    required TResult Function(PingMsg value) ping,
+    required TResult Function(PongMsg value) pong,
+  }) {
+    return pong(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(SyncMsg value)? sync,
+    TResult? Function(SearchResourceMsg value)? searchResource,
+    TResult? Function(RequestResourceMsg value)? requestResource,
+    TResult? Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult? Function(MusicPackageMsg value)? musicPackage,
+    TResult? Function(RequestStateUpdateMsg value)? requestStateUpdate,
+    TResult? Function(StateUpdateMsg value)? stateUpdateMsg,
+    TResult? Function(PlayMsg value)? play,
+    TResult? Function(PauseMsg value)? pause,
+    TResult? Function(SkipSongMsg value)? skipSong,
+    TResult? Function(PreviousSongMsg value)? previousSong,
+    TResult? Function(AddSongToQueueMsg value)? addSongToQueue,
+    TResult? Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult? Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult? Function(PingMsg value)? ping,
+    TResult? Function(PongMsg value)? pong,
+  }) {
+    return pong?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(SyncMsg value)? sync,
+    TResult Function(SearchResourceMsg value)? searchResource,
+    TResult Function(RequestResourceMsg value)? requestResource,
+    TResult Function(ResourceAvailabilityMsg value)? resourceAvailability,
+    TResult Function(MusicPackageMsg value)? musicPackage,
+    TResult Function(RequestStateUpdateMsg value)? requestStateUpdate,
+    TResult Function(StateUpdateMsg value)? stateUpdateMsg,
+    TResult Function(PlayMsg value)? play,
+    TResult Function(PauseMsg value)? pause,
+    TResult Function(SkipSongMsg value)? skipSong,
+    TResult Function(PreviousSongMsg value)? previousSong,
+    TResult Function(AddSongToQueueMsg value)? addSongToQueue,
+    TResult Function(RemoveSongFromQueueMsg value)? removeSongFromQueue,
+    TResult Function(SetMusicChunkSizeMsg value)? setMusicChunkSize,
+    TResult Function(PingMsg value)? ping,
+    TResult Function(PongMsg value)? pong,
+    required TResult orElse(),
+  }) {
+    if (pong != null) {
+      return pong(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$PongMsgToJson(
+      this,
+    );
+  }
+}
+
+abstract class PongMsg implements P2pMessage {
+  const factory PongMsg(final String pingId, final DateTime time) = _$PongMsg;
+
+  factory PongMsg.fromJson(Map<String, dynamic> json) = _$PongMsg.fromJson;
+
+  String get pingId;
+  DateTime get time;
+  @JsonKey(ignore: true)
+  _$$PongMsgCopyWith<_$PongMsg> get copyWith =>
       throw _privateConstructorUsedError;
 }

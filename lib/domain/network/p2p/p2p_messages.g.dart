@@ -7,10 +7,12 @@ part of 'p2p_messages.dart';
 // **************************************************************************
 
 _$SyncMsg _$$SyncMsgFromJson(Map<String, dynamic> json) => _$SyncMsg(
+      clockOffset: Duration(microseconds: json['clockOffset'] as int),
       $type: json['type'] as String?,
     );
 
 Map<String, dynamic> _$$SyncMsgToJson(_$SyncMsg instance) => <String, dynamic>{
+      'clockOffset': instance.clockOffset.inMicroseconds,
       'type': instance.$type,
     };
 
@@ -186,5 +188,27 @@ Map<String, dynamic> _$$SetMusicChunkSizeMsgToJson(
         _$SetMusicChunkSizeMsg instance) =>
     <String, dynamic>{
       'size': instance.size,
+      'type': instance.$type,
+    };
+
+_$PingMsg _$$PingMsgFromJson(Map<String, dynamic> json) => _$PingMsg(
+      json['id'] as String,
+      $type: json['type'] as String?,
+    );
+
+Map<String, dynamic> _$$PingMsgToJson(_$PingMsg instance) => <String, dynamic>{
+      'id': instance.id,
+      'type': instance.$type,
+    };
+
+_$PongMsg _$$PongMsgFromJson(Map<String, dynamic> json) => _$PongMsg(
+      json['pingId'] as String,
+      DateTime.parse(json['time'] as String),
+      $type: json['type'] as String?,
+    );
+
+Map<String, dynamic> _$$PongMsgToJson(_$PongMsg instance) => <String, dynamic>{
+      'pingId': instance.pingId,
+      'time': instance.time.toIso8601String(),
       'type': instance.$type,
     };

@@ -29,8 +29,6 @@ abstract class MusicPlayerListener {
   List<DetailsPackage> getQueue();
 
   void removeFromQueue(int index);
-
-  void onSync();
 }
 
 abstract class MusicProviderListener {
@@ -68,6 +66,8 @@ class P2pNetwork with Disposable {
   set musicBufferListener(MusicBufferListener? listener) {
     _musicBufferListener = listener;
   }
+
+  List<String> get peers => _peers.allIds;
 
   P2pNetwork() {
     _peers.receivedMessages.listen(_handleMessage).canceledBy(this);
@@ -112,8 +112,6 @@ class P2pNetwork with Disposable {
           songPosition: message.songPosition);
     } else if (message is PauseMsg) {
       _musicPlayerListener?.onPause();
-    } else if (message is SyncMsg) {
-      _musicPlayerListener?.onSync();
     } else if (message is ResourceAvailabilityMsg) {
       _musicBufferListener?.onMusicAvailable(event.peerId, message);
     }

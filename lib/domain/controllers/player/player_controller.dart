@@ -13,6 +13,8 @@ import 'package:sound_share/domain/music/reader/music_provider.dart';
 import 'package:sound_share/domain/music/song/song.dart';
 import 'package:sound_share/domain/network/p2p/p2p_messages.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
+import 'package:sound_share/domain/network/p2p/ping_measurement.dart';
+import 'package:sound_share/domain/network/p2p/synchronized_clock.dart';
 
 class PlayerController extends ChangeNotifier with Disposable {
   final _musicQueue = MusicQueue();
@@ -22,6 +24,7 @@ class PlayerController extends ChangeNotifier with Disposable {
   late final MusicPlayer _player =
       MusicPlayer(_musicBufferController, _musicQueue);
   late final MusicProvider _musicProvider;
+  late final PingMeasurement _pingMeasurement;
   bool _isPlaying = false;
 
   DetailsPackage? get currentSong => _musicQueue.currentSong;
@@ -34,12 +37,12 @@ class PlayerController extends ChangeNotifier with Disposable {
     _p2pNetwork.musicPlayerListener = _player;
     _musicProvider =
         MusicProvider(_p2pNetwork, _musicBufferController.bufferCollection);
+    _pingMeasurement = PingMeasurement(_p2pNetwork);
 
     _musicQueue.updateEvents.listen((_) {
       notifyListeners();
     }).canceledBy(this);
 
-    _p2pNetwork.sendMessage(const P2pMessage.sync());
     _player.playerState.listen((state) {
       _isPlaying = state.playing;
       notifyListeners();
@@ -54,6 +57,7 @@ class PlayerController extends ChangeNotifier with Disposable {
     _musicBufferController.dispose();
     _p2pNetwork.dispose();
     _p2pNetwork.musicPlayerListener = null;
+    _pingMeasurement.dispose();
     super.dispose();
   }
 
@@ -68,15 +72,18 @@ class PlayerController extends ChangeNotifier with Disposable {
     }
   }
 
+  void synchronizeClock() async {
+    _pingMeasurement.measureAverageTimeOffset();
+  }
+
   void addSong(MusicSong song) async {
     _musicProvider.addSong(song);
-    await _p2pNetwork.sendMessage(const P2pMessage.sync());
     await _p2pNetwork.sendMessage(P2pMessage.addSongToQueue(song.details));
     notifyListeners();
   }
 
   void nextSong() async {
-    var now = await NTP.now();
+    final now = SynchronizedClock.now();
     _musicQueue.currentSongIndex = _musicQueue.currentSongIndex + 1;
     if (_musicQueue.currentSongIndex >= _musicQueue.songList.length) {
       _musicQueue.currentSongIndex = 0;
@@ -87,7 +94,7 @@ class PlayerController extends ChangeNotifier with Disposable {
   }
 
   void previousSong() async {
-    var now = await NTP.now();
+    final now = SynchronizedClock.now();
     _musicQueue.currentSongIndex = _musicQueue.currentSongIndex - 1;
     if (_musicQueue.currentSongIndex < 0) {
       _musicQueue.currentSongIndex = _musicQueue.songList.length - 1;
@@ -106,8 +113,7 @@ class PlayerController extends ChangeNotifier with Disposable {
   }
 
   void play() async {
-    _p2pNetwork.sendMessage(const P2pMessage.sync());
-    var now = await NTP.now();
+    final now = SynchronizedClock.now();
     _p2pNetwork.sendMessage(
       P2pMessage.play(_musicQueue.currentSongIndex, now, _player.time),
     );

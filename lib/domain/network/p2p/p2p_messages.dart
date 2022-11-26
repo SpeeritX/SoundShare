@@ -16,7 +16,9 @@ class P2pMessageEvent {
 
 @Freezed(unionKey: "type")
 class P2pMessage with _$P2pMessage {
-  const factory P2pMessage.sync() = SyncMsg;
+  const factory P2pMessage.sync({
+    required Duration clockOffset,
+  }) = SyncMsg;
 
   const factory P2pMessage.searchResource({
     required String songId,
@@ -61,9 +63,17 @@ class P2pMessage with _$P2pMessage {
   ) = AddSongToQueueMsg;
 
   const factory P2pMessage.removeSongFromQueue() = RemoveSongFromQueueMsg;
+
   const factory P2pMessage.setMusicChunkSize(
     int size,
   ) = SetMusicChunkSizeMsg;
+
+  const factory P2pMessage.ping(String id) = PingMsg;
+
+  const factory P2pMessage.pong(
+    String pingId,
+    DateTime time,
+  ) = PongMsg;
 
   factory P2pMessage.fromJson(Map<String, dynamic> json) =>
       _$P2pMessageFromJson(json);
