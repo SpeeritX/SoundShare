@@ -168,12 +168,14 @@ Map<String, dynamic> _$$AddSongToQueueMsgToJson(_$AddSongToQueueMsg instance) =>
 _$RemoveSongFromQueueMsg _$$RemoveSongFromQueueMsgFromJson(
         Map<String, dynamic> json) =>
     _$RemoveSongFromQueueMsg(
+      json['index'] as int,
       $type: json['type'] as String?,
     );
 
 Map<String, dynamic> _$$RemoveSongFromQueueMsgToJson(
         _$RemoveSongFromQueueMsg instance) =>
     <String, dynamic>{
+      'index': instance.index,
       'type': instance.$type,
     };
 

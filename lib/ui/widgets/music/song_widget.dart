@@ -68,16 +68,18 @@ class SongWidget extends StatelessWidget {
   }
 
   TextStyle _getTitleStyle(BuildContext context) {
-    var color = (!inQueue || player.currentSong?.songId == song.songId)
-        ? AppColors.darkGray
-        : AppColors.middleGray;
+    var color =
+        (!inQueue || player.songList.indexOf(player.currentSong!) == index)
+            ? AppColors.darkGray
+            : AppColors.middleGray;
     return Theme.of(context).textTheme.bodyText2!.copyWith(color: color);
   }
 
   TextStyle _getArtistStyle(BuildContext context) {
-    var color = (!inQueue || player.currentSong?.songId == song.songId)
-        ? AppColors.primaryColor
-        : AppColors.middleGray;
+    var color =
+        (!inQueue || player.songList.indexOf(player.currentSong!) == index)
+            ? AppColors.primaryColor
+            : AppColors.middleGray;
     return Theme.of(context).textTheme.bodyText2!.copyWith(color: color);
   }
 }

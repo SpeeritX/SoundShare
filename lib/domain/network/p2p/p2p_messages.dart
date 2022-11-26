@@ -58,11 +58,11 @@ class P2pMessage with _$P2pMessage {
 
   const factory P2pMessage.previousSong() = PreviousSongMsg;
 
-  const factory P2pMessage.addSongToQueue(
-    DetailsPackage songData,
-  ) = AddSongToQueueMsg;
+  const factory P2pMessage.addSongToQueue(DetailsPackage songData) =
+      AddSongToQueueMsg;
 
-  const factory P2pMessage.removeSongFromQueue() = RemoveSongFromQueueMsg;
+  const factory P2pMessage.removeSongFromQueue(int index) =
+      RemoveSongFromQueueMsg;
 
   const factory P2pMessage.setMusicChunkSize(
     int size,

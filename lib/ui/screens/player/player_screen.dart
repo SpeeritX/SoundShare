@@ -103,7 +103,7 @@ class _PlayerContentState extends State<PlayerContent> {
                   ),
                   Expanded(
                     child: PrimaryFullButton(
-                      text: "Queued Songs",
+                      text: "Queue",
                       onPressed: () {
                         setState(() {
                           controller.jumpToPage(1);
@@ -203,7 +203,7 @@ class _PlayerContentState extends State<PlayerContent> {
           player: playerController,
           action: SmallButton(
             onPressed: () {
-              playerController.removeSong(entry.value.songId);
+              playerController.removeSong(entry.key);
             },
             child: const FaIcon(
               FontAwesomeIcons.circleMinus,

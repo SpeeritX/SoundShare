@@ -117,7 +117,9 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
 
   @override
   void removeFromQueue(int index) {
-    // TODO: implement removeFromQueue
+    if (index >= 0 && index < _musicQueue.songList.length) {
+      _musicQueue.songList.removeAt(index);
+    }
   }
 
   @override
