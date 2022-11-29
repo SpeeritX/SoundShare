@@ -15,7 +15,7 @@ class PlaySynchronizer {
 
   PlaySynchronizer._();
 
-  Duration get playOffset => _playOffset + _measuredOffset;
+  Duration get playOffset => _playOffset;
 
   Stream<Duration> get playOffsetStream => _playOffsetStream.stream;
 
@@ -26,6 +26,8 @@ class PlaySynchronizer {
   }
 
   Stream<Duration> get measuredOffsetStream => _measuredOffsetStream.stream;
+
+  Duration get measuredOffset => _measuredOffset;
 
   set measuredOffset(Duration offset) {
     _measuredOffset = offset;

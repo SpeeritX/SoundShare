@@ -89,7 +89,8 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
     _nextSongTime = time.add((_player.duration ?? song.duration));
     final position = songPosition +
         SynchronizedClock.now().difference(time) +
-        PlaySynchronizer.instance.playOffset;
+        PlaySynchronizer.instance.playOffset +
+        PlaySynchronizer.instance.measuredOffset;
 
     if (position.isNegative) {
       _player.seek(Duration.zero);
