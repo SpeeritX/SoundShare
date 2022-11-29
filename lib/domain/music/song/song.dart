@@ -31,6 +31,9 @@ class MusicSong {
       } catch (e, st) {
         logger.e("Failed to read song attributes", e, st);
       }
+    } else {
+      artist = "Unknown artist";
+      title = basename(file.path);
     }
     details = DetailsPackage(
       songId: songId,

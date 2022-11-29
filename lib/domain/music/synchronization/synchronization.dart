@@ -116,7 +116,7 @@ class Synchronization {
                   .reduce((val, el) => val + el) /
               3)
           .floor();
-      PlaySynchronizer.instance.playOffset = Duration(milliseconds: offset);
+      PlaySynchronizer.instance.measuredOffset = Duration(milliseconds: offset);
     } else {
       print("Session did not activate.");
     }

@@ -48,11 +48,7 @@ class _PlayerScreenTimerState extends State<PlayerScreenTimer>
           children: [
             _buildModifyOffsetButton("<<", const Duration(milliseconds: -50)),
             _buildModifyOffsetButton("<", const Duration(milliseconds: -5)),
-            _buildModifyOffsetButton(
-                "0",
-                Duration(
-                    milliseconds:
-                        -PlaySynchronizer.instance.playOffset.inMilliseconds)),
+            _buildModifyOffsetButton("#", Duration.zero),
             _buildModifyOffsetButton(">", const Duration(milliseconds: 5)),
             _buildModifyOffsetButton(">>", const Duration(milliseconds: 50)),
           ],
@@ -67,8 +63,7 @@ class _PlayerScreenTimerState extends State<PlayerScreenTimer>
         PlaySynchronizer.instance.playOffset += offset;
       },
       child: Container(
-        width: 40,
-        height: 40,
+        padding: const EdgeInsets.all(10),
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
           color: AppColors.primaryColor,

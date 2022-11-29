@@ -44,6 +44,7 @@ class _PlayerDetailsControlsState extends State<PlayerDetailsControls> {
           ),
           child: IconButton(
             iconSize: 30,
+            padding: const EdgeInsets.only(right: 3),
             onPressed: () {
               widget.playerController.previousSong();
             },
@@ -63,6 +64,11 @@ class _PlayerDetailsControlsState extends State<PlayerDetailsControls> {
           ),
           child: IconButton(
             iconSize: 45,
+            padding: widget.playerController.isPlaying
+                ? const EdgeInsets.only(
+                    left: 10, right: 10, top: 10, bottom: 10)
+                : const EdgeInsets.only(
+                    left: 13, right: 10, top: 10, bottom: 10),
             onPressed: () {
               if (!widget.playerController.isPlaying) {
                 widget.playerController.play();
@@ -85,6 +91,7 @@ class _PlayerDetailsControlsState extends State<PlayerDetailsControls> {
             onPressed: () {
               widget.playerController.nextSong();
             },
+            padding: const EdgeInsets.only(left: 3),
             icon: const FaIcon(
               FontAwesomeIcons.forward,
               color: AppColors.white,

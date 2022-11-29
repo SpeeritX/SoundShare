@@ -141,17 +141,23 @@ class _PlayerContentState extends State<PlayerContent> {
                         builder: (context, playerController, child) => Column(
                           children: [
                             SizedBox(height: Paddings.dynamic.m3),
-                            PrimaryFullButton(
-                                text: 'Synchronize',
-                                onPressed: () {
-                                  playerController.synchronizeClock();
-                                }),
+                            Container(
+                                margin:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: PrimaryFullButton(
+                                    text: 'Synchronize',
+                                    onPressed: () {
+                                      playerController.synchronizeClock();
+                                    })),
                             SizedBox(height: Paddings.dynamic.m1),
-                            PrimaryFullButton(
-                                text: 'Synchronize NTP',
-                                onPressed: () {
-                                  playerController.synchronizeNTP();
-                                }),
+                            Container(
+                                margin:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: PrimaryFullButton(
+                                    text: 'Synchronize NTP',
+                                    onPressed: () {
+                                      playerController.synchronizeNTP();
+                                    })),
                             SizedBox(height: Paddings.dynamic.m1),
                             const PlayerScreenTimer(),
                             ..._createQueuedSongsWidgets(playerController),

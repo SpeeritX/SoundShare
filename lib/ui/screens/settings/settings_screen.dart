@@ -67,5 +67,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void _saveSettings() {
     _playerController.setMusicChunkSize(int.parse(musicChunkSize));
+    Navigator.of(context).pop();
   }
 }
