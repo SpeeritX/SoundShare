@@ -116,8 +116,6 @@ class PlayerController extends ChangeNotifier with Disposable {
     if (_musicQueue.currentSongIndex == index) {
       _player.pause();
     }
-
-    await _p2pNetwork.sendMessage(const P2pMessage.sync());
     await _p2pNetwork.sendMessage(P2pMessage.removeSongFromQueue(index));
   }
 
