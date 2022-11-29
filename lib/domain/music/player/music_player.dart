@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:audio_session/audio_session.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sound_share/common/logger.dart';
 import 'package:sound_share/common/utils/disposable.dart';
 import 'package:sound_share/domain/music/buffer/music_buffer_controller.dart';
@@ -10,36 +9,48 @@ import 'package:sound_share/domain/music/package/details_package.dart';
 import 'package:sound_share/domain/music/package/music_package.dart';
 import 'package:sound_share/domain/music/player/bytes_audio_source.dart';
 import 'package:sound_share/domain/music/player/music_queue.dart';
+import 'package:sound_share/domain/music/synchronization/play_synchronizer.dart';
 import 'package:sound_share/domain/network/p2p/p2p_network.dart';
 import 'package:sound_share/domain/network/p2p/synchronized_clock.dart';
 
-/// Plays the music from the received packages
 class MusicPlayer with Disposable implements MusicPlayerListener {
+  static const songPlayDelay = Duration(seconds: 3);
+
   final _player = AudioPlayer();
   final MusicBufferController _musicBuffer;
   final MusicQueue _musicQueue;
-  late final Duration _playOffset;
   AudioSession? _session;
   var _source = BytesAudioSource(null);
+  Timer? _timer;
+  DetailsPackage? _currentSong;
+  Duration? _songPosition = const Duration();
+  DateTime _nextSongTime = DateTime.now();
 
   Stream<PlayerState> get playerState => _player.playerStateStream;
+
+  Duration? get songPosition => _songPosition;
 
   MusicPlayer(this._musicBuffer, this._musicQueue) {
     _player.processingStateStream.listen((event) {
       if (event == ProcessingState.completed) {
         final song = _musicQueue.nextSong();
-        _playSong(song, Duration(seconds: 2) - _playOffset);
+        _playSong(song, _nextSongTime, Duration.zero);
       }
     }).canceledBy(this);
     AudioSession.instance.then((value) {
       _session = value;
       _session!.configure(const AudioSessionConfiguration.music());
     });
-    SharedPreferences.getInstance().then((value) =>
-        _playOffset = Duration(milliseconds: value.getInt('playOffset') ?? 0));
   }
 
-  Future<void> _setSong(BytesAudioSource source) async {
+  Future<void> _setSong(DetailsPackage song) async {
+    if (_currentSong?.songId == song.songId) {
+      return;
+    }
+    _currentSong = song;
+    logger.d("#### Set new song ${song.bytesLength}");
+
+    final source = _musicBuffer.getSong(song);
     _source = source;
     pause();
     try {
@@ -47,24 +58,11 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
     } on PlayerInterruptedException catch (_) {
       logger.w("setAudioSource interrupted");
     }
-    _player.play();
   }
 
   void addPackage(MusicPackage package) {
     logger.d("#### Add song package ${package.data.length}");
     _source.addData(package.startIndex, package.data.toList());
-  }
-
-  Future<void> _playSong(DetailsPackage song, Duration songPosition) async {
-    logger.d("#### Set new song ${song.bytesLength}");
-    final source = _musicBuffer.getSong(song);
-    await _setSong(source);
-    if (songPosition.isNegative) {
-      await Future.delayed(songPosition);
-      _player.seek(const Duration());
-    } else {
-      _player.seek(songPosition);
-    }
   }
 
   Duration? getCurrentSongDuration() {
@@ -75,15 +73,37 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
     return _player.position;
   }
 
-  Duration? time = const Duration();
-
   void pause() {
-    time = _player.position;
+    _songPosition = _player.position;
     _player.pause();
   }
 
   Future<void> stop() async {
     await _player.stop();
+  }
+
+  Future<void> _playSong(
+      DetailsPackage song, DateTime time, Duration songPosition) async {
+    _nextSongTime = time.add(song.duration + songPlayDelay);
+    logger.d("NEXT SONG TIME: ${_nextSongTime}");
+    await _setSong(song);
+    final position = songPosition +
+        SynchronizedClock.now().difference(time) +
+        PlaySynchronizer.instance.playOffset;
+
+    if (position.isNegative) {
+      _player.seek(Duration.zero);
+      _timer?.cancel();
+      _timer = Timer(-position + Duration(milliseconds: 200), () {
+        _player.play();
+      });
+    } else {
+      _player.seek(position);
+      _timer?.cancel();
+      _timer = Timer(Duration(milliseconds: 200), () {
+        _player.play();
+      });
+    }
   }
 
   @override
@@ -102,17 +122,14 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
   }
 
   @override
-  void onPlay(int index, DateTime time, {Duration? songPosition}) {
+  void onPlay(int index, DateTime time, {Duration? songPosition}) async {
     _musicQueue.setIndex(index);
     final song = _musicQueue.currentSong;
     if (song == null) {
       logger.e("onPlay song index '$index' is null");
       return;
     }
-    _playSong(
-        song,
-        SynchronizedClock.now().difference(time) +
-            (songPosition ?? const Duration()));
+    _playSong(song, time, songPosition ?? Duration.zero);
   }
 
   @override
@@ -134,6 +151,7 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
   @override
   void dispose() {
     _player.dispose();
+    _timer?.cancel();
     super.dispose();
   }
 }

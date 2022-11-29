@@ -24,6 +24,7 @@ class SmallButton extends StatelessWidget {
       onTap: () {
         if (!disable) onPressed();
       },
+      behavior: HitTestBehavior.translucent,
       shrinkScale: 0.85,
       child: Container(
           color: backgroundColor,

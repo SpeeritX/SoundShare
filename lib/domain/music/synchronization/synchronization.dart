@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:audio_session/audio_session.dart';
 import 'package:audio_streamer/audio_streamer.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sound_share/domain/music/synchronization/play_synchronizer.dart';
 
 class Synchronization {
   Synchronization();
@@ -110,14 +110,13 @@ class Synchronization {
       print(_miliseconds.toString());
       _miliseconds.sort();
       await _session?.setActive(false);
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setInt(
-          'playOffset',
-          (_miliseconds
-                      .sublist(_miliseconds.length - 3)
-                      .reduce((val, el) => val + el) /
-                  3)
-              .floor());
+
+      final offset = (_miliseconds
+                  .sublist(_miliseconds.length - 3)
+                  .reduce((val, el) => val + el) /
+              3)
+          .floor();
+      PlaySynchronizer.instance.playOffset = Duration(milliseconds: offset);
     } else {
       print("Session did not activate.");
     }

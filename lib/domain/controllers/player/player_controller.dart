@@ -78,6 +78,12 @@ class PlayerController extends ChangeNotifier with Disposable {
     _pingMeasurement.measureAverageTimeOffset();
   }
 
+  void synchronizeNTP() async {
+    final offset = await NTP.getNtpOffset();
+    SynchronizedClock.instance.clockOffset = Duration(milliseconds: -offset);
+    // _pingMeasurement.measureAverageTimeOffset();
+  }
+
   void addSong(MusicSong song) async {
     _musicProvider.addSong(song);
     await _p2pNetwork.sendMessage(P2pMessage.addSongToQueue(song.details));
@@ -122,7 +128,7 @@ class PlayerController extends ChangeNotifier with Disposable {
   void play() async {
     final now = SynchronizedClock.now();
     _p2pNetwork.sendMessage(
-      P2pMessage.play(_musicQueue.currentSongIndex, now, _player.time),
+      P2pMessage.play(_musicQueue.currentSongIndex, now, _player.songPosition),
     );
   }
 
@@ -151,6 +157,7 @@ class PlayerController extends ChangeNotifier with Disposable {
     if (duration == null || position == null) {
       return 0;
     }
-    return position.inMilliseconds / duration.inMilliseconds;
+    final percentage = position.inMilliseconds / duration.inMilliseconds;
+    return percentage.clamp(0, 1);
   }
 }
