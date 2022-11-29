@@ -5,7 +5,7 @@ import 'package:sound_share/domain/music/package/details_package.dart';
 import 'package:sound_share/domain/music/player/bytes_audio_source.dart';
 
 class MusicBufferCollection {
-  static const maxSongs = 2;
+  static const maxSongs = 10;
   final Map<String, BytesAudioSource> _songs = {};
   final Map<String, DateTime> _songsTime = {};
   final Map<String, Duration> _songsDownloadDuration = {};

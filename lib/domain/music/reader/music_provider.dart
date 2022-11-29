@@ -29,12 +29,6 @@ class MusicProvider with Disposable implements MusicProviderListener {
     _songs.add(song);
   }
 
-  void removeSong(int index) {
-    if (index >= 0 && index < _songs.length) {
-      _songs.removeAt(index);
-    }
-  }
-
   @override
   Future<bool> isSongAvailable(String id) async {
     if (_bufferCollection.contains(id)) {

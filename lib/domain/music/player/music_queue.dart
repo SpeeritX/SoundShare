@@ -22,6 +22,8 @@ class MusicQueue {
     }
 
     _currentSongIndex = value;
+
+    _notifyUpdate();
   }
 
   DetailsPackage? get currentSong {
@@ -75,16 +77,14 @@ class MusicQueue {
       }
     }
     songList.add(song);
-
     _notifyUpdate();
   }
 
   void removeSong(int index) {
-    if (_currentSongIndex >= index) {
+    if (_currentSongIndex >= index && _currentSongIndex > 0) {
       _currentSongIndex = _currentSongIndex - 1;
     }
     songList.removeAt(index);
-
     _notifyUpdate();
   }
 
