@@ -84,9 +84,9 @@ class MusicPlayer with Disposable implements MusicPlayerListener {
 
   Future<void> _playSong(
       DetailsPackage song, DateTime time, Duration songPosition) async {
-    _nextSongTime = time.add(song.duration + songPlayDelay);
     logger.d("NEXT SONG TIME: ${_nextSongTime}");
     await _setSong(song);
+    _nextSongTime = time.add((_player.duration ?? song.duration));
     final position = songPosition +
         SynchronizedClock.now().difference(time) +
         PlaySynchronizer.instance.playOffset;
