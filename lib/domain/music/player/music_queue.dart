@@ -22,6 +22,8 @@ class MusicQueue {
     }
 
     _currentSongIndex = value;
+
+    _notifyUpdate();
   }
 
   DetailsPackage? get currentSong {

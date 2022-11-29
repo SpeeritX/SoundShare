@@ -99,20 +99,13 @@ class PlayerController extends ChangeNotifier with Disposable {
     );
   }
 
-  //TODO bug: sometimes the song does not disappear right away
   void removeSong(int index) async {
     if (_musicQueue.currentSongIndex == index) {
       _player.pause();
     }
 
-    if (_musicQueue.currentSongIndex >= index && _musicQueue.currentSongIndex > 0) {
-      _musicQueue.currentSongIndex = _musicQueue.currentSongIndex - 1;
-    }
-
-    _musicProvider.removeSong(index);
     await _p2pNetwork.sendMessage(const P2pMessage.sync());
     await _p2pNetwork.sendMessage(P2pMessage.removeSongFromQueue(index));
-    notifyListeners();
   }
 
   void setMusicChunkSize(int size) {
