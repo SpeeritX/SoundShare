@@ -108,7 +108,6 @@ class Synchronization {
       }
       print(_maxSounds.toString());
       print(_miliseconds.toString());
-      _miliseconds.sort();
       await _session?.setActive(false);
 
       final offset = (_miliseconds
@@ -116,6 +115,7 @@ class Synchronization {
                   .reduce((val, el) => val + el) /
               3)
           .floor();
+      print("OFFSET: $offset");
       PlaySynchronizer.instance.measuredOffset = Duration(milliseconds: offset);
     } else {
       print("Session did not activate.");

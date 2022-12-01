@@ -39,5 +39,7 @@ class PlaySynchronizer {
     _preferences = await SharedPreferences.getInstance();
     _playOffset =
         Duration(milliseconds: _preferences.getInt(playOffsetKey) ?? 0);
+    _measuredOffset =
+        Duration(milliseconds: _preferences.getInt(measuredOffsetKey) ?? 0);
   }
 }

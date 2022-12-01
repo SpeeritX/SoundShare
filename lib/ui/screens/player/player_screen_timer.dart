@@ -36,7 +36,7 @@ class _PlayerScreenTimerState extends State<PlayerScreenTimer>
         Text(
             "Clock offset: ${SynchronizedClock.instance.clockOffset.inMilliseconds}"),
         Text(
-            "Play offset: ${PlaySynchronizer.instance.playOffset.inMilliseconds}"),
+            "Play offset: ${(PlaySynchronizer.instance.playOffset + PlaySynchronizer.instance.measuredOffset).inMilliseconds}"),
         Text(
           timeFormat.format(SynchronizedClock.now()),
           style: Theme.of(context).textTheme.bodyText2!.copyWith(
