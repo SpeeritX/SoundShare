@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sound_share/domain/controllers/player/player_controller.dart';
+import 'package:sound_share/ui/screens/player/player_screen_timer.dart';
 import 'package:sound_share/ui/style/paddings.dart';
-import 'package:sound_share/ui/widgets/buttons/primary_full_button.dart';
+import 'package:sound_share/ui/widgets/buttons/small_button.dart';
 
 import '../../widgets/scaffold/app_bar.dart';
 
@@ -40,25 +41,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text("Music chunk size"),
-            TextField(
-              controller: _musicChunkSizeController,
-              onChanged: (text) {
-                setState(() {
-                  musicChunkSize = text;
-                });
-              },
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _musicChunkSizeController,
+                    onChanged: (text) {
+                      setState(() {
+                        musicChunkSize = text;
+                      });
+                    },
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                SizedBox(width: Paddings.dynamic.m1),
+                SmallButton(
+                  onPressed: () {
+                    _saveSettings();
+                  },
+                  child: Text("Save"),
+                ),
+              ],
             ),
-            SizedBox(height: Paddings.dynamic.m3),
-            PrimaryFullButton(
-              onPressed: () {
-                _saveSettings();
-              },
-              text: 'Save',
-            ),
+            SizedBox(height: Paddings.dynamic.m4),
+            const PlayerScreenTimer(),
           ],
         ),
       ),

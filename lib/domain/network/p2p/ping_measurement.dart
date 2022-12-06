@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sound_share/common/logger.dart';
 import 'package:sound_share/common/utils/disposable.dart';
 import 'package:sound_share/domain/network/p2p/p2p_messages.dart';
@@ -29,6 +30,10 @@ class PingMeasurement with Disposable {
       }
       if (msg is SyncMsg) {
         SynchronizedClock.instance.clockOffset += msg.clockOffset;
+        Fluttertoast.showToast(
+          msg: "Synchronized time",
+          toastLength: Toast.LENGTH_SHORT,
+        );
       }
     }).canceledBy(this);
   }

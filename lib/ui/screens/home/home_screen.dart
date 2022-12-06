@@ -94,20 +94,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: Paddings.dynamic.m2),
                     PrimaryFullButton(
-                      onPressed: () {
-                        _createNetwork();
-                      },
-                      text: "Create",
-                    ),
-                    SizedBox(height: Paddings.dynamic.m2),
-                    PrimaryFullButton(
-                      onPressed: () {
-                        _openTestMusic();
-                      },
-                      text: "Test music",
-                    ),
-                    SizedBox(height: Paddings.dynamic.m2),
-                    PrimaryFullButton(
                       onPressed: () async {
                         if (await Permission.microphone.request().isGranted) {
                           Synchronization().sync();
@@ -116,24 +102,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       text: "Calibrate",
                     ),
                     SizedBox(height: Paddings.dynamic.m4),
-                    SizedBox(height: Paddings.dynamic.m4),
-                    Container(
-                        padding: EdgeInsets.all(Paddings.static.m2),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Help",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .button!
-                                    .copyWith(color: AppColors.primaryColor)),
-                            Text("About",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .button!
-                                    .copyWith(color: AppColors.primaryColor))
-                          ],
-                        )),
                   ],
                 ),
               ),

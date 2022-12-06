@@ -69,6 +69,17 @@ class _PlayerContentState extends State<PlayerContent> {
       appBar: DefaultAppBar(title: "Player", actions: [
         SmallButton(
           onPressed: () {
+            Provider.of<PlayerController>(context, listen: false)
+                .synchronizeClock();
+          },
+          child: const FaIcon(
+            FontAwesomeIcons.rotate,
+            color: AppColors.white,
+            size: 25.0,
+          ),
+        ),
+        SmallButton(
+          onPressed: () {
             _openSettings();
           },
           child: const FaIcon(
@@ -140,26 +151,7 @@ class _PlayerContentState extends State<PlayerContent> {
                       child: Consumer<PlayerController>(
                         builder: (context, playerController, child) => Column(
                           children: [
-                            SizedBox(height: Paddings.dynamic.m3),
-                            Container(
-                                margin:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                child: PrimaryFullButton(
-                                    text: 'Synchronize',
-                                    onPressed: () {
-                                      playerController.synchronizeClock();
-                                    })),
                             SizedBox(height: Paddings.dynamic.m1),
-                            Container(
-                                margin:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                child: PrimaryFullButton(
-                                    text: 'Synchronize NTP',
-                                    onPressed: () {
-                                      playerController.synchronizeNTP();
-                                    })),
-                            SizedBox(height: Paddings.dynamic.m1),
-                            const PlayerScreenTimer(),
                             ..._createQueuedSongsWidgets(playerController),
                             SizedBox(height: 4 * Paddings.dynamic.m4),
                           ],

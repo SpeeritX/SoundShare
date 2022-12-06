@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:sound_share/domain/music/synchronization/play_synchronizer.dart';
 import 'package:sound_share/domain/network/p2p/synchronized_clock.dart';
 import 'package:sound_share/ui/style/app_colors.dart';
+import 'package:sound_share/ui/style/paddings.dart';
 import 'package:sound_share/ui/widgets/buttons/small_button.dart';
 
 class PlayerScreenTimer extends StatefulWidget {
@@ -34,15 +35,7 @@ class _PlayerScreenTimerState extends State<PlayerScreenTimer>
     return Column(
       children: [
         Text(
-            "Clock offset: ${SynchronizedClock.instance.clockOffset.inMilliseconds}"),
-        Text(
             "Play offset: ${(PlaySynchronizer.instance.playOffset + PlaySynchronizer.instance.measuredOffset).inMilliseconds}"),
-        Text(
-          timeFormat.format(SynchronizedClock.now()),
-          style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                fontFamily: 'Roboto',
-              ),
-        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -53,7 +46,16 @@ class _PlayerScreenTimerState extends State<PlayerScreenTimer>
             _buildModifyOffsetButton(">", const Duration(milliseconds: 5)),
             _buildModifyOffsetButton(">>", const Duration(milliseconds: 50)),
           ],
-        )
+        ),
+        SizedBox(height: Paddings.dynamic.m3),
+        Text(
+            "Clock offset: ${SynchronizedClock.instance.clockOffset.inMilliseconds}"),
+        Text(
+          timeFormat.format(SynchronizedClock.now()),
+          style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                fontFamily: 'Roboto',
+              ),
+        ),
       ],
     );
   }
